@@ -1,3 +1,3 @@
 # Peardrop
 
-A cross-platform alternative to Airdrop
+🍐 Airdrop alternative for cross platform compatibility
