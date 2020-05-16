@@ -1,3 +1,5 @@
+use thiserror::Error;
+
 /**
  * Acknowledgement packet extension.
  *
@@ -15,6 +17,15 @@ pub struct AckPacket {
 }
 
 /**
+ * Error while constructing an AckType.
+ */
+#[derive(Error, Debug)]
+pub enum AckTypeError {
+    #[error("Invalid acknowledgement type")]
+    InvalidType,
+}
+
+/**
  * Type of receiver acknowledge packet.
  * See the core protocol.
  */
@@ -24,7 +35,7 @@ pub enum AckType {
 }
 
 impl AckType {
-    pub fn new(raw: ux::u4) -> Option<Self> {
+    pub fn new(raw: ux::u4) -> Result<Self, AckTypeError> {
         use num_traits::FromPrimitive;
         // Try to parse low 3 bits
         let low = u8::from(raw) & 0b111;
@@ -33,20 +44,22 @@ impl AckType {
             // Check if it is accept/reject
             match ty {
                 SenderPacket | AdPacket => {
-                    Some(Self::AcceptReject(ty, u8::from(raw) & 0b1000 == 0b1000))
+                    Ok(Self::AcceptReject(ty, u8::from(raw) & 0b1000 == 0b1000))
                 }
                 _ => Self::normal(raw),
             }
         } else {
-            // Attempt to parse all 4 bits or None
+            // Attempt to parse all 4 bits or Err
             Self::normal(raw)
         }
     }
 
     // To prevent copy-and-paste in new
-    fn normal(raw: ux::u4) -> Option<Self> {
+    fn normal(raw: ux::u4) -> Result<Self, AckTypeError> {
         use num_traits::FromPrimitive;
-        AckTypeType::from_u8(raw.into()).map(Self::Normal)
+        AckTypeType::from_u8(raw.into())
+            .map(Self::Normal)
+            .ok_or(AckTypeError::InvalidType)
     }
 }
 
