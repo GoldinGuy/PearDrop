@@ -2,6 +2,8 @@
  * Sender packet extension.
  *
  * Empty as it is implemented by other structs.
+ *
+ * TODO: Add Error type.
  */
 pub trait SenderExtension: super::Extension {}
 
