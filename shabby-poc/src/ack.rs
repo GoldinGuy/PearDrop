@@ -28,7 +28,7 @@ impl AckPacket {
         use ux::u4;
         /* type + ext len */
         let double_nibble = r.read_u8()?;
-        let type_ = AckType::new(u4::new(double_nibble & 0xf0 >> 4))?;
+        let type_ = AckType::new(u4::new((double_nibble & 0xf0) >> 4))?;
         let ext_len = u4::new(double_nibble & 0xf);
         let exts = Self::read_exts(r, ext_len)?;
         Ok(Self {
