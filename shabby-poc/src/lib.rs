@@ -10,21 +10,24 @@ mod sender;
 pub use sender::*;
 
 /**
- * Generic extension.
+ * Generic interface for marshalling objects.
  *
- * Should be able to be read from a Read, and written to a Write.
+ * Why not Serde? Because we are not going through another format for encoding.
+ * We're just writing this as bytes to a stream. Therefore each object
+ * serializes itself differently.
+ *
+ * Should implement Debug.
  */
-pub trait Extension: std::fmt::Debug {
-    // TODO: add to implementers. Until then, stubbed.
-    // type Error = dyn std::error::Error;
+pub trait Marshal: std::fmt::Debug {
+    type Error;
     /**
-     * Serialize (or write) this extension to a Write.
+     * Marshal this object to a Write.
      */
-    fn write(&self, w: &mut dyn std::io::Write) -> Result<(), Box<dyn std::error::Error>>;
+    fn write(&self, w: &mut dyn std::io::Write) -> Result<(), Self::Error>;
     /**
-     * Deserialize (or read) this extension from a Read.
+     * Unmarshal this object from a Read.
      */
-    fn read(r: &mut dyn std::io::Read) -> Result<Self, Box<dyn std::error::Error>>
+    fn read(r: &mut dyn std::io::Read) -> Result<Self, Self::Error>
     where
         Self: Sized;
 }

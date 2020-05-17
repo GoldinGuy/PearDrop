@@ -1,3 +1,4 @@
+use super::Marshal;
 use thiserror::Error;
 
 /**
@@ -7,7 +8,7 @@ use thiserror::Error;
  *
  * TODO: Add Error type.
  */
-pub trait AckExtension: super::Extension {}
+pub trait AckExtension: std::fmt::Debug {}
 
 /**
  * Receiver acknowledge packet.
@@ -19,11 +20,13 @@ pub struct AckPacket {
     extensions: Vec<Box<dyn AckExtension>>,
 }
 
-impl AckPacket {
+impl Marshal for AckPacket {
+    type Error = AckPacketError;
+
     /**
      * Reads an AckPacket from the given reader.
      */
-    pub fn new(r: &mut dyn std::io::Read) -> Result<Self, AckPacketError> {
+    fn read(r: &mut dyn std::io::Read) -> Result<Self, Self::Error> {
         use byteorder::ReadBytesExt;
         use ux::u4;
         /* type + ext len */
@@ -31,10 +34,30 @@ impl AckPacket {
         let type_ = AckType::new(u4::new((double_nibble & 0xf0) >> 4))?;
         let ext_len = u4::new(double_nibble & 0xf);
         let exts = Self::read_exts(r, ext_len)?;
-        Ok(Self {
-            type_,
-            extensions: exts,
-        })
+        Ok(Self::new(type_, exts))
+    }
+
+    /**
+     * Writes this AckPacket to the given writer.
+     */
+    fn write(&self, w: &mut dyn std::io::Write) -> Result<(), Self::Error> {
+        use byteorder::WriteBytesExt;
+        let ext_len = self.extensions.len();
+        if ext_len != 0 {
+            unimplemented!();
+        }
+        let double_nibble = (u8::from(self.type_.raw()) << 4) | ext_len as u8;
+        w.write_u8(double_nibble)?;
+        Ok(())
+    }
+}
+
+impl AckPacket {
+    /**
+     * Creates a new AckPacket using the given type and extensions.
+     */
+    pub fn new(type_: AckType, extensions: Vec<Box<dyn AckExtension>>) -> Self {
+        Self { type_, extensions }
     }
 
     fn read_exts(
@@ -137,6 +160,17 @@ impl AckType {
             _ => None,
         }
     }
+
+    /**
+     * Convert this into a raw u4.
+     */
+    pub fn raw(&self) -> ux::u4 {
+        use ux::u4;
+        match *self {
+            Self::AcceptReject(ty, ar) => u4::new((ar as u8) << 3) | u4::new(ty as u8),
+            Self::Normal(ty) => u4::new(ty as u8),
+        }
+    }
 }
 
 /**
@@ -155,16 +189,78 @@ pub enum AckTypeType {
 mod test {
     use super::*;
 
-    #[test]
-    fn test_acknowledge_data() {
-        let data = [
-            // type | ext len
-            (AckTypeType::DataPacket as u8) << 4,
-        ];
-        let mut cursor = std::io::Cursor::new(data);
-        let packet = AckPacket::new(&mut cursor).unwrap();
-        println!("{:#?}", packet);
-        assert_eq!(packet.get_type().get_type(), AckTypeType::DataPacket);
-        assert_eq!(packet.get_type().is_accepted(), None);
+    mod type_ {
+        use super::*;
+
+        #[test]
+        fn test_data() {
+            let data = ux::u4::new(AckTypeType::DataPacket as u8);
+            let type_ = AckType::new(data).unwrap();
+            assert_eq!(type_.get_type(), AckTypeType::DataPacket);
+            assert_eq!(type_.is_accepted(), None);
+            assert_eq!(type_.raw(), data);
+        }
+
+        #[test]
+        fn test_sender_reject() {
+            let data = ux::u4::new(0 << 3 | AckTypeType::SenderPacket as u8);
+            let type_ = AckType::new(data).unwrap();
+            assert_eq!(type_.get_type(), AckTypeType::SenderPacket);
+            assert_eq!(type_.is_accepted(), Some(false));
+            assert_eq!(type_.raw(), data);
+        }
+
+        #[test]
+        fn test_sender_accept() {
+            let data = ux::u4::new(1 << 3 | AckTypeType::SenderPacket as u8);
+            let type_ = AckType::new(data).unwrap();
+            assert_eq!(type_.get_type(), AckTypeType::SenderPacket);
+            assert_eq!(type_.is_accepted(), Some(true));
+            assert_eq!(type_.raw(), data);
+        }
+
+        #[test]
+        fn test_ad_reject() {
+            let data = ux::u4::new(0 << 3 | AckTypeType::AdPacket as u8);
+            let type_ = AckType::new(data).unwrap();
+            assert_eq!(type_.get_type(), AckTypeType::AdPacket);
+            assert_eq!(type_.is_accepted(), Some(false));
+            assert_eq!(type_.raw(), data);
+        }
+
+        #[test]
+        fn test_ad_accept() {
+            let data = ux::u4::new(1 << 3 | AckTypeType::AdPacket as u8);
+            let type_ = AckType::new(data).unwrap();
+            assert_eq!(type_.get_type(), AckTypeType::AdPacket);
+            assert_eq!(type_.is_accepted(), Some(true));
+            assert_eq!(type_.raw(), data);
+        }
+    }
+
+    mod packet {
+        use super::*;
+
+        #[test]
+        fn test_ext_len() {
+            let type_raw = 1 << 3 | AckTypeType::AdPacket as u8;
+            let data = [type_raw << 4 | 0 /* ext_len */];
+            let mut cursor = std::io::Cursor::new(data);
+            let packet = AckPacket::read(&mut cursor).unwrap();
+            assert_eq!(packet.extensions.len(), 0);
+            assert_eq!(packet.get_type().get_type(), AckTypeType::AdPacket);
+            assert_eq!(packet.get_type().is_accepted(), Some(true));
+            assert_eq!(packet.get_type().raw(), ux::u4::new(type_raw));
+        }
+
+        #[test]
+        fn test_write() {
+            let type_ = AckType::Normal(AckTypeType::DataPacket);
+            let packet = AckPacket::new(type_, Vec::new());
+            let mut out = Vec::new();
+            let expected = [u8::from(type_.raw()) << 4 | 0];
+            packet.write(&mut out).unwrap();
+            assert_eq!(out, expected);
+        }
     }
 }
