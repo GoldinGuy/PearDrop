@@ -73,3 +73,25 @@ pub enum AdPacketError {
     #[error("{0}")]
     IO(#[from] std::io::Error),
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_read() {
+        let data = [0 /* ext_len */];
+        let mut cursor = std::io::Cursor::new(data);
+        let packet = AdPacket::read(&mut cursor).unwrap();
+        assert_eq!(packet.extensions.len(), 0);
+    }
+
+    #[test]
+    fn test_write() {
+        let packet = AdPacket::new(Vec::new());
+        let mut out = Vec::new();
+        let expected = [0];
+        packet.write(&mut out).unwrap();
+        assert_eq!(out, expected);
+    }
+}
