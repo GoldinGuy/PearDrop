@@ -112,7 +112,7 @@ impl SenderPacket {
     }
 
     fn read_exts(
-        r: &mut dyn std::io::Read,
+        _r: &mut dyn std::io::Read,
         exts_len: u8,
     ) -> Result<Vec<Box<dyn SenderExtension>>, SenderPacketError> {
         if exts_len != 0 {
@@ -143,4 +143,119 @@ pub enum SenderPacketError {
     InvalidMIMEType,
     #[error("IO error: {0}")]
     IO(#[from] std::io::Error),
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_read() {
+        use byteorder::{WriteBytesExt, BE};
+        use std::io::Write;
+        let filename = "example.txt";
+        let mimetype = "text/plain";
+        let data_len = 278475344u64;
+        let triple_byte = ((filename.len() as u32) << 12) | mimetype.len() as u32;
+        let mut data = vec![];
+        data.write_u24::<BE>(triple_byte).unwrap();
+        data.write_all(filename.as_bytes()).unwrap();
+        data.write_all(mimetype.as_bytes()).unwrap();
+        data.write_u8(0).unwrap(); // exts_len
+        data.write_u64::<BE>(data_len).unwrap();
+        let mut cursor = std::io::Cursor::new(data);
+
+        let packet = SenderPacket::read(&mut cursor).unwrap();
+        assert_eq!(packet.extensions.len(), 0);
+        assert_eq!(packet.filename, filename);
+        assert_eq!(packet.mimetype, mimetype);
+        assert_eq!(packet.data_len, data_len);
+    }
+
+    #[test]
+    fn test_read_invalid_filename() {
+        use byteorder::{WriteBytesExt, BE};
+        use std::io::Write;
+        // From https://stackoverflow.com/a/3886015
+        // Invalid 4 Octet Sequence (in 3rd Octet)
+        let filename = [0xf0, 0x90, 0x28, 0xbc];
+        let mimetype = "text/plain";
+        let data_len = 278475344u64;
+        let triple_byte = ((filename.len() as u32) << 12) | mimetype.len() as u32;
+        let mut data = vec![];
+        data.write_u24::<BE>(triple_byte).unwrap();
+        data.write_all(&filename).unwrap();
+        data.write_all(mimetype.as_bytes()).unwrap();
+        data.write_u8(0).unwrap(); // exts_len
+        data.write_u64::<BE>(data_len).unwrap();
+        let mut cursor = std::io::Cursor::new(data);
+
+        let packet = SenderPacket::read(&mut cursor);
+        /* Necessary because Error doesn't impl PartialEq */
+        assert!(packet.is_err());
+        match packet {
+            Err(e) => match e {
+                SenderPacketError::InvalidFilename => assert!(true),
+                _ => assert!(false),
+            },
+            _ => unreachable!(),
+        }
+    }
+
+    #[test]
+    fn test_read_invalid_mimetype() {
+        use byteorder::{WriteBytesExt, BE};
+        use std::io::Write;
+        let filename = "example.txt";
+        // From https://stackoverflow.com/a/3886015
+        // Invalid 4 Octet Sequence (in 3rd Octet)
+        let mimetype = [0xf0, 0x90, 0x28, 0xbc];
+        let data_len = 278475344u64;
+        let triple_byte = ((filename.len() as u32) << 12) | mimetype.len() as u32;
+        let mut data = vec![];
+        data.write_u24::<BE>(triple_byte).unwrap();
+        data.write_all(filename.as_bytes()).unwrap();
+        data.write_all(&mimetype).unwrap();
+        data.write_u8(0).unwrap(); // exts_len
+        data.write_u64::<BE>(data_len).unwrap();
+        let mut cursor = std::io::Cursor::new(data);
+
+        let packet = SenderPacket::read(&mut cursor);
+        /* Necessary because Error doesn't impl PartialEq */
+        assert!(packet.is_err());
+        match packet {
+            Err(e) => match e {
+                SenderPacketError::InvalidMIMEType => assert!(true),
+                _ => assert!(false),
+            },
+            _ => unreachable!(),
+        }
+    }
+
+    #[test]
+    fn test_write() {
+        use byteorder::{WriteBytesExt, BE};
+        use std::io::Write;
+        let filename = "example.txt";
+        let mimetype = "text/plain";
+        let data_len = 278475344u64;
+        let triple_byte = ((filename.len() as u32) << 12) | mimetype.len() as u32;
+        let mut expected = vec![];
+        expected.write_u24::<BE>(triple_byte).unwrap();
+        expected.write_all(filename.as_bytes()).unwrap();
+        expected.write_all(mimetype.as_bytes()).unwrap();
+        expected.write_u8(0).unwrap(); // exts_len
+        expected.write_u64::<BE>(data_len).unwrap();
+
+        let packet = SenderPacket::new(
+            filename.to_string(),
+            mimetype.to_string(),
+            Vec::new(),
+            data_len,
+        );
+        let mut out = Vec::new();
+        packet.write(&mut out).unwrap();
+
+        assert_eq!(out, expected);
+    }
 }
