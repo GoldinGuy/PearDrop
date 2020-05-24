@@ -121,6 +121,27 @@ impl SenderPacket {
             Ok(Vec::new())
         }
     }
+
+    /**
+     * Get the filename of this SenderPacket.
+     */
+    pub fn get_filename(&self) -> &str {
+        &self.filename
+    }
+
+    /**
+     * Get the MIME type of this SenderPacket.
+     */
+    pub fn get_mimetype(&self) -> &str {
+        &self.mimetype
+    }
+
+    /**
+     * Get the data length of this SenderPacket.
+     */
+    pub fn get_data_len(&self) -> u64 {
+        self.data_len
+    }
 }
 
 /// Maximum length of the filename in a SenderPacket.
