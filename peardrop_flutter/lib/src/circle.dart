@@ -95,19 +95,19 @@ class _CircleWaveRouteState extends State<CirclePage>
 
 class CircleWavePainter extends CustomPainter {
   final double waveRadius;
-  var wavePaint;
-  CircleWavePainter(this.waveRadius) {
-    wavePaint = Paint()
-      ..color = Colors.grey[200]
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
-      ..isAntiAlias = true;
-  }
+  final Paint wavePaint = Paint()
+    ..color = Colors.grey[200]
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 2.0
+    ..isAntiAlias = true;
+
+  CircleWavePainter(this.waveRadius);
+
   @override
   void paint(Canvas canvas, Size size) {
-    double centerX = size.width / 2.0;
-    double centerY = size.height / 1.25;
-    double maxRadius = hypot(centerX, centerY);
+    double centerX = size.width * 0.5;
+    double centerY = size.height * 0.8;
+    double maxRadius = centerX * centerX + centerY * centerY;
 
     var currentRadius = waveRadius;
     while (currentRadius < maxRadius) {
@@ -119,9 +119,5 @@ class CircleWavePainter extends CustomPainter {
   @override
   bool shouldRepaint(CircleWavePainter oldDelegate) {
     return oldDelegate.waveRadius != waveRadius;
-  }
-
-  double hypot(double x, double y) {
-    return math.sqrt(x * x + y * y);
   }
 }
