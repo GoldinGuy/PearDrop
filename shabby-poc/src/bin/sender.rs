@@ -3,7 +3,7 @@ use shabby_poc::*;
 use std::{fs, net};
 
 const UDP_MULTICAST_ADDRESS: net::Ipv4Addr = net::Ipv4Addr::new(224, 0, 0, 3);
-const LOCALHOST: net::Ipv4Addr = net::Ipv4Addr::new(0, 0, 0, 0);
+const INADDR_ANY: net::Ipv4Addr = net::Ipv4Addr::new(0, 0, 0, 0);
 
 #[derive(FromArgs)]
 /// Send a file to a receiver using PearDrop.
@@ -35,8 +35,8 @@ macro_rules! ask {
 
 fn main() -> std::io::Result<()> {
     let args: PearDropOpts = argh::from_env();
-    let self_udp_addr = net::SocketAddrV4::new(LOCALHOST, 0);
-    let self_tcp_addr = net::SocketAddrV4::new(LOCALHOST, args.self_port);
+    let self_udp_addr = net::SocketAddrV4::new(INADDR_ANY, args.self_port);
+    let self_tcp_addr = net::SocketAddrV4::new(INADDR_ANY, args.self_port);
 
     {
         println!("Binding UDP socket (ephmeral)");
