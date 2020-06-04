@@ -78,11 +78,13 @@ class _DevicesPageState extends State<DevicesPage> {
     }
 
     // dummy data
-    var numDevices = 3;
+    var numDevices = 5;
     var devices = new List(numDevices);
     devices[0] = new Device("Seth's iPhone", Icons.phone_iphone);
     devices[1] = new Device("Nick's Macbook", Icons.laptop_mac);
     devices[2] = new Device("Uanirudhx's PC", Icons.laptop_windows);
+    devices[3] = new Device("Bob's Samsung", Icons.phone_android);
+    devices[4] = new Device("Noskcaj's Mac", Icons.laptop);
 
     return MaterialApp(
       title: title,
@@ -120,12 +122,15 @@ class _DevicesPageState extends State<DevicesPage> {
                   padding: EdgeInsets.all(15.0),
                   shape: CircleBorder(),
                 ),
-                Text(
-                  devices[index].getName(),
-                  style: TextStyle(
-                    fontSize: 14,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 6.0, 0, 0),
+                  child: Text(
+                    devices[index].getName(),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
-                ),
+                )
               ],
             );
           }),
