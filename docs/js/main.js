@@ -4,12 +4,12 @@
 	// validation
 	var input = $(".validate-input .input100");
 
-	$(".validate-form").on("submit", function () {
+	$(".validate-form").submit(function () {
 		var check = true;
 
-		for (var i = 0; i < input.length; i++) {
-			if (validate(input[i]) == false) {
-				showValidate(input[i]);
+		for (var inp of input) {
+			if (!validate(inp)) {
+				showValidate(inp);
 				check = false;
 			}
 		}
@@ -31,12 +31,12 @@
 					.trim()
 					.match(
 						/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/
-					) == null
+					) === null
 			) {
 				return false;
 			}
 		} else {
-			if ($(input).val().trim() == "") {
+			if ($(input).val().trim().length === 0) {
 				return false;
 			}
 		}
@@ -54,11 +54,11 @@
 		$(thisAlert).removeClass("alert-validate");
 	}
 	//  modal
-	$(".modal-subscribe").on("click", function (e) {
+	$(".modal-subscribe").click(function (e) {
 		e.stopPropagation();
 	});
 
-	$(".btn-close-modal").on("click", function () {
+	$(".btn-close-modal").click(function () {
 		$("#subscribe").modal("hide");
 	});
 
@@ -68,7 +68,7 @@
 	});
 
 	// send mail
-	submit.onclick = function send_mail() {
+	$(submit).click(function() {
 		window.location.href =
 			"mailto:gspam275@gmail.com?subject=" +
 			encodeURI(
@@ -78,7 +78,7 @@
 			"&body=" +
 			encodeURI(document.getElementById("email_field").value);
 		return false;
-	};
+	});
 
 	// countdown
 	var deadline = new Date("Jun 28, 2020 15:37:25").getTime();
