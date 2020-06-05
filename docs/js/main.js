@@ -1,8 +1,7 @@
 (function ($) {
 	"use strict";
 
-	/*==================================================================
-    [ Validate ]*/
+	// validation
 	var input = $(".validate-input .input100");
 
 	$(".validate-form").on("submit", function () {
@@ -54,9 +53,7 @@
 
 		$(thisAlert).removeClass("alert-validate");
 	}
-
-	/*==================================================================
-    [ Modal ]*/
+	//  modal
 	$(".modal-subscribe").on("click", function (e) {
 		e.stopPropagation();
 	});
@@ -64,8 +61,36 @@
 	$(".btn-close-modal").on("click", function () {
 		$("#subscribe").modal("hide");
 	});
+
+	// tilt
+	$(".js-tilt").tilt({
+		scale: 1.1
+	});
+
+	// countdown
+	var deadline = new Date("Jun 28, 2020 15:37:25").getTime();
+	var x = setInterval(function () {
+		var now = new Date().getTime();
+		var t = deadline - now;
+		if (t < 0) {
+			t = 0;
+		}
+		document.getElementById("days").innerHTML = Math.floor(
+			t / (1000 * 60 * 60 * 24)
+		);
+		document.getElementById("hours").innerHTML = Math.floor(
+			(t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+		);
+		document.getElementById("minutes").innerHTML = Math.floor(
+			(t % (1000 * 60 * 60)) / (1000 * 60)
+		);
+		document.getElementById("seconds").innerHTML = Math.floor(
+			(t % (1000 * 60)) / 1000
+		);
+	}, 1000);
 })(jQuery);
 
+// send mail
 function send_mail() {
 	window.location.href =
 		"mailto:gspam275@gmail.com?subject=" +
@@ -77,21 +102,3 @@ function send_mail() {
 		encodeURI(document.getElementById("email_field").value);
 	return false;
 }
-
-var deadline = new Date("Jun 28, 2020 15:37:25").getTime();
-var x = setInterval(function () {
-	var now = new Date().getTime();
-	var t = deadline - now;
-	document.getElementById("days").innerHTML = Math.floor(
-		t / (1000 * 60 * 60 * 24)
-	);
-	document.getElementById("hours").innerHTML = Math.floor(
-		(t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-	);
-	document.getElementById("minutes").innerHTML = Math.floor(
-		(t % (1000 * 60 * 60)) / (1000 * 60)
-	);
-	document.getElementById("seconds").innerHTML = Math.floor(
-		(t % (1000 * 60)) / 1000
-	);
-}, 1000);
