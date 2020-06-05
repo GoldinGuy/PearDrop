@@ -1,15 +1,3 @@
-function send_mail() {
-	window.location.href =
-		"mailto:gspam275@gmail.com?subject=" +
-		encodeURI(
-			document.getElementById("name_field").value +
-				": New PearDrop Subscriber Email"
-		) +
-		"&body=" +
-		encodeURI(document.getElementById("email_field").value);
-	return false;
-}
-
 (function ($) {
 	"use strict";
 
@@ -77,3 +65,33 @@ function send_mail() {
 		$("#subscribe").modal("hide");
 	});
 })(jQuery);
+
+function send_mail() {
+	window.location.href =
+		"mailto:gspam275@gmail.com?subject=" +
+		encodeURI(
+			document.getElementById("name_field").value +
+				": New PearDrop Subscriber Email"
+		) +
+		"&body=" +
+		encodeURI(document.getElementById("email_field").value);
+	return false;
+}
+
+var deadline = new Date("Jun 28, 2020 15:37:25").getTime();
+var x = setInterval(function () {
+	var now = new Date().getTime();
+	var t = deadline - now;
+	document.getElementById("days").innerHTML = Math.floor(
+		t / (1000 * 60 * 60 * 24)
+	);
+	document.getElementById("hours").innerHTML = Math.floor(
+		(t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+	);
+	document.getElementById("minutes").innerHTML = Math.floor(
+		(t % (1000 * 60 * 60)) / (1000 * 60)
+	);
+	document.getElementById("seconds").innerHTML = Math.floor(
+		(t % (1000 * 60)) / 1000
+	);
+}, 1000);
