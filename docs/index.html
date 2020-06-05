@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+	<!-- header -->
 	<head>
 		<title>PearDrop</title>
 		<meta charset="UTF-8" />
@@ -13,6 +14,17 @@
 		<link
 			rel="stylesheet"
 			type="text/css"
+			href="externals/css_framework/style.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="externals/css_framework/util.css"
+		/>
+		<link rel="stylesheet" type="text/css" href="css/main.css" />
+		<link
+			rel="stylesheet"
+			type="text/css"
 			href="externals/animate/animate.css"
 		/>
 		<link
@@ -20,8 +32,6 @@
 			type="text/css"
 			href="externals/select2/select2.min.css"
 		/>
-		<link rel="stylesheet" type="text/css" href="css/util.css" />
-		<link rel="stylesheet" type="text/css" href="css/main.css" />
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap"
 			rel="stylesheet"
@@ -41,102 +51,56 @@
 		/>
 	</head>
 	<body>
+		<!-- hero area -->
 		<div
 			class="bg-g1 size1 flex-w flex-col-c-sb p-l-15 p-r-15 p-t-55 p-b-35 respon1"
 		>
 			<span></span>
 			<div class="flex-col-c p-t-50 p-b-50">
-				<h3
-					class="l1-txt1 txt-center p-b-10"
-					style="font-family: Montserrat; font-weight: 900;"
-				>
+				<h3 class="l1-txt1 txt-center p-b-10 mont-black">
 					PearDrop: Coming Soon
 				</h3>
 
-				<p
-					class="txt-center l1-txt2 p-b-60"
-					style="font-family: Montserrat; font-weight: 400;"
-				>
+				<p class="txt-center l1-txt2 p-b-60 mont-light">
 					A cross-platform file transfer application
 				</p>
-				<!-- set time -->
 
 				<div class="flex-w flex-c cd100 p-b-82">
 					<div class="flex-col-c-m size2 how-countdown">
-						<span
-							class="l1-txt3 p-b-9 days"
-							id="days"
-							style="font-family: Montserrat; font-weight: 700;"
-							>00</span
-						>
-						<span
-							class="s1-txt1"
-							style="font-family: Montserrat; font-weight: 500;"
-							>Days</span
-						>
+						<span class="l1-txt3 p-b-9 days mont-bold" id="days">00</span>
+						<span class="s1-txt1 mont-reg">Days</span>
 					</div>
 
 					<div class="flex-col-c-m size2 how-countdown">
-						<span
-							class="l1-txt3 p-b-9 hours"
-							id="hours"
-							style="font-family: Montserrat; font-weight: 700;"
-							>00</span
-						>
-						<span
-							class="s1-txt1"
-							style="font-family: Montserrat; font-weight: 500;"
-							>Hours</span
-						>
+						<span class="l1-txt3 p-b-9 hours mont-bold" id="hours">00</span>
+						<span class="s1-txt1 mont-reg">Hours</span>
 					</div>
 
 					<div class="flex-col-c-m size2 how-countdown">
-						<span
-							class="l1-txt3 p-b-9 minutes"
-							id="minutes"
-							style="font-family: Montserrat; font-weight: 700;"
-							>00</span
-						>
-						<span
-							class="s1-txt1"
-							style="font-family: Montserrat; font-weight: 500;"
-							>Minutes</span
-						>
+						<span class="l1-txt3 p-b-9 minutes mont-bold" id="minutes">00</span>
+						<span class="s1-txt1 mont-reg">Minutes</span>
 					</div>
 					<div id="time"></div>
 					<div class="flex-col-c-m size2 how-countdown">
-						<span
-							class="l1-txt3 p-b-9 seconds"
-							id="seconds"
-							style="font-family: Montserrat; font-weight: 700;"
-							>00</span
-						>
-						<span
-							class="s1-txt1"
-							style="font-family: Montserrat; font-weight: 500;"
-							>Seconds</span
-						>
+						<span class="l1-txt3 p-b-9 seconds mont-bold" id="seconds">00</span>
+						<span class="s1-txt1 mont-reg">Seconds</span>
 					</div>
 				</div>
-
+				<!-- subscribe button -->
 				<button
-					class="flex-c-m s1-txt2 size3 how-btn"
+					class="flex-c-m s1-txt2 size3 how-btn mont-bold"
 					data-toggle="modal"
 					data-target="#subscribe"
-					style="font-family: Montserrat; font-weight: 700;"
 				>
 					Follow us for updates!
 				</button>
 			</div>
-
-			<span
-				class="s1-txt3 txt-center"
-				style="font-family: Montserrat; font-weight: 500;"
-			>
+			<!-- copyright -->
+			<span class="s1-txt3 txt-center mont-reg">
 				@ 2020 PearDrop
 			</span>
 		</div>
-
+		<!-- popup -->
 		<div
 			class="modal fade"
 			id="subscribe"
@@ -154,17 +118,10 @@
 
 					<div class="wsize1 m-lr-auto">
 						<h3 class="m1-txt1 txt-center p-b-36">
-							<span
-								class="bor1 p-b-6"
-								style="font-family: Montserrat; font-weight: 900;"
-								>Subscribe</span
-							>
+							<span class="bor1 p-b-6 mont-bold">Subscribe</span>
 						</h3>
 
-						<p
-							class="m1-txt2 txt-center p-b-40"
-							style="font-family: Montserrat; font-weight: 700;"
-						>
+						<p class="m1-txt2 txt-center p-b-40 mont-bold">
 							Follow us for updates!
 						</p>
 
@@ -178,12 +135,11 @@
 								data-validate="Name is required"
 							>
 								<input
-									class="s1-txt4 placeholder0 input100"
+									class="s1-txt4 placeholder0 input100 mont-reg"
 									type="text"
 									name="name"
 									placeholder="Name"
 									id="name_field"
-									style="font-family: Montserrat; font-weight: 500;"
 								/>
 								<span class="focus-input100"></span>
 							</div>
@@ -193,41 +149,47 @@
 								data-validate="Email is required: ex@abc.xyz"
 							>
 								<input
-									class="s1-txt4 placeholder0 input100"
+									class="s1-txt4 placeholder0 input100 mont-reg"
 									type="text"
 									name="email"
 									id="email_field"
 									placeholder="Email"
-									style="font-family: Montserrat; font-weight: 500;"
 								/>
 								<span class="focus-input100"></span>
 							</div>
 
 							<div class="w-full">
 								<button
-									class="flex-c-m s1-txt2 size5 how-btn1 trans-04"
+									class="flex-c-m s1-txt2 size5 how-btn1 trans-04 mont-bold"
 									type="submit"
 									id="submit"
-									style="font-family: Montserrat; font-weight: 700;"
 								>
 									Get Updates
 								</button>
 							</div>
 						</form>
 
-						<p
-							class="s1-txt5 txt-center wsize2 m-lr-auto p-t-20"
-							style="font-family: Montserrat; font-weight: 500;"
-						>
+						<p class="s1-txt5 txt-center wsize2 m-lr-auto p-t-20 mont-reg">
 							We hate spam too! Unsubscribe at any time.
 						</p>
 					</div>
 				</div>
 			</div>
 		</div>
-
+		<!-- scripts -->
 		<script src="externals/jquery/jquery-3.2.1.min.js"></script>
 		<script src="externals/bootstrap/js/popper.js"></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+			integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+			integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+			crossorigin="anonymous"
+		></script>
+
 		<script src="externals/bootstrap/js/bootstrap.min.js"></script>
 		<script src="externals/select2/select2.min.js"></script>
 		<script src="externals/countdowntime/moment.min.js"></script>
@@ -235,11 +197,7 @@
 		<script src="externals/countdowntime/moment-timezone-with-data.min.js"></script>
 		<script src="externals/countdowntime/countdowntime.js"></script>
 		<script src="externals/tilt/tilt.jquery.min.js"></script>
-		<script>
-			$(".js-tilt").tilt({
-				scale: 1.1
-			});
-		</script>
+
 		<script src="js/main.js"></script>
 	</body>
 </html>
