@@ -1,6 +1,6 @@
-(function ($) {
-	"use strict";
+"use strict";
 
+(function ($) {
 	// validation
 	var input = $(".validate-input .input100");
 
@@ -67,6 +67,19 @@
 		scale: 1.1
 	});
 
+	// send mail
+	submit.onclick = function send_mail() {
+		window.location.href =
+			"mailto:gspam275@gmail.com?subject=" +
+			encodeURI(
+				document.getElementById("name_field").value +
+					": New PearDrop Subscriber Email"
+			) +
+			"&body=" +
+			encodeURI(document.getElementById("email_field").value);
+		return false;
+	};
+
 	// countdown
 	var deadline = new Date("Jun 28, 2020 15:37:25").getTime();
 	var x = setInterval(function () {
@@ -89,16 +102,3 @@
 		);
 	}, 1000);
 })(jQuery);
-
-// send mail
-function send_mail() {
-	window.location.href =
-		"mailto:gspam275@gmail.com?subject=" +
-		encodeURI(
-			document.getElementById("name_field").value +
-				": New PearDrop Subscriber Email"
-		) +
-		"&body=" +
-		encodeURI(document.getElementById("email_field").value);
-	return false;
-}
