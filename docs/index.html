@@ -8,23 +8,17 @@
 		<link
 			rel="stylesheet"
 			type="text/css"
-			href="vendor/bootstrap/css/bootstrap.min.css"
+			href="externals/bootstrap/css/bootstrap.min.css"
 		/>
 		<link
 			rel="stylesheet"
 			type="text/css"
-			href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"
+			href="externals/animate/animate.css"
 		/>
 		<link
 			rel="stylesheet"
 			type="text/css"
-			href="fonts/iconic/css/material-design-iconic-font.min.css"
-		/>
-		<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css" />
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="vendor/select2/select2.min.css"
+			href="externals/select2/select2.min.css"
 		/>
 		<link rel="stylesheet" type="text/css" href="css/util.css" />
 		<link rel="stylesheet" type="text/css" href="css/main.css" />
@@ -66,25 +60,6 @@
 					A cross-platform file transfer application
 				</p>
 				<!-- set time -->
-				<script>
-					var deadline = new Date("Jun 28, 2020 15:37:25").getTime();
-					var x = setInterval(function () {
-						var now = new Date().getTime();
-						var t = deadline - now;
-						document.getElementById("days").innerHTML = Math.floor(
-							t / (1000 * 60 * 60 * 24)
-						);
-						document.getElementById("hours").innerHTML = Math.floor(
-							(t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-						);
-						document.getElementById("minutes").innerHTML = Math.floor(
-							(t % (1000 * 60 * 60)) / (1000 * 60)
-						);
-						document.getElementById("seconds").innerHTML = Math.floor(
-							(t % (1000 * 60)) / 1000
-						);
-					}, 1000);
-				</script>
 
 				<div class="flex-w flex-c cd100 p-b-82">
 					<div class="flex-col-c-m size2 how-countdown">
@@ -251,15 +226,15 @@
 			</div>
 		</div>
 
-		<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-		<script src="vendor/bootstrap/js/popper.js"></script>
-		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-		<script src="vendor/select2/select2.min.js"></script>
-		<script src="vendor/countdowntime/moment.min.js"></script>
-		<script src="vendor/countdowntime/moment-timezone.min.js"></script>
-		<script src="vendor/countdowntime/moment-timezone-with-data.min.js"></script>
-		<script src="vendor/countdowntime/countdowntime.js"></script>
-		<script src="vendor/tilt/tilt.jquery.min.js"></script>
+		<script src="externals/jquery/jquery-3.2.1.min.js"></script>
+		<script src="externals/bootstrap/js/popper.js"></script>
+		<script src="externals/bootstrap/js/bootstrap.min.js"></script>
+		<script src="externals/select2/select2.min.js"></script>
+		<script src="externals/countdowntime/moment.min.js"></script>
+		<script src="externals/countdowntime/moment-timezone.min.js"></script>
+		<script src="externals/countdowntime/moment-timezone-with-data.min.js"></script>
+		<script src="externals/countdowntime/countdowntime.js"></script>
+		<script src="externals/tilt/tilt.jquery.min.js"></script>
 		<script>
 			$(".js-tilt").tilt({
 				scale: 1.1
