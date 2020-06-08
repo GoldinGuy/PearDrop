@@ -1,6 +1,6 @@
 use argh::FromArgs;
 use rand::prelude::*;
-use shabby_poc::*;
+use peardrop_protocol::*;
 use std::{fs, net};
 
 const UDP_MULTICAST_ADDRESS: net::Ipv4Addr = net::Ipv4Addr::new(224, 0, 0, 3);
