@@ -1,21 +1,15 @@
 use argh::FromArgs;
+use rand::prelude::*;
 use shabby_poc::*;
 use std::{fs, net};
 
 const UDP_MULTICAST_ADDRESS: net::Ipv4Addr = net::Ipv4Addr::new(224, 0, 0, 3);
+const UDP_MULTICAST_PORT: u16 = 65535;
 const INADDR_ANY: net::Ipv4Addr = net::Ipv4Addr::new(0, 0, 0, 0);
 
 #[derive(FromArgs)]
 /// Send a file to a receiver using PearDrop.
 struct PearDropOpts {
-    /// which TCP port we should use
-    #[argh(option)]
-    self_port: u16,
-
-    /// which TCP port the receiver is using
-    #[argh(option)]
-    other_port: u16,
-
     /// name of the file to send
     #[argh(positional)]
     filename: String,
@@ -35,8 +29,9 @@ macro_rules! ask {
 
 fn main() -> std::io::Result<()> {
     let args: PearDropOpts = argh::from_env();
-    let self_udp_addr = net::SocketAddrV4::new(INADDR_ANY, args.self_port);
-    let self_tcp_addr = net::SocketAddrV4::new(INADDR_ANY, args.self_port);
+    let self_port = random::<u16>() + 1025;
+    let self_udp_addr = net::SocketAddrV4::new(INADDR_ANY, self_port);
+    let self_tcp_addr = net::SocketAddrV4::new(INADDR_ANY, self_port);
 
     {
         println!("Binding UDP socket (ephmeral)");
@@ -46,7 +41,9 @@ fn main() -> std::io::Result<()> {
 
         // Send ad packet to multicast
         let out = {
-            let ad_packet = AdPacket::new(Vec::new());
+            let ad_packet = AdPacket::new(AdExtensions {
+                tcp: Some(TCPAdExtension { ad_port: self_port }),
+            });
             let mut out = Vec::new();
             ad_packet.write(&mut out).unwrap();
             out
@@ -54,7 +51,7 @@ fn main() -> std::io::Result<()> {
 
         sock.send_to(
             &out,
-            net::SocketAddrV4::new(UDP_MULTICAST_ADDRESS, args.self_port),
+            net::SocketAddrV4::new(UDP_MULTICAST_ADDRESS, UDP_MULTICAST_PORT),
         )?;
         println!("Broadcasted on UDP multicast");
     }
@@ -72,6 +69,14 @@ fn main() -> std::io::Result<()> {
         if let Some(true) = packet.get_type().is_accepted() {
             println!("Received accept ack");
             let peer_addr = stream.peer_addr()?;
+            // Try to get other port, otherwise reject
+            let other_port = if let Some(TCPAckExtension { ad_port: port }) = packet.extensions.tcp
+            {
+                port
+            } else {
+                println!("Couldn't find TCP extension, skipping");
+                continue;
+            };
             let should_send = ask!(
                 "Should we send to this receiver (addr={})? [y/n] ",
                 peer_addr
@@ -79,7 +84,7 @@ fn main() -> std::io::Result<()> {
             if should_send {
                 println!("Attempting to connect");
                 // Negotiate the rest of the handshake.
-                let addr = net::SocketAddr::new(peer_addr.ip(), args.other_port);
+                let addr = net::SocketAddr::new(peer_addr.ip(), other_port);
                 let mut connection = net::TcpStream::connect(addr)?;
                 println!("Connected to receiver");
                 let mut f = fs::File::open(&args.filename)?;

@@ -31,3 +31,13 @@ pub trait Marshal: std::fmt::Debug {
     where
         Self: Sized;
 }
+
+/**
+ * Generic interface for structs that have a predefined size.
+ */
+pub trait Size {
+    /**
+     * Size of this struct.
+     */
+    const SIZE: u8;
+}
