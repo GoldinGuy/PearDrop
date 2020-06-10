@@ -63,8 +63,9 @@ impl AdPacket {
         let mut buf = vec![0; 128];
         r.read(&mut buf)
             .map_err(|_| DekuError::InvalidParam("Failed to read".to_string()))?;
-        use std::convert::TryFrom;
-        Self::try_from(&buf[..])
+        // NOTE: Don't use TryFrom because it panics on extra data
+        let (_, res) = Self::from_bytes((&buf[..], 0))?;
+        Ok(res)
     }
 
     /**
