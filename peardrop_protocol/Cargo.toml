@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 deku = "0.4.0"
+num-traits = "0.2.11"
+num-derive = "0.3.0"
