@@ -52,6 +52,7 @@ fn write_acktype(
  */
 #[derive(Debug, Clone, Hash, PartialEq, Eq, DekuRead, DekuWrite)]
 #[deku(endian = "big", id_type = "u8")]
+#[non_exhaustive]
 pub enum AckExtension {
     #[deku(id = "TCP_EXTENSION_TYPE")]
     TCP { ad_port: u16 },

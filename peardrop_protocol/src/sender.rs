@@ -87,6 +87,7 @@ fn write_string(
  */
 #[derive(Debug, Clone, Hash, PartialEq, Eq, DekuRead, DekuWrite)]
 #[deku(endian = "big", id_type = "u8")]
+#[non_exhaustive]
 pub enum SenderExtension {
     // XXX: Remove this once SenderPacket has an extension
     #[deku(id = "0")]

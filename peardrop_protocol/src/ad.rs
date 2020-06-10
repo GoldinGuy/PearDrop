@@ -38,6 +38,7 @@ fn write_hashset(
  */
 #[derive(Debug, Clone, Hash, PartialEq, Eq, DekuRead, DekuWrite)]
 #[deku(endian = "big", id_type = "u8")]
+#[non_exhaustive]
 pub enum AdExtension {
     #[deku(id = "TCP_EXTENSION_TYPE")]
     TCP { ad_port: u16 },
