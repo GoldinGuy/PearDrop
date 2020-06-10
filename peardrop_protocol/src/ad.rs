@@ -5,7 +5,7 @@ use std::collections::HashSet;
  * Advertisement packet.
  * See the core protocol.
  */
-#[derive(Debug, DekuRead, DekuWrite)]
+#[derive(Debug, Clone, DekuRead, DekuWrite)]
 #[deku(endian = "big")]
 pub struct AdPacket {
     extensions_len: u8,
@@ -52,6 +52,28 @@ impl AdPacket {
             extensions_len: extensions.len() as _,
             extensions,
         }
+    }
+
+    /**
+     * Reads an AdPacket from the given reader.
+     */
+    pub fn read(r: &mut dyn std::io::Read) -> Result<Self, DekuError> {
+        // XXX: Keep this updated!
+        let mut buf = vec![0; 128];
+        r.read(&mut buf)
+            .map_err(|_| DekuError::InvalidParam("Failed to read".to_string()))?;
+        use std::convert::TryFrom;
+        Self::try_from(&buf[..])
+    }
+
+    /**
+     * Writes an AdPacket to the given writer.
+     */
+    pub fn write(&self, w: &mut dyn std::io::Write) -> Result<(), DekuError> {
+        use std::convert::TryInto;
+        let out: Vec<u8> = (*self).clone().try_into()?;
+        w.write_all(&out)
+            .map_err(|_| DekuError::InvalidParam("Failed to write".to_string()))
     }
 }
 

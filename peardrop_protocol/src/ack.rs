@@ -70,6 +70,28 @@ impl AckPacket {
     }
 
     /**
+     * Reads an AckPacket from the given reader.
+     */
+    pub fn read(r: &mut dyn std::io::Read) -> Result<Self, DekuError> {
+        // XXX: Keep this updated!
+        let mut buf = vec![0; 128];
+        r.read(&mut buf)
+            .map_err(|_| DekuError::InvalidParam("Failed to read".to_string()))?;
+        use std::convert::TryFrom;
+        Self::try_from(&buf[..])
+    }
+
+    /**
+     * Writes an AckPacket to the given writer.
+     */
+    pub fn write(&self, w: &mut dyn std::io::Write) -> Result<(), DekuError> {
+        use std::convert::TryInto;
+        let out: Vec<u8> = (*self).clone().try_into()?;
+        w.write_all(&out)
+            .map_err(|_| DekuError::InvalidParam("Failed to write".to_string()))
+    }
+
+    /**
      * Get the type of this AckPacket.
      */
     pub fn get_type(&self) -> AckType {

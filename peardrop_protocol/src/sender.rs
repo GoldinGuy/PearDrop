@@ -5,7 +5,7 @@ use std::collections::HashSet;
  * Sender packet.
  * See the core protocol.
  */
-#[derive(Debug, DekuRead, DekuWrite)]
+#[derive(Debug, Clone, DekuRead, DekuWrite)]
 #[deku(endian = "big")]
 pub struct SenderPacket {
     #[deku(bits = "12", map = "check_filename_length")]
@@ -114,6 +114,28 @@ impl SenderPacket {
             extensions,
             data_len,
         }
+    }
+
+    /**
+     * Reads a SenderPacket from the given reader.
+     */
+    pub fn read(r: &mut dyn std::io::Read) -> Result<Self, DekuError> {
+        // XXX: Keep this updated!
+        let mut buf = vec![0; 4096];
+        r.read(&mut buf)
+            .map_err(|_| DekuError::InvalidParam("Failed to read".to_string()))?;
+        use std::convert::TryFrom;
+        Self::try_from(&buf[..])
+    }
+
+    /**
+     * Writes a SenderPacket to the given writer.
+     */
+    pub fn write(&self, w: &mut dyn std::io::Write) -> Result<(), DekuError> {
+        use std::convert::TryInto;
+        let out: Vec<u8> = (*self).clone().try_into()?;
+        w.write_all(&out)
+            .map_err(|_| DekuError::InvalidParam("Failed to write".to_string()))
     }
 
     /**
