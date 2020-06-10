@@ -1,6 +1,7 @@
 use argh::FromArgs;
-use rand::prelude::*;
 use peardrop_protocol::*;
+use rand::prelude::*;
+use std::collections::HashSet;
 use std::{fs, net};
 
 const UDP_MULTICAST_ADDRESS: net::Ipv4Addr = net::Ipv4Addr::new(224, 0, 0, 3);
@@ -40,13 +41,14 @@ fn main() -> std::io::Result<()> {
         sock.set_broadcast(true)?;
 
         // Send ad packet to multicast
-        let out = {
-            let ad_packet = AdPacket::new(AdExtensions {
-                tcp: Some(TCPAdExtension { ad_port: self_port }),
+        let out: Vec<u8> = {
+            use std::convert::TryInto;
+            let ad_packet = AdPacket::new({
+                let mut h = HashSet::new();
+                h.insert(AdExtension::TCP { ad_port: self_port });
+                h
             });
-            let mut out = Vec::new();
-            ad_packet.write(&mut out).unwrap();
-            out
+            ad_packet.try_into().unwrap()
         };
 
         sock.send_to(
@@ -62,7 +64,7 @@ fn main() -> std::io::Result<()> {
     for stream in sock.incoming() {
         let mut stream = stream?;
         println!("Accepted TCP receiver");
-        // Read ack packet
+        // Read ack packet by reading up to 128 bytes, per spec
         let packet = AckPacket::read(&mut stream).expect("Malformed packet from receiver");
         println!("Read ack packet");
         // If accept, then ask user if they want to send
@@ -70,8 +72,11 @@ fn main() -> std::io::Result<()> {
             println!("Received accept ack");
             let peer_addr = stream.peer_addr()?;
             // Try to get other port, otherwise reject
-            let other_port = if let Some(TCPAckExtension { ad_port: port }) = packet.extensions.tcp
-            {
+            let other_port = if let Some(port) =
+                packet.extensions.iter().find_map(|ext| match ext {
+                    AckExtension::TCP { ad_port: port } => Some(*port),
+                    _ => None,
+                }) {
                 port
             } else {
                 println!("Couldn't find TCP extension, skipping");
@@ -93,7 +98,7 @@ fn main() -> std::io::Result<()> {
                 let packet = SenderPacket::new(
                     args.filename.clone(),
                     "text/plain".to_string(),
-                    Vec::new(),
+                    HashSet::new(),
                     data_len,
                 );
                 packet

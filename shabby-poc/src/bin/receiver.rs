@@ -1,6 +1,7 @@
 use argh::FromArgs;
-use rand::prelude::*;
 use peardrop_protocol::*;
+use rand::prelude::*;
+use std::collections::HashSet;
 use std::{fs, net};
 
 const UDP_MULTICAST_ADDRESS: net::Ipv4Addr = net::Ipv4Addr::new(224, 0, 0, 3);
@@ -44,10 +45,15 @@ fn main() -> std::io::Result<()> {
         let mut cursor = std::io::Cursor::new(msg);
         let packet = AdPacket::read(&mut cursor).expect("Malformed ad packet");
         println!("Received ad packet");
-        net::SocketAddr::new(
-            addr.ip(),
-            packet.extensions.tcp.expect("No TCP extension").ad_port,
-        )
+        let port = packet
+            .extensions
+            .iter()
+            .find_map(|ext| match ext {
+                AdExtension::TCP { ad_port: port } => Some(*port),
+                _ => None,
+            })
+            .expect("No TCP extension");
+        net::SocketAddr::new(addr.ip(), port)
     };
 
     // TCP step (1)
@@ -56,12 +62,11 @@ fn main() -> std::io::Result<()> {
         let mut stream = net::TcpStream::connect(other_tcp_addr)?;
         println!("Connected to sender TCP");
         let ack_type = AckType::AcceptReject(AckTypeType::AdPacket, true);
-        let packet = AckPacket::new(
-            ack_type,
-            AckExtensions {
-                tcp: Some(TCPAckExtension { ad_port: self_port }),
-            },
-        );
+        let packet = AckPacket::new(ack_type, {
+            let mut h = HashSet::new();
+            h.insert(AckExtension::TCP { ad_port: self_port });
+            h
+        });
         packet
             .write(&mut stream)
             .expect("Could not write packet to sender");
@@ -91,7 +96,7 @@ fn main() -> std::io::Result<()> {
         // Receive by acking with an accept
         let ackp = AckPacket::new(
             AckType::AcceptReject(AckTypeType::SenderPacket, true),
-            AckExtensions::default(),
+            HashSet::new(),
         );
         ackp.write(&mut stream)
             .expect("Could not write packet to sender");
@@ -101,10 +106,7 @@ fn main() -> std::io::Result<()> {
         let mut f = fs::File::create(args.out)?;
         std::io::copy(&mut (&mut stream).take(packet.get_data_len()), &mut f)?;
         // Send ack
-        let ackp = AckPacket::new(
-            AckType::Normal(AckTypeType::DataPacket),
-            AckExtensions::default(),
-        );
+        let ackp = AckPacket::new(AckType::Normal(AckTypeType::DataPacket), HashSet::new());
         ackp.write(&mut stream)
             .expect("Could not write packet to sender");
         println!("Send data accept ack");
@@ -113,7 +115,7 @@ fn main() -> std::io::Result<()> {
         // Ack with a reject
         let ackp = AckPacket::new(
             AckType::AcceptReject(AckTypeType::SenderPacket, false),
-            AckExtensions::default(),
+            HashSet::new(),
         );
         ackp.write(&mut stream)
             .expect("Could not write packet to sender");
