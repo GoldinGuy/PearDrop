@@ -1,95 +1,97 @@
-use super::Marshal;
-use thiserror::Error;
-
-/**
- * Sender packet extension.
- *
- * Empty as it is implemented by other structs.
- *
- * TODO: Add Error type.
- */
-pub trait SenderExtension: std::fmt::Debug {}
+use deku::prelude::*;
+use std::collections::HashSet;
 
 /**
  * Sender packet.
  * See the core protocol.
  */
-#[derive(Debug)]
+#[derive(Debug, DekuRead, DekuWrite)]
+#[deku(endian = "big")]
 pub struct SenderPacket {
+    #[deku(bits = "12", map = "check_filename_length")]
+    filename_len: u16,
+    #[deku(bits = "12", map = "check_mimetype_length")]
+    mimetype_len: u16,
+    #[deku(
+        count = "filename_len",
+        /* vec <-> string */
+        map = "|x: Vec<u8>| -> Result<_, DekuError> { String::from_utf8(x).map_err(|e| DekuError::Parse(e.to_string())) }",
+        writer = "write_string(&self.filename, output_is_le, field_bits)"
+    )]
     filename: String,
+    #[deku(
+        count = "mimetype_len",
+        /* vec <-> string */
+        map = "|x: Vec<u8>| -> Result<_, DekuError> { String::from_utf8(x).map_err(|e| DekuError::Parse(e.to_string())) }",
+        writer = "write_string(&self.mimetype, output_is_le, field_bits)"
+    )]
     mimetype: String,
-    extensions: Vec<Box<dyn SenderExtension>>,
+    extensions_len: u8,
+    #[deku(
+        count = "extensions_len",
+        /* vec <-> hashset */
+        map = "|x: Vec<SenderExtension>| -> Result<_, DekuError> { Ok(x.into_iter().collect::<HashSet<_>>()) }",
+        writer = "write_hashset(&self.extensions, output_is_le, field_bits)"
+    )]
+    extensions: HashSet<SenderExtension>,
     data_len: u64,
 }
 
-impl Marshal for SenderPacket {
-    type Error = SenderPacketError;
-
-    /**
-     * Reads a SenderPacket from the given reader.
-     */
-    fn read(r: &mut dyn std::io::Read) -> Result<Self, Self::Error> {
-        use byteorder::{ReadBytesExt, BE};
-        use ux::u12;
-        let triple_byte = r.read_u24::<BE>()?;
-        // Take out filename length and MIME type length
-        let filename_len = u12::new(((triple_byte & 0xfff000) >> 12) as u16);
-        let mimetype_len = u12::new((triple_byte & 0xfff) as u16);
-        if u16::from(filename_len) > MAX_FILENAME_LEN {
-            return Err(SenderPacketError::FilenameLengthExceeded(filename_len));
-        }
-        if u16::from(mimetype_len) > MAX_MIMETYPE_LEN {
-            return Err(SenderPacketError::MIMETypeLengthExceeded(mimetype_len));
-        }
-
-        // Read filename and MIME type
-        let mut filename_v = vec![0; u16::from(filename_len) as usize];
-        r.read_exact(&mut filename_v)?;
-        let filename = match String::from_utf8(filename_v) {
-            Ok(s) => s,
-            Err(_) => return Err(SenderPacketError::InvalidFilename),
-        };
-        let mut mimetype_v = vec![0; u16::from(mimetype_len) as usize];
-        r.read_exact(&mut mimetype_v)?;
-        let mimetype = match String::from_utf8(mimetype_v) {
-            Ok(s) => s,
-            Err(_) => return Err(SenderPacketError::InvalidMIMEType),
-        };
-
-        // Read extensions
-        let exts_len = r.read_u8()?;
-        let exts = Self::read_exts(r, exts_len)?;
-
-        // Read data lenth
-        let data_len = r.read_u64::<BE>()?;
-
-        Ok(Self::new(filename, mimetype, exts, data_len))
+/* util */
+fn check_filename_length(x: u16) -> Result<u16, DekuError> {
+    if x <= MAX_FILENAME_LEN {
+        Ok(x)
+    } else {
+        Err(DekuError::Parse(format!(
+            "Exceeded maximum filename length of {} (got {})",
+            MAX_FILENAME_LEN, x
+        )))
     }
+}
 
-    /**
-     * Writes this SenderPacket to the given writer.
-     */
-    fn write(&self, w: &mut dyn std::io::Write) -> Result<(), Self::Error> {
-        use byteorder::{WriteBytesExt, BE};
-        let ext_len = self.extensions.len();
-        if ext_len != 0 {
-            unimplemented!();
-        }
-
-        // Write filename and MIME type
-        let triple_byte = ((self.filename.len() as u32) << 12) | self.mimetype.len() as u32;
-        w.write_u24::<BE>(triple_byte)?;
-        w.write_all(&self.filename.as_bytes())?;
-        w.write_all(&self.mimetype.as_bytes())?;
-
-        // Write extensions
-        w.write_u8(ext_len as u8)?;
-
-        // Write data_len
-        w.write_u64::<BE>(self.data_len)?;
-
-        Ok(())
+fn check_mimetype_length(x: u16) -> Result<u16, DekuError> {
+    if x <= MAX_MIMETYPE_LEN {
+        Ok(x)
+    } else {
+        Err(DekuError::Parse(format!(
+            "Exceeded maximum MIME type length of {} (got {})",
+            MAX_MIMETYPE_LEN, x
+        )))
     }
+}
+
+/* Hack because there is no write map for now */
+fn write_hashset(
+    x: &HashSet<SenderExtension>,
+    output_is_le: bool,
+    bit_size: Option<usize>,
+) -> Result<BitVec<Msb0, u8>, DekuError> {
+    x.iter()
+        .cloned()
+        .collect::<Vec<_>>()
+        .write(output_is_le, bit_size)
+}
+
+/* Hack because there is no write string for now */
+fn write_string(
+    x: &str,
+    output_is_le: bool,
+    bit_size: Option<usize>,
+) -> Result<BitVec<Msb0, u8>, DekuError> {
+    x.as_bytes().to_vec().write(output_is_le, bit_size)
+}
+
+/**
+ * Extension to a sender packet.
+ * See the core protocol.
+ */
+#[derive(Debug, Clone, Hash, PartialEq, Eq, DekuRead, DekuWrite)]
+#[deku(endian = "big", id_type = "u8")]
+pub enum SenderExtension {
+    // XXX: Remove this once SenderPacket has an extension
+    #[deku(id = "0")]
+    #[allow(non_camel_case_types)]
+    _hack,
 }
 
 impl SenderPacket {
@@ -100,25 +102,17 @@ impl SenderPacket {
     pub fn new(
         filename: String,
         mimetype: String,
-        extensions: Vec<Box<dyn SenderExtension>>,
+        extensions: HashSet<SenderExtension>,
         data_len: u64,
     ) -> Self {
         Self {
+            filename_len: filename.len() as _,
+            mimetype_len: mimetype.len() as _,
             filename,
             mimetype,
+            extensions_len: extensions.len() as _,
             extensions,
             data_len,
-        }
-    }
-
-    fn read_exts(
-        _r: &mut dyn std::io::Read,
-        exts_len: u8,
-    ) -> Result<Vec<Box<dyn SenderExtension>>, SenderPacketError> {
-        if exts_len != 0 {
-            unimplemented!()
-        } else {
-            Ok(Vec::new())
         }
     }
 
@@ -145,30 +139,14 @@ impl SenderPacket {
 }
 
 /// Maximum length of the filename in a SenderPacket.
-pub const MAX_FILENAME_LEN: u16 = 4084; /* see kjetilkjeka/ux#5 */
+pub const MAX_FILENAME_LEN: u16 = 4084;
 /// Maximum length of the MIME type in a SenderPacket.
-pub const MAX_MIMETYPE_LEN: u16 = 4084; /* see kjetilkjeka/ux#5 */
-
-/**
- * Error while constructing a SenderPacket.
- */
-#[derive(Error, Debug)]
-pub enum SenderPacketError {
-    #[error("Filename length exceeded {} bytes (got {0} bytes)", MAX_FILENAME_LEN)]
-    FilenameLengthExceeded(ux::u12),
-    #[error("MIME type length exceeded {} bytes (got {0} bytes)", MAX_MIMETYPE_LEN)]
-    MIMETypeLengthExceeded(ux::u12),
-    #[error("Filename is not valid UTF-8")]
-    InvalidFilename,
-    #[error("MIME type is not valid UTF-8")]
-    InvalidMIMEType,
-    #[error("IO error: {0}")]
-    IO(#[from] std::io::Error),
-}
+pub const MAX_MIMETYPE_LEN: u16 = 4084;
 
 #[cfg(test)]
 mod test {
     use super::*;
+    use std::convert::{TryFrom, TryInto};
 
     #[test]
     fn test_read() {
@@ -184,9 +162,8 @@ mod test {
         data.write_all(mimetype.as_bytes()).unwrap();
         data.write_u8(0).unwrap(); // exts_len
         data.write_u64::<BE>(data_len).unwrap();
-        let mut cursor = std::io::Cursor::new(data);
 
-        let packet = SenderPacket::read(&mut cursor).unwrap();
+        let packet = SenderPacket::try_from(&data[..]).unwrap();
         assert_eq!(packet.extensions.len(), 0);
         assert_eq!(packet.filename, filename);
         assert_eq!(packet.mimetype, mimetype);
@@ -209,18 +186,9 @@ mod test {
         data.write_all(mimetype.as_bytes()).unwrap();
         data.write_u8(0).unwrap(); // exts_len
         data.write_u64::<BE>(data_len).unwrap();
-        let mut cursor = std::io::Cursor::new(data);
 
-        let packet = SenderPacket::read(&mut cursor);
-        /* Necessary because Error doesn't impl PartialEq */
+        let packet = SenderPacket::try_from(&data[..]);
         assert!(packet.is_err());
-        match packet {
-            Err(e) => match e {
-                SenderPacketError::InvalidFilename => assert!(true),
-                _ => assert!(false),
-            },
-            _ => unreachable!(),
-        }
     }
 
     #[test]
@@ -239,18 +207,9 @@ mod test {
         data.write_all(&mimetype).unwrap();
         data.write_u8(0).unwrap(); // exts_len
         data.write_u64::<BE>(data_len).unwrap();
-        let mut cursor = std::io::Cursor::new(data);
 
-        let packet = SenderPacket::read(&mut cursor);
-        /* Necessary because Error doesn't impl PartialEq */
+        let packet = SenderPacket::try_from(&data[..]);
         assert!(packet.is_err());
-        match packet {
-            Err(e) => match e {
-                SenderPacketError::InvalidMIMEType => assert!(true),
-                _ => assert!(false),
-            },
-            _ => unreachable!(),
-        }
     }
 
     #[test]
@@ -271,11 +230,10 @@ mod test {
         let packet = SenderPacket::new(
             filename.to_string(),
             mimetype.to_string(),
-            Vec::new(),
+            HashSet::new(),
             data_len,
         );
-        let mut out = Vec::new();
-        packet.write(&mut out).unwrap();
+        let out: Vec<u8> = packet.try_into().unwrap();
 
         assert_eq!(out, expected);
     }
