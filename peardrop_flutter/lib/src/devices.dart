@@ -21,7 +21,7 @@ class _DevicesPageState extends State<DevicesPage> {
     Map<String, String> _paths;
     String _extension;
     bool _loadingPath = false;
-    // if multi-pick is true mutliple files can be selected
+    // if multi-pick = true mutliple files can be selected
     bool _multiPick = false;
     FileType _pickingType = FileType.any;
     TextEditingController _controller = new TextEditingController();
@@ -78,11 +78,13 @@ class _DevicesPageState extends State<DevicesPage> {
     }
 
     // dummy data
-    var numDevices = 3;
+    var numDevices = 1;
     var devices = new List(numDevices);
-    devices[0] = new Device("Seth's iPhone", Icons.phone_iphone);
-    devices[1] = new Device("Nick's Macbook", Icons.laptop_mac);
-    devices[2] = new Device("Uanirudhx's PC", Icons.laptop_windows);
+    devices[0] = new Device("Seth's Laptop", Icons.phone_iphone);
+    // devices[1] = new Device("Bob's Macbook", Icons.laptop_mac);
+    // devices[2] = new Device("Anirudh's PC", Icons.laptop_windows);
+    // devices[3] = new Device("Jack's Samsung", Icons.phone_android);
+    // devices[4] = new Device("Suzy's Mac", Icons.laptop_mac);
 
     return MaterialApp(
       title: title,
@@ -90,17 +92,35 @@ class _DevicesPageState extends State<DevicesPage> {
       home: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(title),
-          // TODO: determine which bg color is better - backgroundColor: Color(0xff759055),
-          backgroundColor: Color(0xff6b9080),
-          // TODO: alter buttons to lead to actual pages
-          actions: <Widget>[
-            IconButton(
-              tooltip: 'Settings',
-              icon: Icon(Icons.settings),
-              onPressed: () => Navigator.pushNamed(context, '/settings'),
-            ),
-          ],
+          title: Center(
+            child: Text(title,
+                style: TextStyle(
+                    fontFamily: 'Open Sans', fontWeight: FontWeight.w700)),
+            // TODO: determine solid color VS gradient  // backgroundColor: Color(0xff6b9080),
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                  Color(0xff91c27d),
+                  Color(0xff559364),
+                ])),
+          ),
+          // TODO: uncomment buttons when pages are ready to be implemented
+          // leading: IconButton(
+          //   tooltip: 'History',
+          //   icon: Icon(Icons.history),
+          //   onPressed: () => Navigator.pushNamed(context, '/history'),
+          // ),
+          // actions: <Widget>[
+          //   IconButton(
+          //     tooltip: 'Settings',
+          //     icon: Icon(Icons.settings),
+          //     onPressed: () => Navigator.pushNamed(context, '/settings'),
+          //   ),
+          // ],
         ),
         body: GridView.count(
           crossAxisCount: 3,
@@ -108,7 +128,6 @@ class _DevicesPageState extends State<DevicesPage> {
             return Column(
               children: [
                 Spacer(),
-                // TODO: determine shape outline vs bg
                 RawMaterialButton(
                   onPressed: () => _openFileExplorer(),
                   elevation: 0.0,
@@ -120,15 +139,32 @@ class _DevicesPageState extends State<DevicesPage> {
                   padding: EdgeInsets.all(15.0),
                   shape: CircleBorder(),
                 ),
-                Text(
-                  devices[index].getName(),
-                  style: TextStyle(
-                    fontSize: 14,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                  child: Text(
+                    devices[index].getName(),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ],
             );
           }),
+        ),
+        bottomNavigationBar: Stack(
+          children: [
+            new Container(
+              height: 30.0,
+              color: Colors.white12,
+              child: Center(
+                child: Text(
+                  '1.0.0+0',
+                  style: TextStyle(color: Colors.grey[500]),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

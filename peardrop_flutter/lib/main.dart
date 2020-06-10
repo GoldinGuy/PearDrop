@@ -15,6 +15,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Color(0xff6b9080),
+        accentColor: Color(0xff91c27d),
+        fontFamily: 'Open Sans',
       ),
       routes: {
         '/circle': (_) => CirclePage(),
