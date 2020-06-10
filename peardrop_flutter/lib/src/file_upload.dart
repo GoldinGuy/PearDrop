@@ -87,41 +87,6 @@ class _FileUploadState extends State<FileUpload> {
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // new Padding(
-                //   padding: const EdgeInsets.only(top: 20.0),
-                //   child: new DropdownButton(
-                //       hint: new Text('Load path from'),
-                //       value: _pickingType,
-                //       items: <DropdownMenuItem>[
-                //         new DropdownMenuItem(
-                //           child: new Text('Audio'),
-                //           value: FileType.audio,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('Images'),
-                //           value: FileType.image,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('Video'),
-                //           value: FileType.video,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('All Media'),
-                //           value: FileType.media,
-                //         ),
-                //         new DropdownMenuItem(
-                //           child: new Text('All Files'),
-                //           value: FileType.any,
-                //         ),
-
-                //       ],
-                //       onChanged: (value) => setState(() {
-                //             _pickingType = value;
-                //             if (_pickingType != FileType.custom) {
-                //               _controller.text = _extension = '';
-                //             }
-                //           })),
-                // ),
                 new ConstrainedBox(
                   constraints: BoxConstraints.tightFor(width: 100.0),
                   child: _pickingType == FileType.custom
