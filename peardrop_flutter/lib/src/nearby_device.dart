@@ -3,19 +3,19 @@
 import 'package:flutter/cupertino.dart';
 
 class Device {
-  String device_name;
-  IconData icon_name;
+  String deviceName;
+  IconData iconName;
 
   Device(dn, icon) {
-    device_name = dn;
-    icon_name = icon;
+    deviceName = dn;
+    iconName = icon;
   }
 
   String getName() {
-    return device_name;
+    return deviceName;
   }
 
   IconData getIcon() {
-    return icon_name;
+    return iconName;
   }
 }

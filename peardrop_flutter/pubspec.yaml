@@ -8,7 +8,11 @@ dependencies:
 
   cupertino_icons: ^0.1.2
 
+  sliding_up_panel: ^1.0.2
+
   file_picker: ^1.9.0+1
+
+  device_info: ^0.4.2+4
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +34,9 @@ flutter:
           weight: 500
         - asset: assets/fonts/OpenSans-Bold.ttf
           weight: 700
+
+dependency_overrides:
+  sliding_up_panel:
+    git:
+      url: https://github.com/GoldinGuy/sliding_up_panel
+      ref: master

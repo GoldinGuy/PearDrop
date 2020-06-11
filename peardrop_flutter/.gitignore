@@ -13,3 +13,5 @@ pubspec.lock
 .flutter-plugins
 .flutter-plugins-dependencies
 Podfile.lock
+.oldcode.txt
+*.oldcode.txt
