@@ -16,8 +16,13 @@ class DevicesPage extends StatefulWidget {
 
 class _DevicesPageState extends State<DevicesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  String _path, _fileName, _extension, deviceId = "Device";
+  PanelController _pc = new PanelController();
+  String _path,
+      _fileName,
+      _extension,
+      deviceId = "Device",
+      nameOfRecipient = "Unknown";
+  IconData iconOfRecipient;
   Map<String, String> _paths;
   bool _loadingPath = false;
   // if multi-pick = true mutliple files can be selected
@@ -43,8 +48,18 @@ class _DevicesPageState extends State<DevicesPage> {
     }
   }
 
+  cancelShare() {
+    _pc.close();
+  }
+
+  filePickAndShare(iOR, nOR) {
+    iconOfRecipient = iOR;
+    nameOfRecipient = nOR;
+    _openFileExplorer();
+  }
+
   // this method allows user to upload files
-  void _openFileExplorer() async {
+  _openFileExplorer() async {
     setState(() => _loadingPath = true);
     try {
       if (_multiPick) {
@@ -72,6 +87,11 @@ class _DevicesPageState extends State<DevicesPage> {
           ? _path.split('/').last
           : _paths != null ? _paths.keys.toString() : '...';
     });
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if ('$_fileName' != null) {
+        _pc.open();
+      }
+    });
   }
 
   // this method clear the temporary cache
@@ -95,7 +115,9 @@ class _DevicesPageState extends State<DevicesPage> {
 
   final double _initFabHeight = 120.0;
   double _panelHeightOpen;
-  double _panelHeightClosed = 95.0;
+  // double _panelHeightClosed = 95.0;
+  // TODO: set this to a value higher than 0 if wanting a "closed" modal
+  double _panelHeightClosed = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -125,9 +147,14 @@ class _DevicesPageState extends State<DevicesPage> {
           alignment: Alignment.topCenter,
           children: <Widget>[
             SlidingUpPanel(
+              controller: _pc,
               maxHeight: _panelHeightOpen,
               minHeight: _panelHeightClosed,
               defaultPanelState: PanelState.CLOSED,
+              backdropEnabled: true,
+              backdropOpacity: 0.5,
+              isDraggable: false,
+
               // TODO: determine if parallax is neccessary
               // parallaxEnabled: true,
               // parallaxOffset: .5,
@@ -137,44 +164,48 @@ class _DevicesPageState extends State<DevicesPage> {
                   topLeft: Radius.circular(18.0),
                   topRight: Radius.circular(18.0)),
               onPanelSlide: (double pos) => setState(() {}),
-              collapsed: Container(
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Container(
-                      width: 30,
-                      height: 5,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(12.0))),
-                    ),
-                    SizedBox(
-                      height: 18,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Visible as ",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Open Sans',
-                          ),
-                        ),
-                        Text(
-                          '$deviceId',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
+              // TODO: determine if collapsed is neccessary
+              // collapsed: Container(
+              //   color: Colors.white,
+              //   child: Column(
+              //     children: [
+              //       SizedBox(
+              //         height: 18,
+              //       ),
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Text(
+              //             "Visible as ",
+              //             style: TextStyle(
+              //               color: Colors.black,
+              //               fontFamily: 'Open Sans',
+              //             ),
+              //           ),
+              //           Text(
+              //             '$deviceId',
+              //             style: TextStyle(
+              //                 color: Colors.black,
+              //                 fontFamily: 'Open Sans',
+              //                 fontWeight: FontWeight.bold),
+              //           ),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: Stack(
+          children: [
+            new Container(
+              height: 30.0,
+              color: Colors.white10,
+              child: Center(
+                child: Text(
+                  '1.0.0+0',
+                  style: TextStyle(color: Colors.grey[500]),
                 ),
               ),
             ),
@@ -212,7 +243,10 @@ class _DevicesPageState extends State<DevicesPage> {
                   return Column(
                     children: [
                       RawMaterialButton(
-                        onPressed: () => _openFileExplorer(),
+                        onPressed: () => filePickAndShare(
+                          devices[index].getIcon(),
+                          devices[index].getName(),
+                        ),
                         elevation: 0.0,
                         fillColor: Color(0xff91c27d),
                         child: Icon(
@@ -253,29 +287,39 @@ class _DevicesPageState extends State<DevicesPage> {
         child: ListView(
           controller: sc,
           children: <Widget>[
-            SizedBox(
-              height: 12.0,
-            ),
+            // SizedBox(
+            //   height: 12.0,
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: <Widget>[
+            //     Container(
+            //       width: 30,
+            //       height: 5,
+            //       decoration: BoxDecoration(
+            //           color: Colors.grey[300],
+            //           borderRadius: BorderRadius.all(Radius.circular(12.0))),
+            //     ),
+            //   ],
+            // ),
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 30,
-                  height: 5,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text('Cancel'),
+                CloseButton(
+                  onPressed: () => cancelShare(),
                 ),
               ],
             ),
             SizedBox(
-              height: 18.0,
+              height: 8.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Sharing to Bob's PC",
+                  "Sharing to " + '$nameOfRecipient',
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Open Sans',
@@ -292,7 +336,7 @@ class _DevicesPageState extends State<DevicesPage> {
               children: <Widget>[
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 25, 0, 25),
+                  padding: EdgeInsets.fromLTRB(0, 21, 0, 21),
                   color: Colors.grey[50],
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -302,7 +346,7 @@ class _DevicesPageState extends State<DevicesPage> {
                         size: 30,
                       ),
                       Center(
-                        child: Text('VOD_349278957_83.MP4',
+                        child: Text('$_fileName',
                             style: TextStyle(
                                 fontFamily: 'Open Sans', fontSize: 15)),
                       ),
@@ -312,7 +356,7 @@ class _DevicesPageState extends State<DevicesPage> {
 
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 15, 0, 5),
+                  padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
                   child: Center(
                     child: Stack(
                       children: [
@@ -328,11 +372,11 @@ class _DevicesPageState extends State<DevicesPage> {
                           width: 70,
                         ),
                         RawMaterialButton(
-                          onPressed: () => _openFileExplorer(),
+                          onPressed: () => {},
                           elevation: 0.0,
                           fillColor: Color(0xff91c27d),
                           child: Icon(
-                            Icons.phone_iphone,
+                            iconOfRecipient,
                             size: 35.0,
                             color: Colors.white,
                           ),
@@ -345,19 +389,22 @@ class _DevicesPageState extends State<DevicesPage> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: 30,
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(18, 5, 3, 0),
+                        child: Icon(
+                          Icons.error_outline,
+                          size: 30,
+                        ),
                       ),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
                           child: Text(
-                              'Make sure both devices are unlocked, close together (within 1ft), and have bluetooth and WiFi enabled',
+                              'Make sure both devices are unlocked, close together (within 1ft), and have Bluetooth and WiFi enabled',
                               style: TextStyle(
                                   fontFamily: 'Open Sans', fontSize: 15)),
                         ),
