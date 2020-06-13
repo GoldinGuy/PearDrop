@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:peardrop/src/circle.dart';
 import 'package:peardrop/src/devices.dart';
-import 'package:peardrop/src/file_upload.dart';
 import 'package:flutter/widgets.dart';
-import 'package:peardrop/src/settings.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,9 +16,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Open Sans',
       ),
       routes: {
-        '/circle': (_) => CirclePage(),
         '/devices': (_) => DevicesPage(),
-        '/settings': (_) => SettingsScreen(),
       },
       home: DevicesPage(),
     );

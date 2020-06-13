@@ -15,3 +15,5 @@ pubspec.lock
 Podfile.lock
 .oldcode.txt
 *.oldcode.txt
+.circle.dart
+.file_upload.dart
