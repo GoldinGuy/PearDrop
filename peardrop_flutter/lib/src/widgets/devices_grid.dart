@@ -15,7 +15,7 @@ class DevicesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var columns = min(devices.length, 3);
+    var columns = min(devices.length, 2);
     // columns = 0;
     if (columns <= 0) {
       return Center(
@@ -62,7 +62,18 @@ class DevicesGrid extends StatelessWidget {
                             devices[index].getName(),
                             style: TextStyle(
                               fontSize: 15,
+                              fontFamily: 'Open Sans',
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                          child: Text(
+                            devices[index].getIP(),
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontFamily: 'Open Sans',
+                                color: Colors.grey),
                           ),
                         ),
                       ],

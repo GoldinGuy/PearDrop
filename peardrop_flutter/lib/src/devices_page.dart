@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:peardrop/src/utilities/sharing_service.dart';
+import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/devices_grid.dart';
 import 'package:peardrop/src/widgets/peardrop_appbar.dart';
@@ -29,7 +30,7 @@ class _DevicesPageState extends State<DevicesPage> {
       _fileName,
       _extension,
       nameOfPeer = "Unknown",
-      deviceId = "PearPhone",
+      deviceId = "190.160.225.16",
       pearPanel = "sharing";
   IconData iconOfPeer;
   Map<String, String> _paths;
@@ -44,9 +45,8 @@ class _DevicesPageState extends State<DevicesPage> {
     _controller.addListener(() => _extension = _controller.text);
     // TODO: determine how best to use deviceInfo | deviceId = DeviceDetails().getDeviceDetails() as String;
     // dummy data
-    devices.add(Device("Seth's XR", Icons.phone_iphone, '190.160.225.16'));
-    devices.add(Device("Bob's Macbook", Icons.laptop_mac, '140.70.235.92'));
-    devices.add(Device("Anirudh's PC", Icons.laptop_windows, '3.219.241.180'));
+    devices.add(Device(Icons.phone_iphone, '140.70.235.92'));
+    devices.add(Device(Icons.laptop_windows, '3.219.241.180'));
   }
 
   // cancels file sharing
@@ -113,7 +113,7 @@ class _DevicesPageState extends State<DevicesPage> {
         body: _getBody(),
         bottomNavigationBar: BottomVersionBar(
           version: '1.0.0+0',
-          deviceName: 'foobar',
+          deviceName: WordList().ipToWords(deviceId),
         ),
       ),
     );

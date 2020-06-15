@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'progress_indicator.dart';
 
@@ -54,9 +53,12 @@ class SlidingPanelReceive extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.description,
-                              size: 30,
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              child: Icon(
+                                Icons.description,
+                                size: 30,
+                              ),
                             ),
                             Center(
                               child: Text(fileName,
@@ -81,7 +83,7 @@ class SlidingPanelReceive extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(18, 5, 3, 0),
+                        padding: EdgeInsets.fromLTRB(18, 10, 3, 0),
                         child: Icon(
                           // Icons.device_unknown,
                           Icons.devices,
@@ -90,7 +92,7 @@ class SlidingPanelReceive extends StatelessWidget {
                       ),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(15, 5, 15, 0),
+                          padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
                           child: Text(
                               'Make sure both devices are unlocked, within a reasonable distance, and have Bluetooth and WiFi enabled',
                               style: TextStyle(

@@ -14,7 +14,7 @@ dependencies:
 
   device_info: ^0.4.2+4
 
-  flutter_spinkit: "^4.1.2"
+  # flutter_spinkit: "^4.1.2"
 
 dev_dependencies:
   flutter_test:
@@ -26,15 +26,15 @@ flutter:
   fonts:
     - family: Montserrat
       fonts:
-        - asset: assets/fonts/Montserrat-Regular.ttf
-        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/externals/fonts/Montserrat-Regular.ttf
+        - asset: assets/externals/fonts/Montserrat-Bold.ttf
           weight: 700
     - family: Open Sans
       fonts:
-        - asset: assets/fonts/OpenSans-Regular.ttf
-        - asset: assets/fonts/OpenSans-SemiBold.ttf
+        - asset: assets/externals/fonts/OpenSans-Regular.ttf
+        - asset: assets/externals/fonts/OpenSans-SemiBold.ttf
           weight: 500
-        - asset: assets/fonts/OpenSans-Bold.ttf
+        - asset: assets/externals/fonts/OpenSans-Bold.ttf
           weight: 700
 
 dependency_overrides:

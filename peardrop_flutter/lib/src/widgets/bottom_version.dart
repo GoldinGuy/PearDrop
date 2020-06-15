@@ -19,13 +19,6 @@ class BottomVersionBar extends StatelessWidget {
             'Your device is visible as ' + deviceName,
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          // Text(
-          //   'foobar',
-          //   style: TextStyle(
-          //       fontFamily: 'Open Sans',
-          //       fontSize: 15,
-          //       fontWeight: FontWeight.bold),
-          // ),
           Padding(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Text(
