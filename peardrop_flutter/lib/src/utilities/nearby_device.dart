@@ -3,16 +3,25 @@
 import 'package:flutter/cupertino.dart';
 
 class Device {
-  String deviceName;
+  String ipAddress, deviceName;
   IconData iconName;
 
-  Device(dn, icon) {
+  Device(dn, icon, ip) {
     deviceName = dn;
+    ipAddress = ip;
     iconName = icon;
+  }
+
+  setName(name) {
+    deviceName = name;
   }
 
   String getName() {
     return deviceName;
+  }
+
+  String getIP() {
+    return ipAddress;
   }
 
   IconData getIcon() {

@@ -3,26 +3,25 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'progress_indicator.dart';
+
 class SlidingPanelReceive extends StatelessWidget {
-  SlidingPanelReceive(
-      {this.nameOfSender,
-      this.iconOfSender,
-      this.sc,
-      this.fileName,
-      this.cancel,
-      this.deviceName});
+  SlidingPanelReceive({
+    this.nameOfSender,
+    this.iconOfSender,
+    this.sc,
+    this.fileName,
+    this.cancel,
+  });
   // : super(listenable: sc);
 
-  final String nameOfSender, fileName, deviceName;
+  final String nameOfSender, fileName;
   final ScrollController sc;
   final IconData iconOfSender;
   final CloseButton cancel;
 
   @override
   Widget build(BuildContext context) {
-    final spinkit = SpinKitDoubleBounce(
-      color: Colors.white,
-    );
     return MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -45,61 +44,39 @@ class SlidingPanelReceive extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.fromLTRB(0, 21, 0, 21),
+                        color: Colors.grey[50],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.description,
+                              size: 30,
+                            ),
+                            Center(
+                              child: Text(fileName,
+                                  style: TextStyle(
+                                      fontFamily: 'Open Sans', fontSize: 15)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                  child: Center(
-                    child: Stack(
-                      children: [
-                        // Container(
-                        //   margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                        //   padding: EdgeInsets.fromLTRB(2, 2, 2, 3),
-                        //   child: CircularProgressIndicator(
-                        //     strokeWidth: 6,
-                        //     valueColor: AlwaysStoppedAnimation<Color>(
-                        //         Color(0xff559364)),
-                        //   ),
-                        //   height: 80,
-                        //   width: 70,
-                        // ),
-                        RawMaterialButton(
-                          onPressed: () => {},
-                          elevation: 0.0,
-                          fillColor: Color(0xff91c27d),
-                          child: spinkit,
-                          padding: EdgeInsets.all(15.0),
-                          shape: CircleBorder(),
-                        ),
-                      ],
-                    ),
-                  ),
+                  padding: EdgeInsets.fromLTRB(0, 16, 0, 2),
+                  child: PercentageProgressIndicator(
+                      centerIcon: Icons.file_download),
                 ),
 
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 20, 0, 3),
-                  child: Center(
-                    child: Text('Your device is visible as',
-                        style:
-                            TextStyle(fontFamily: 'Open Sans', fontSize: 16)),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 3, 0, 5),
-                  child: Center(
-                    child: Text(
-                      deviceName,
-                      style: TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

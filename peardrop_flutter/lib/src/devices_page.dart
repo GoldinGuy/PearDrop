@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:peardrop/src/utilities/sharing_service.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/devices_grid.dart';
 import 'package:peardrop/src/widgets/peardrop_appbar.dart';
+import 'package:peardrop/src/widgets/sliding_panel_accept.dart';
 import 'package:peardrop/src/widgets/sliding_panel_receive.dart';
 import 'package:peardrop/src/widgets/sliding_panel_send.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -17,12 +19,18 @@ class DevicesPage extends StatefulWidget {
 }
 
 typedef FileShareCallback(int index);
+typedef FileReceiveCallback();
 
 class _DevicesPageState extends State<DevicesPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PanelController _pc = new PanelController();
   List<Device> devices = [];
-  String _path, _fileName, _extension, nameOfPeer = "Unknown", deviceId;
+  String _path,
+      _fileName,
+      _extension,
+      nameOfPeer = "Unknown",
+      deviceId = "PearPhone",
+      pearPanel = "sharing";
   IconData iconOfPeer;
   Map<String, String> _paths;
   // if multi-pick = true mutliple files can be selected
@@ -35,11 +43,10 @@ class _DevicesPageState extends State<DevicesPage> {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
     // TODO: determine how best to use deviceInfo | deviceId = DeviceDetails().getDeviceDetails() as String;
-
     // dummy data
-    devices.add(Device("Seth's XR", Icons.phone_iphone));
-    devices.add(Device("Bob's Macbook", Icons.laptop_mac));
-    devices.add(Device("Anirudh's PC", Icons.laptop_windows));
+    devices.add(Device("Seth's XR", Icons.phone_iphone, '190.160.225.16'));
+    devices.add(Device("Bob's Macbook", Icons.laptop_mac, '140.70.235.92'));
+    devices.add(Device("Anirudh's PC", Icons.laptop_windows, '3.219.241.180'));
   }
 
   // cancels file sharing
@@ -52,6 +59,13 @@ class _DevicesPageState extends State<DevicesPage> {
     iconOfPeer = devices[index].getIcon();
     nameOfPeer = devices[index].getName();
     _openFileExplorer();
+  }
+
+  // handles what happens after file is accepted
+  handleFileReceive() {
+    setState(() {
+      pearPanel = 'receiving';
+    });
   }
 
   // allows user to upload files
@@ -97,7 +111,10 @@ class _DevicesPageState extends State<DevicesPage> {
       child: Scaffold(
         appBar: PearDropAppBar().getAppBar('PearDrop'),
         body: _getBody(),
-        bottomNavigationBar: BottomVersionBar(version: '1.0.0+0'),
+        bottomNavigationBar: BottomVersionBar(
+          version: '1.0.0+0',
+          deviceName: 'foobar',
+        ),
       ),
     );
   }
@@ -115,13 +132,13 @@ class _DevicesPageState extends State<DevicesPage> {
           minHeight: _panelHeightClosed,
           defaultPanelState: PanelState.CLOSED,
           backdropEnabled: true,
-          backdropOpacity: 0.5,
+          backdropOpacity: 0.2,
           isDraggable: false,
           body: DevicesGrid(
             devices: devices,
             func: handleFileShare,
           ),
-          panelBuilder: (sc) => _getSendingPanel(sc),
+          panelBuilder: (sc) => _getPanel(sc),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(18.0), topRight: Radius.circular(18.0)),
           onPanelSlide: (double pos) => setState(() {}),
@@ -130,44 +147,39 @@ class _DevicesPageState extends State<DevicesPage> {
     );
   }
 
-// returns panel that will display when sending
-  Widget _getSendingPanel(ScrollController sc) {
-    return SlidingPanelSend(
-      nameOfRecipient: '$nameOfPeer',
-      iconOfRecipient: iconOfPeer,
-      sc: sc,
-      fileName: '$_fileName',
-      cancel: CloseButton(
-        onPressed: () => cancelShare(),
-      ),
-    );
+// returns panel based on type of sharing
+  Widget _getPanel(ScrollController sc) {
+    if (pearPanel == "sharing") {
+      return SlidingPanelSend(
+        nameOfRecipient: '$nameOfPeer',
+        iconOfRecipient: iconOfPeer,
+        sc: sc,
+        fileName: '$_fileName',
+        cancel: CloseButton(
+          onPressed: () => cancelShare(),
+        ),
+      );
+    } else if (pearPanel == "receiving") {
+      return SlidingPanelReceive(
+        nameOfSender: '$nameOfPeer',
+        iconOfSender: iconOfPeer,
+        sc: sc,
+        fileName: '$_fileName',
+        cancel: CloseButton(
+          onPressed: () => cancelShare(),
+        ),
+      );
+    } else {
+      return SlidingPanelAccept(
+        nameOfSender: '$nameOfPeer',
+        iconOfSender: iconOfPeer,
+        sc: sc,
+        func: handleFileReceive,
+        fileName: '$_fileName',
+        cancel: CloseButton(
+          onPressed: () => cancelShare(),
+        ),
+      );
+    }
   }
-
-// returns panel that will display when receiving
-  Widget _getReceivingPanel(ScrollController sc) {
-    return SlidingPanelReceive(
-      nameOfSender: '$nameOfPeer',
-      iconOfSender: iconOfPeer,
-      sc: sc,
-      fileName: '$_fileName',
-      cancel: CloseButton(
-        onPressed: () => cancelShare(),
-      ),
-      deviceName: 'foobar',
-    );
-  }
-
-  // clears the temporary cache
-  // void _clearCachedFiles() {
-  //   FilePicker.clearTemporaryFiles().then((result) {
-  //     _scaffoldKey.currentState.showSnackBar(
-  //       SnackBar(
-  //         backgroundColor: result ? Colors.green : Colors.red,
-  //         content: Text((result
-  //             ? 'Temporary files removed successyfully.'
-  //             : 'Failed to clean temporary files')),
-  //       ),
-  //     );
-  //   });
-  // }
 }

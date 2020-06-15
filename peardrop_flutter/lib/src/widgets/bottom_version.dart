@@ -2,25 +2,39 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BottomVersionBar extends StatelessWidget {
-  BottomVersionBar({this.version});
+  BottomVersionBar({this.version, this.deviceName});
 
-  final String version;
+  final String version, deviceName;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        new Container(
-          height: 30.0,
-          color: Colors.white10,
-          child: Center(
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20, 5, 20, 2),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Your device is visible as ' + deviceName,
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          // Text(
+          //   'foobar',
+          //   style: TextStyle(
+          //       fontFamily: 'Open Sans',
+          //       fontSize: 15,
+          //       fontWeight: FontWeight.bold),
+          // ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
             child: Text(
               version,
               style: TextStyle(color: Colors.grey[500]),
             ),
-          ),
-        ),
-      ],
+          )
+        ],
+      ),
     );
   }
 }

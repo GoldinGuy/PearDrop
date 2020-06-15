@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:peardrop/src/widgets/progress_indicator.dart';
 
 class SlidingPanelSend extends StatelessWidget {
   SlidingPanelSend(
@@ -25,13 +26,7 @@ class SlidingPanelSend extends StatelessWidget {
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Text('Cancel'),
-                cancel,
-              ],
-            ),
-            SizedBox(
-              height: 8.0,
+              children: [cancel],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -47,67 +42,44 @@ class SlidingPanelSend extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: 20.0,
+              height: 15.0,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.fromLTRB(0, 21, 0, 21),
+                        color: Colors.grey[50],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.description,
+                              size: 30,
+                            ),
+                            Center(
+                              child: Text(fileName,
+                                  style: TextStyle(
+                                      fontFamily: 'Open Sans', fontSize: 15)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 21, 0, 21),
-                  color: Colors.grey[50],
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.insert_drive_file,
-                        size: 30,
-                      ),
-                      Center(
-                        child: Text(fileName,
-                            style: TextStyle(
-                                fontFamily: 'Open Sans', fontSize: 15)),
-                      ),
-                    ],
-                  ),
+                  padding: EdgeInsets.fromLTRB(0, 16, 0, 2),
+                  child: PercentageProgressIndicator(
+                      centerIcon: Icons.file_upload),
                 ),
 
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
-                  child: Center(
-                    child: Stack(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                          padding: EdgeInsets.fromLTRB(2, 2, 2, 3),
-                          child: CircularProgressIndicator(
-                            strokeWidth: 6,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xff559364)),
-                          ),
-                          height: 70,
-                          width: 70,
-                        ),
-                        RawMaterialButton(
-                          onPressed: () => {},
-                          elevation: 0.0,
-                          fillColor: Color(0xff91c27d),
-                          child: Icon(
-                            iconOfRecipient,
-                            size: 35.0,
-                            color: Colors.white,
-                          ),
-                          padding: EdgeInsets.all(15.0),
-                          shape: CircleBorder(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
