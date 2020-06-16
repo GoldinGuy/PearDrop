@@ -1,9 +1,6 @@
 // This page will contain all user settings necessary for app
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:peardrop/src/devices.dart';
 
 const TextStyle HEADER_TEXT_STYLE = TextStyle(
   fontWeight: FontWeight.bold,

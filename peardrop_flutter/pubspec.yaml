@@ -8,7 +8,13 @@ dependencies:
 
   cupertino_icons: ^0.1.2
 
+  sliding_up_panel: ^1.0.2
+
   file_picker: ^1.9.0+1
+
+  device_info: ^0.4.2+4
+
+  # flutter_spinkit: "^4.1.2"
 
 dev_dependencies:
   flutter_test:
@@ -16,3 +22,22 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/externals/fonts/Montserrat-Regular.ttf
+        - asset: assets/externals/fonts/Montserrat-Bold.ttf
+          weight: 700
+    - family: Open Sans
+      fonts:
+        - asset: assets/externals/fonts/OpenSans-Regular.ttf
+        - asset: assets/externals/fonts/OpenSans-SemiBold.ttf
+          weight: 500
+        - asset: assets/externals/fonts/OpenSans-Bold.ttf
+          weight: 700
+# dependency_overrides:
+#   sliding_up_panel:
+#     git:
+#       url: https://github.com/GoldinGuy/sliding_up_panel
+#       ref: master
