@@ -21,8 +21,6 @@ class _PercentageProgressIndicatorState
   _PercentageProgressIndicatorState({this.centerIcon});
   IconData centerIcon;
 
-  // IconData centerIcon;
-  // IconData centerIcon = Icons.file_upload;
   @override
   void initState() {
     super.initState();
@@ -62,6 +60,7 @@ class _PercentageProgressIndicatorState
 
   @override
   Widget build(BuildContext context) {
+    centerIcon = widget.centerIcon;
     return new Center(
       child: new Container(
         height: 95.0,

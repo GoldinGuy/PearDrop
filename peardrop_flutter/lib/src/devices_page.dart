@@ -26,13 +26,12 @@ class _DevicesPageState extends State<DevicesPage> {
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PanelController _pc = new PanelController();
   List<Device> devices = [];
+  int peerIndex = 0;
   String _path,
       _fileName,
       _extension,
-      nameOfPeer = "Unknown",
       deviceId = "190.160.225.16",
       pearPanel = "sharing";
-  IconData iconOfPeer;
   Map<String, String> _paths;
   // if multi-pick = true mutliple files can be selected
   bool _multiPick = false, _loadingPath = false;
@@ -49,15 +48,9 @@ class _DevicesPageState extends State<DevicesPage> {
     devices.add(Device(Icons.laptop_windows, '3.219.241.180'));
   }
 
-  // cancels file sharing
-  cancelShare() {
-    _pc.close();
-  }
-
   // handles what happens after file is selected and device chosen
-  handleFileShare(index) {
-    iconOfPeer = devices[index].getIcon();
-    nameOfPeer = devices[index].getName();
+  handleFileShare(int index) {
+    peerIndex = index;
     _openFileExplorer();
   }
 
@@ -66,6 +59,11 @@ class _DevicesPageState extends State<DevicesPage> {
     setState(() {
       pearPanel = 'receiving';
     });
+  }
+
+  // cancels file sharing
+  cancelShare() {
+    _pc.close();
   }
 
   // allows user to upload files
@@ -92,6 +90,7 @@ class _DevicesPageState extends State<DevicesPage> {
     }
     if (!mounted) return;
     setState(() {
+      pearPanel = "sharing";
       _loadingPath = false;
       _fileName = _path != null
           ? _path.split('/').last
@@ -147,12 +146,11 @@ class _DevicesPageState extends State<DevicesPage> {
     );
   }
 
-// returns panel based on type of sharing
+// returns panel based on situation
   Widget _getPanel(ScrollController sc) {
     if (pearPanel == "sharing") {
       return SlidingPanelSend(
-        nameOfRecipient: '$nameOfPeer',
-        iconOfRecipient: iconOfPeer,
+        peerDevice: devices[peerIndex],
         sc: sc,
         fileName: '$_fileName',
         cancel: CloseButton(
@@ -161,8 +159,7 @@ class _DevicesPageState extends State<DevicesPage> {
       );
     } else if (pearPanel == "receiving") {
       return SlidingPanelReceive(
-        nameOfSender: '$nameOfPeer',
-        iconOfSender: iconOfPeer,
+        peerDevice: devices[peerIndex],
         sc: sc,
         fileName: '$_fileName',
         cancel: CloseButton(
@@ -171,8 +168,7 @@ class _DevicesPageState extends State<DevicesPage> {
       );
     } else {
       return SlidingPanelAccept(
-        nameOfSender: '$nameOfPeer',
-        iconOfSender: iconOfPeer,
+        peerDevice: devices[peerIndex],
         sc: sc,
         func: handleFileReceive,
         fileName: '$_fileName',

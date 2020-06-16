@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:peardrop/src/utilities/nearby_device.dart';
 
 import 'progress_indicator.dart';
 
 class SlidingPanelReceive extends StatelessWidget {
   SlidingPanelReceive({
-    this.nameOfSender,
-    this.iconOfSender,
+    this.peerDevice,
     this.sc,
     this.fileName,
     this.cancel,
   });
   // : super(listenable: sc);
 
-  final String nameOfSender, fileName;
+  final String fileName;
   final ScrollController sc;
-  final IconData iconOfSender;
+  final Device peerDevice;
   final CloseButton cancel;
 
   @override
@@ -73,7 +73,7 @@ class SlidingPanelReceive extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(0, 16, 0, 2),
                   child: PercentageProgressIndicator(
-                      centerIcon: Icons.file_download),
+                      centerIcon: peerDevice.getIcon()),
                 ),
 
                 Container(
@@ -113,6 +113,7 @@ class SlidingPanelReceive extends StatelessWidget {
   }
 
   getTitle() {
+    String nameOfSender = peerDevice.getName();
     if (nameOfSender != null && nameOfSender != '') {
       return Text(
         "Receiving File From " + nameOfSender,

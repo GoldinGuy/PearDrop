@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:peardrop/src/devices_page.dart';
+import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/utilities/sharing_service.dart';
 
 typedef FileReceiveCallback();
 
 class SlidingPanelAccept extends StatelessWidget {
   SlidingPanelAccept({
-    this.nameOfSender,
-    this.iconOfSender,
+    this.peerDevice,
     this.sc,
     this.fileName,
     this.func,
@@ -17,9 +17,9 @@ class SlidingPanelAccept extends StatelessWidget {
   });
   // : super(listenable: sc);
 
-  final String nameOfSender, fileName;
+  final String fileName;
   final ScrollController sc;
-  final IconData iconOfSender;
+  final Device peerDevice;
   final FileReceiveCallback func;
   final CloseButton cancel;
 
@@ -39,7 +39,7 @@ class SlidingPanelAccept extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  nameOfSender,
+                  peerDevice.getName(),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Open Sans',
@@ -54,7 +54,7 @@ class SlidingPanelAccept extends StatelessWidget {
                   elevation: 0.0,
                   fillColor: Color(0xff91c27d),
                   child: Icon(
-                    iconOfSender,
+                    peerDevice.getIcon(),
                     size: 35.0,
                     color: Colors.white,
                   ),

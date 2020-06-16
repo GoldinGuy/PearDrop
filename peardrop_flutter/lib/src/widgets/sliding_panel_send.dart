@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/widgets/progress_indicator.dart';
 
 class SlidingPanelSend extends StatelessWidget {
-  SlidingPanelSend(
-      {this.nameOfRecipient,
-      this.iconOfRecipient,
-      this.sc,
-      this.fileName,
-      this.cancel});
+  SlidingPanelSend({this.peerDevice, this.sc, this.fileName, this.cancel});
 
-  final String nameOfRecipient, fileName;
+  final String fileName;
+  final Device peerDevice;
   final ScrollController sc;
-  final IconData iconOfRecipient;
   final CloseButton cancel;
 
   @override
@@ -32,7 +28,7 @@ class SlidingPanelSend extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Sharing to " + nameOfRecipient,
+                  "Sharing to " + peerDevice.getName(),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontFamily: 'Open Sans',
@@ -77,7 +73,7 @@ class SlidingPanelSend extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(0, 16, 0, 2),
                   child: PercentageProgressIndicator(
-                      centerIcon: Icons.file_upload),
+                      centerIcon: peerDevice.getIcon()),
                 ),
 
                 Container(
