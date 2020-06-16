@@ -1,11 +1,9 @@
 # PearDrop
 
-> 🍐 A cross-platform file transfer application
+🍐 A cross-platform file transfer application
 
 [![Discuss On Discord][discord]][discord-url]
-
 [![Contributors][contributors-shield]][contributors-url]
-
 [![Issues][issues]][issues-url]
 
 These days, closed ecosystems surround us. iPhones only share with Apple devices, Android phones only with Windows. Sending a file from one place to another is difficult and frustrating, usually requiring you to send an email to yourself. This is not acceptable, and PearDrop aims to solve this issue. PearDrop is an application built on a custom protocol that is available on every platform (Apple, Google, Windows, etc). This allows for simple and efficient file transfer when you really need it.
