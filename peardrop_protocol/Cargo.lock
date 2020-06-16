@@ -59,9 +59,9 @@ dependencies = [
 
 [[package]]
 name = "deku"
-version = "0.4.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35b1614554a47ad62842eb3173ea5ed817ea95c75c66ef825d8e5faa9fdefef3"
+checksum = "546e68ea4d32f14f659dde1049d6a978e708da84c4129d5d887d28651935650e"
 dependencies = [
  "bitvec",
  "deku_derive",
@@ -69,9 +69,9 @@ dependencies = [
 
 [[package]]
 name = "deku_derive"
-version = "0.4.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ca03dc68373efb85331b43e99bdc552133fe78b8857af86ae5ec0f66e238316"
+checksum = "99c8ac0e138cb0115bd7e8ab8b4209b8e92b69471f666e5d9d43d4d1b016556f"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -110,9 +110,9 @@ dependencies = [
 
 [[package]]
 name = "num-traits"
-version = "0.2.11"
+version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c62be47e61d1842b9170f0fdeec8eba98e60e90e5446449a0545e5152acd7096"
+checksum = "ac267bcc07f48ee5f8935ab0d24f316fb722d7a1292e2913f0cc196b29ffd611"
 dependencies = [
  "autocfg",
 ]
@@ -159,9 +159,9 @@ checksum = "6446ced80d6c486436db5c078dde11a9f73d42b57fb273121e160b84f63d894c"
 
 [[package]]
 name = "syn"
-version = "1.0.30"
+version = "1.0.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93a56fabc59dce20fe48b6c832cc249c713e7ed88fa28b0ee0a3bfcaae5fe4e2"
+checksum = "b5304cfdf27365b7585c25d4af91b35016ed21ef88f17ced89c7093b43dba8b6"
 dependencies = [
  "proc-macro2",
  "quote",
