@@ -36,9 +36,8 @@ flutter:
           weight: 500
         - asset: assets/externals/fonts/OpenSans-Bold.ttf
           weight: 700
-
-dependency_overrides:
-  sliding_up_panel:
-    git:
-      url: https://github.com/GoldinGuy/sliding_up_panel
-      ref: master
+# dependency_overrides:
+#   sliding_up_panel:
+#     git:
+#       url: https://github.com/GoldinGuy/sliding_up_panel
+#       ref: master

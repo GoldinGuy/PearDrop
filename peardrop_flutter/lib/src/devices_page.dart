@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:peardrop/src/utilities/sharing_service.dart';
+import 'package:peardrop/src/utilities/pear_panel.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/devices_grid.dart';
@@ -27,13 +27,9 @@ class _DevicesPageState extends State<DevicesPage> {
   PanelController _pc = new PanelController();
   List<Device> devices = [];
   int peerIndex = 0;
-  String _path,
-      _fileName,
-      _extension,
-      deviceId = "190.160.225.16",
-      pearPanel = "sharing";
+  String _path, _fileName, _extension, deviceId = "190.160.225.16";
+  PearPanel pearPanel = new PearPanel();
   Map<String, String> _paths;
-  // if multi-pick = true mutliple files can be selected
   bool _multiPick = false, _loadingPath = false;
   FileType _pickingType = FileType.any;
   TextEditingController _controller = new TextEditingController();
@@ -57,7 +53,7 @@ class _DevicesPageState extends State<DevicesPage> {
   // handles what happens after file is accepted
   handleFileReceive() {
     setState(() {
-      pearPanel = 'receiving';
+      pearPanel.setPanelReceiving();
     });
   }
 
@@ -90,7 +86,7 @@ class _DevicesPageState extends State<DevicesPage> {
     }
     if (!mounted) return;
     setState(() {
-      pearPanel = "sharing";
+      pearPanel.setPanelSharing();
       _loadingPath = false;
       _fileName = _path != null
           ? _path.split('/').last
@@ -148,7 +144,7 @@ class _DevicesPageState extends State<DevicesPage> {
 
 // returns panel based on situation
   Widget _getPanel(ScrollController sc) {
-    if (pearPanel == "sharing") {
+    if (pearPanel.sharing && !pearPanel.receiving) {
       return SlidingPanelSend(
         peerDevice: devices[peerIndex],
         sc: sc,
@@ -157,7 +153,7 @@ class _DevicesPageState extends State<DevicesPage> {
           onPressed: () => cancelShare(),
         ),
       );
-    } else if (pearPanel == "receiving") {
+    } else if (!pearPanel.sharing && pearPanel.receiving) {
       return SlidingPanelReceive(
         peerDevice: devices[peerIndex],
         sc: sc,

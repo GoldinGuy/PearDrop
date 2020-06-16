@@ -4,16 +4,3 @@ class SharingService {
 
   handleFileReceive() {}
 }
-
-// class PearPanel {
-//   PearPanel({this.panel});
-//   String panel;
-
-//   String getPanel() {
-//     return panel;
-//   }
-
-//   setPanel(String state) {
-//     panel = state;
-//   }
-// }

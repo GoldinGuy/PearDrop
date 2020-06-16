@@ -16,7 +16,6 @@ class DevicesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var columns = min(devices.length, 2);
-    // columns = 0;
     if (columns <= 0) {
       return Center(
         child: Padding(

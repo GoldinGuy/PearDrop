@@ -48,10 +48,6 @@ class _PercentageProgressIndicatorState
         } else {
           percentage = newPercentage;
           newPercentage += 10;
-          // if (newPercentage > 100.0) {
-          //   percentage = 0.0;
-          //   newPercentage = 0.0;
-          // }
           percentageAnimationController.forward(from: 0.0);
         }
       }),
