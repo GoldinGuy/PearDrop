@@ -42,7 +42,6 @@ class SlidingPanelAccept extends StatelessWidget {
                   peerDevice.getName(),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
-                    fontFamily: 'Open Sans',
                     fontSize: 20.0,
                   ),
                 ),
@@ -68,7 +67,6 @@ class SlidingPanelAccept extends StatelessWidget {
                   'would like to share a file with you',
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
-                    fontFamily: 'Open Sans',
                     fontSize: 16.0,
                   ),
                 ),
@@ -96,8 +94,7 @@ class SlidingPanelAccept extends StatelessWidget {
                             ),
                             Center(
                               child: Text(fileName,
-                                  style: TextStyle(
-                                      fontFamily: 'Open Sans', fontSize: 15)),
+                                  style: TextStyle(fontSize: 15)),
                             ),
                           ],
                         ),

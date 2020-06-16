@@ -1,27 +1,30 @@
 // this file will contain all releavnt info for nearby devices (for now just dummy data)
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 
 class Device {
-  String ipAddress, deviceName;
-  IconData iconName;
+  String _deviceName;
+  IconData _iconName;
+  InternetAddress _ipAddress;
 
-  Device(icon, ip) {
-    deviceName = WordList().ipToWords(ip);
-    ipAddress = ip;
-    iconName = icon;
+  Device(IconData icon, InternetAddress ip) {
+    _deviceName = WordList().ipToWords(ip);
+    _ipAddress = ip;
+    _iconName = icon;
   }
 
   String getName() {
-    return deviceName;
+    return _deviceName;
   }
 
-  String getIP() {
-    return ipAddress;
+  InternetAddress getIP() {
+    return _ipAddress;
   }
 
   IconData getIcon() {
-    return iconName;
+    return _iconName;
   }
 }

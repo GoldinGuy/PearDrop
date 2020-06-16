@@ -1,9 +1,10 @@
 // this is the main page of the app (the first you see) and will show nearby devices that (when clicked on) will allow you to select file(s) to share
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:peardrop/src/utilities/pear_panel.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/devices_grid.dart';
@@ -19,6 +20,7 @@ class DevicesPage extends StatefulWidget {
   _DevicesPageState createState() => _DevicesPageState();
 }
 
+enum PearPanel { sharing, receiving, accepting }
 typedef FileShareCallback(int index);
 typedef FileReceiveCallback();
 
@@ -27,12 +29,13 @@ class _DevicesPageState extends State<DevicesPage> {
   PanelController _pc = new PanelController();
   List<Device> devices = [];
   int peerIndex = 0;
-  String _path, _fileName, _extension, deviceId = "190.160.225.16";
-  PearPanel pearPanel = new PearPanel();
+  String _path, _fileName, _extension;
+  InternetAddress deviceId = new InternetAddress('190.160.225.16');
   Map<String, String> _paths;
   bool _multiPick = false, _loadingPath = false;
   FileType _pickingType = FileType.any;
   TextEditingController _controller = new TextEditingController();
+  PearPanel pearPanel = PearPanel.sharing;
 
   @override
   void initState() {
@@ -40,8 +43,8 @@ class _DevicesPageState extends State<DevicesPage> {
     _controller.addListener(() => _extension = _controller.text);
     // TODO: determine how best to use deviceInfo | deviceId = DeviceDetails().getDeviceDetails() as String;
     // dummy data
-    devices.add(Device(Icons.phone_iphone, '140.70.235.92'));
-    devices.add(Device(Icons.laptop_windows, '3.219.241.180'));
+    devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
+    devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
   }
 
   // handles what happens after file is selected and device chosen
@@ -53,7 +56,7 @@ class _DevicesPageState extends State<DevicesPage> {
   // handles what happens after file is accepted
   handleFileReceive() {
     setState(() {
-      pearPanel.setPanelReceiving();
+      pearPanel = PearPanel.receiving;
     });
   }
 
@@ -86,7 +89,7 @@ class _DevicesPageState extends State<DevicesPage> {
     }
     if (!mounted) return;
     setState(() {
-      pearPanel.setPanelSharing();
+      pearPanel = PearPanel.sharing;
       _loadingPath = false;
       _fileName = _path != null
           ? _path.split('/').last
@@ -144,7 +147,7 @@ class _DevicesPageState extends State<DevicesPage> {
 
 // returns panel based on situation
   Widget _getPanel(ScrollController sc) {
-    if (pearPanel.sharing && !pearPanel.receiving) {
+    if (pearPanel == PearPanel.sharing) {
       return SlidingPanelSend(
         peerDevice: devices[peerIndex],
         sc: sc,
@@ -153,7 +156,7 @@ class _DevicesPageState extends State<DevicesPage> {
           onPressed: () => cancelShare(),
         ),
       );
-    } else if (!pearPanel.sharing && pearPanel.receiving) {
+    } else if (pearPanel == PearPanel.receiving) {
       return SlidingPanelReceive(
         peerDevice: devices[peerIndex],
         sc: sc,
@@ -162,7 +165,7 @@ class _DevicesPageState extends State<DevicesPage> {
           onPressed: () => cancelShare(),
         ),
       );
-    } else {
+    } else if (pearPanel == PearPanel.accepting) {
       return SlidingPanelAccept(
         peerDevice: devices[peerIndex],
         sc: sc,
@@ -172,6 +175,14 @@ class _DevicesPageState extends State<DevicesPage> {
           onPressed: () => cancelShare(),
         ),
       );
+    } else {
+      return MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: ListView(
+            controller: sc,
+            children: <Widget>[Text('An Error Occurred')],
+          ));
     }
   }
 }

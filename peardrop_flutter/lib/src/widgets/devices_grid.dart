@@ -61,18 +61,14 @@ class DevicesGrid extends StatelessWidget {
                             devices[index].getName(),
                             style: TextStyle(
                               fontSize: 15,
-                              fontFamily: 'Open Sans',
                             ),
                           ),
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                           child: Text(
-                            devices[index].getIP(),
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontFamily: 'Open Sans',
-                                color: Colors.grey),
+                            devices[index].getIP().address.toString(),
+                            style: TextStyle(fontSize: 13, color: Colors.grey),
                           ),
                         ),
                       ],

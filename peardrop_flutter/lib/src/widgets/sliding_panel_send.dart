@@ -31,7 +31,6 @@ class SlidingPanelSend extends StatelessWidget {
                   "Sharing to " + peerDevice.getName(),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
-                    fontFamily: 'Open Sans',
                     fontSize: 20.0,
                   ),
                 ),
@@ -62,8 +61,7 @@ class SlidingPanelSend extends StatelessWidget {
                             ),
                             Center(
                               child: Text(fileName,
-                                  style: TextStyle(
-                                      fontFamily: 'Open Sans', fontSize: 15)),
+                                  style: TextStyle(fontSize: 15)),
                             ),
                           ],
                         ),
@@ -95,8 +93,7 @@ class SlidingPanelSend extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
                           child: Text(
                               'Make sure both devices are unlocked, within a reasonable distance, and have Bluetooth and WiFi enabled',
-                              style: TextStyle(
-                                  fontFamily: 'Open Sans', fontSize: 15)),
+                              style: TextStyle(fontSize: 15)),
                         ),
                       )
                     ],

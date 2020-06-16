@@ -9,9 +9,7 @@ class PearDropAppBar {
   getAppBar(String title) {
     return AppBar(
       title: Center(
-        child: Text(title,
-            style: TextStyle(
-                fontFamily: 'Open Sans', fontWeight: FontWeight.w700)),
+        child: Text(title, style: TextStyle(fontWeight: FontWeight.w700)),
       ),
       flexibleSpace: Container(
         decoration: BoxDecoration(
