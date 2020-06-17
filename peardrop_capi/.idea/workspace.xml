@@ -14,9 +14,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0364b78b-e950-4b8d-8eaf-05fcb345a8c7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/peardrop.h" beforeDir="false" afterPath="$PROJECT_DIR$/peardrop.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sender.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/sender.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ack.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/ack.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +76,7 @@
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+    <option name="version" value="2" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -87,6 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1592348710579</updated>
       <workItem from="1592348713717" duration="7814000" />
+      <workItem from="1592426138018" duration="2674000" />
     </task>
     <servers />
   </component>
