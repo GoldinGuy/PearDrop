@@ -16,6 +16,62 @@ pub extern "C" fn adpacket_read(buf: *const u8, len: i32) -> *mut adpacket {
     }
 }
 
+/// Creates an AdPacket.
+#[no_mangle]
+pub extern "C" fn adpacket_create() -> *mut adpacket {
+    let packet = AdPacket::new(std::collections::HashSet::new());
+    Box::into_raw(Box::new(packet)) as *mut _
+}
+
+/// Add or update the TCP extension on an AdPacket.
+///
+/// Returns non-zero on error.
+#[no_mangle]
+pub extern "C" fn adpacket_ext_tcp_update(packet: *mut adpacket, port: u16) -> i32 {
+    if packet.is_null() {
+        return 1;
+    }
+    let packet = unsafe { &mut *(packet as *mut AdPacket) };
+    // Remove TCP extension if it already exists
+    {
+        let mut e = None;
+        for ext in &packet.extensions {
+            match ext {
+                // TODO: It may be expensive to clone an extension, look into no-copy
+                AdExtension::TCP { ad_port: _ } => e = Some(ext.clone()),
+                _ => {},
+            }
+        }
+        if let Some(e) = e {
+            packet.extensions.remove(&e);
+        }
+    }
+    // Add new extension
+    let ext = AdExtension::TCP { ad_port: port };
+    packet.extensions.insert(ext);
+    0
+}
+
+/// Reads the TCP extension on an AdPacket.
+///
+/// Returns zero if the extension is not present.
+///
+/// Returns non-zero on error.
+#[no_mangle]
+pub extern "C" fn adpacket_ext_tcp_get(packet: *const adpacket, out_port: *mut u16) -> i32 {
+    if packet.is_null() || out_port.is_null() {
+        return 1;
+    }
+    // XXX: Not an unsafe block because let port is completely safe.
+    let packet = unsafe { &*(packet as *const AdPacket) };
+    let port = packet.extensions.iter().find_map(|x| match x {
+        AdExtension::TCP { ad_port: port } => Some(*port),
+        _ => None,
+    }).unwrap_or_default();
+    unsafe { *out_port = port };
+    0
+}
+
 /// Writes an AdPacket to a buffer and returns it.
 ///
 /// Returns non-zero on error.
