@@ -1,5 +1,5 @@
 use super::*;
-use std::ffi::CString;
+use std::ffi::{CString, CStr};
 
 pub type senderpacket = std::ffi::c_void;
 
@@ -15,6 +15,30 @@ pub extern "C" fn senderpacket_read(buf: *const u8, len: i32) -> *mut senderpack
         Err(_) => std::ptr::null_mut(),
         Ok(p) => Box::into_raw(Box::new(p)) as *mut _,
     }
+}
+
+/// Creates a SenderPacket from the given filename, MIME type and data length.
+///
+/// Returns NULL on error.
+#[no_mangle]
+pub extern "C" fn senderpacket_create(filename: *const u8, mimetype: *const u8, data_len: u64) -> *mut senderpacket {
+    if filename.is_null() || mimetype.is_null() {
+        return std::ptr::null_mut();
+    }
+    // Copy strings
+    let filename = unsafe { CStr::from_ptr(filename as _).to_owned() }.into_string();
+    if let Err(_) = filename {
+        return std::ptr::null_mut();
+    }
+    let filename = filename.unwrap();
+    let mimetype = unsafe { CStr::from_ptr(mimetype as _).to_owned() }.into_string();
+    if let Err(_) = mimetype {
+        return std::ptr::null_mut();
+    }
+    let mimetype = mimetype.unwrap();
+    // Create packet and return
+    let packet = SenderPacket::new(filename, mimetype, std::collections::HashSet::new(), data_len);
+    Box::into_raw(Box::new(packet)) as *mut _
 }
 
 /// Writes a SenderPacket to a buffer and returns it.
