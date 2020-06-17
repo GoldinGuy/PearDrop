@@ -9,6 +9,8 @@ typedef void acktype;
 
 typedef void adpacket;
 
+typedef void senderpacket;
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
@@ -76,6 +78,51 @@ adpacket *adpacket_read(const uint8_t *buf, int32_t len);
  * Returns non-zero on error.
  */
 int32_t adpacket_write(const adpacket *packet, uint8_t **out_buf, uintptr_t *out_len);
+
+/**
+ * Frees a SenderPacket.
+ */
+void senderpacket_free(senderpacket *packet);
+
+/**
+ * Get the data length of a SenderPacket.
+ *
+ * Returns non-zero on error.
+ */
+int32_t senderpacket_get_data_length(const senderpacket *packet, uint64_t *out_len);
+
+/**
+ * Get the filename of a SenderPacket.
+ *
+ * Returns NULL on error.
+ */
+uint8_t *senderpacket_get_filename(const senderpacket *packet);
+
+/**
+ * Get the MIME type of a SenderPacket.
+ *
+ * Returns NULL on error.
+ */
+uint8_t *senderpacket_get_mimetype(const senderpacket *packet);
+
+/**
+ * Creates a SenderPacket from the given buffer.
+ *
+ * Returns NULL on error.
+ */
+senderpacket *senderpacket_read(const uint8_t *buf, int32_t len);
+
+/**
+ * Writes a SenderPacket to a buffer and returns it.
+ *
+ * Returns non-zero on error.
+ */
+int32_t senderpacket_write(const senderpacket *packet, uint8_t **out_buf, uintptr_t *out_len);
+
+/**
+ * Frees a string previously retrieved from this API.
+ */
+void string_free(uint8_t *s);
 
 #ifdef __cplusplus
 } // extern "C"

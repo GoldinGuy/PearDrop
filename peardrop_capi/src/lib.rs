@@ -21,6 +21,12 @@ fn write_vec(v_buf: Result<Vec<u8>, DekuError>, out_buf: *mut *mut u8, out_len: 
     }
 }
 
+/// Frees a string previously retrieved from this API.
+#[no_mangle]
+pub extern "C" fn string_free(s: *mut u8) {
+    unsafe { CString::from_raw(s as _) };
+}
+
 mod ack;
 pub use ack::*;
 
@@ -29,3 +35,4 @@ pub use ad::*;
 
 mod sender;
 pub use sender::*;
+use std::ffi::CString;
