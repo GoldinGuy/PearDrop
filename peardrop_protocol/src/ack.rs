@@ -14,7 +14,7 @@ pub struct AckPacket {
         writer = "write_acktype(&self.type_, output_is_le, field_bits)"
     )]
     type_: AckType,
-    #[deku(bits = "4")]
+    #[deku(bits = "4", writer = "(self.extensions.len() as u8).write(output_is_le, field_bits)")]
     extensions_len: u8,
     #[deku(count = "extensions_len",
         /* vec <-> hashset */
