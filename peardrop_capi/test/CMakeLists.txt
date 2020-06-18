@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
+set(CMAKE_CXX_STANDARD 11)
 
 project(peardrop_capi_tests)
 
@@ -32,10 +33,6 @@ target_link_libraries(peardrop_capi_tests
 )
 
 # Googletest stuff
-
-if (APPLE)
-	add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-endif (APPLE)
 
 add_subdirectory(externals/googletest)
 

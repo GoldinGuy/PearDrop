@@ -84,6 +84,13 @@ acktype *acktype_create_reject(uint8_t type_);
 void acktype_free(acktype *type_);
 
 /**
+ * Creates an AckType from its raw representation.
+ *
+ * Returns NULL on error.
+ */
+acktype *acktype_from_raw(uint8_t raw);
+
+/**
  * Gets the type of an AckType.
  *
  * Returns non-zero on error.
@@ -98,6 +105,13 @@ int32_t acktype_get_type(const acktype *type_, uint8_t *out_type);
  * Returns non-zero on error.
  */
 int32_t acktype_is_accepted(const acktype *type_, uint8_t *out_is_accepted);
+
+/**
+ * Gets the raw representation of an AckType.
+ *
+ * Returns non-zero on error.
+ */
+int32_t acktype_to_raw(const acktype *type_, uint8_t *out_raw);
 
 /**
  * Creates an AdPacket.
