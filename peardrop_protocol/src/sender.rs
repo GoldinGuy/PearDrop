@@ -26,6 +26,7 @@ pub struct SenderPacket {
         writer = "write_string(&self.mimetype, output_is_le, field_bits)"
     )]
     mimetype: String,
+    #[deku(writer = "(self.extensions.len() as u8).write(output_is_le, field_bits)")]
     extensions_len: u8,
     #[deku(
         count = "extensions_len",
