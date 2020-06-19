@@ -38,7 +38,7 @@ add_subdirectory(externals/googletest)
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-target_link_libraries(peardrop_capi_tests gtest gtest_main)
+target_link_libraries(peardrop_capi_tests gtest gtest_main ${CMAKE_DL_LIBS})
 
 enable_testing()
 
