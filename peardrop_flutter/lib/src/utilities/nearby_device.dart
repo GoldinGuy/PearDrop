@@ -11,7 +11,7 @@ class Device {
   InternetAddress _ipAddress;
 
   Device(IconData icon, InternetAddress ip) {
-    _deviceName = WordList().ipToWords(ip);
+    _deviceName = WordList().ipToWords(ip).toString();
     _ipAddress = ip;
     _iconName = icon;
   }

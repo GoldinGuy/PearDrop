@@ -2,9 +2,7 @@ import 'dart:io' show Platform;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:peardrop/src/devices_page.dart';
 import 'package:peardrop/src/home.dart';
-import 'package:peardrop/src/select_file.dart';
 import 'package:window_size/window_size.dart' as window_size;
 
 void main() {
@@ -49,7 +47,6 @@ class PearDrop extends StatelessWidget {
       ),
       routes: {
         '/home': (_) => HomePage(),
-        '/devices': (_) => DevicesPage(),
       },
       home: HomePage(),
     );

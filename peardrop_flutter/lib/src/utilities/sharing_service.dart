@@ -14,33 +14,33 @@ class SharingService {
   FileType _pickingType = FileType.any;
   TextEditingController _controller = new TextEditingController();
   int peerIndex = 0;
-  PearBody pearBody = PearBody.selectingFile;
 
   // handleFileSend(fileName, filePath, mime, ip) {}
 
-  handleFileSelect() {
+  void handleFileSelect() {
     openFileExplorer();
   }
 
   // handles what happens after file is selected and device chosen
-  handleFileShare(int index) {
+  void handleFileShare(int index) {
     peerIndex = index;
+    // pc.open();
   }
 
   // handles what happens after file is accepted
-  handleFileReceive() {
+  void handleFileReceive() {
     // setState(() {
     //   pearPanel = PearPanel.receiving;
     // });
   }
 
   // cancels file sharing
-  cancelShare() {
+  void cancelShare() {
     // _pc.close();
   }
 
   // allows user to upload files
-  openFileExplorer() async {
+  void openFileExplorer() async {
     _controller.addListener(() => _extension = _controller.text);
     String initialDirectory;
     if (Platform.isMacOS || Platform.isWindows) {

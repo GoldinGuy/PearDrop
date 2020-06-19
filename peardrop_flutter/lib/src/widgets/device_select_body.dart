@@ -8,15 +8,15 @@ import 'package:peardrop/src/home.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
 typedef void DeviceSelectCallback(int index);
-typedef void PearBodyCallback(PearBody pearBody);
+typedef void SetPanelCallback(bool panelOpen);
 
 class DeviceSelectBody extends StatelessWidget {
   DeviceSelectBody(
-      {this.devices, this.fileShare, this.pearBody, this.deviceName});
+      {this.devices, this.fileShare, this.setPanel, this.deviceName});
 
   final List<Device> devices;
   final DeviceSelectCallback fileShare;
-  final PearBodyCallback pearBody;
+  final SetPanelCallback setPanel;
   final String deviceName;
 
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class DeviceSelectBody extends StatelessWidget {
                         child: InkWell(
                             borderRadius: BorderRadius.circular(20),
                             onTap: () {
-                              pearBody(PearBody.pickingDevice);
+                              setPanel(true);
                               fileShare(i);
                             },
                             child: Row(

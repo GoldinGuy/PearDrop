@@ -110,7 +110,7 @@ class SlidingPanelReceive extends StatelessWidget {
         ));
   }
 
-  getTitle() {
+  Text getTitle() {
     String nameOfSender = peerDevice.getName();
     if (nameOfSender != null && nameOfSender != '') {
       return Text(

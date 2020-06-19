@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:peardrop/src/home.dart';
 
 typedef void FileSelectCallback();
-typedef void PearBodyCallback(PearBody value);
+typedef void FileSelectedCallback(bool value);
 
 class FileSelectBody extends StatelessWidget {
-  FileSelectBody({this.fileSelect, this.deviceName, this.pearBody});
+  FileSelectBody({this.fileSelect, this.deviceName, this.setFileSelected});
 
   final FileSelectCallback fileSelect;
-  final PearBodyCallback pearBody;
+  final FileSelectedCallback setFileSelected;
   final String deviceName;
 
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class FileSelectBody extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: () {
-                pearBody(PearBody.pickingDevice);
+                setFileSelected(true);
                 fileSelect();
               },
               child: Container(

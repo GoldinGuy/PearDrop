@@ -6,7 +6,7 @@ class PearDropAppBar {
 
   final String title;
 
-  getAppBar(String title) {
+  AppBar getAppBar(String title) {
     return AppBar(
       title: Center(
         child: Text(title, style: TextStyle(fontWeight: FontWeight.w700)),

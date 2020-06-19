@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:peardrop/src/devices_page.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/utilities/sharing_service.dart';
 
