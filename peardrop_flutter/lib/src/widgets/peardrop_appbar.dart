@@ -11,6 +11,7 @@ class PearDropAppBar {
       title: Center(
         child: Text(title, style: TextStyle(fontWeight: FontWeight.w700)),
       ),
+      elevation: 0,
       flexibleSpace: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(

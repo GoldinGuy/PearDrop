@@ -2,9 +2,11 @@
 
 import 'dart:io';
 
+import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/devices_grid.dart';
@@ -67,39 +69,70 @@ class _DevicesPageState extends State<DevicesPage> {
 
   // allows user to upload files
   _openFileExplorer() async {
-    setState(() => _loadingPath = true);
-    try {
-      if (_multiPick) {
-        _path = null;
-        _paths = await FilePicker.getMultiFilePath(
-            type: _pickingType,
-            allowedExtensions: (_extension?.isNotEmpty ?? false)
-                ? _extension?.replaceAll(' ', '')?.split(',')
-                : null);
-      } else {
-        _paths = null;
-        _path = await FilePicker.getFilePath(
-            type: _pickingType,
-            allowedExtensions: (_extension?.isNotEmpty ?? false)
-                ? _extension?.replaceAll(' ', '')?.split(',')
-                : null);
+    String initialDirectory;
+    if (Platform.isMacOS || Platform.isWindows) {
+      initialDirectory = (await getApplicationDocumentsDirectory()).path;
+      final result = await showOpenPanel(
+          allowsMultipleSelection: true, initialDirectory: initialDirectory);
+      _path = '${result.paths.join('\n')}';
+      // if (result.canceled) {
+      //       showDialog(
+      //       context: context,
+      //       builder: (BuildContext context) => _buildAboutDialog(context),
+      //     );
+      //   scaffold.showSnackBar(SnackBar(content: Text('File Share Canceled')));
+      // } else {
+      //   final scaffold = Scaffold.of(context);
+      //   scaffold.showSnackBar(SnackBar(
+      //       content: Text('${result.paths.join('\n')}' + ' Selected')));
+      // }
+      setState(() {
+        pearPanel = PearPanel.sharing;
+        _loadingPath = false;
+        _fileName = _path != null
+            ? _path.split('/').last
+            : _paths != null ? _paths.keys.toString() : '...';
+      });
+      await Future.delayed(const Duration(milliseconds: 600), () {
+        if ('$_fileName' != null) {
+          _pc.open();
+        }
+      });
+    } else if (Platform.isIOS || Platform.isAndroid) {
+      setState(() => _loadingPath = true);
+      try {
+        if (_multiPick) {
+          _path = null;
+          _paths = await FilePicker.getMultiFilePath(
+              type: _pickingType,
+              allowedExtensions: (_extension?.isNotEmpty ?? false)
+                  ? _extension?.replaceAll(' ', '')?.split(',')
+                  : null);
+        } else {
+          _paths = null;
+          _path = await FilePicker.getFilePath(
+              type: _pickingType,
+              allowedExtensions: (_extension?.isNotEmpty ?? false)
+                  ? _extension?.replaceAll(' ', '')?.split(',')
+                  : null);
+        }
+      } on PlatformException catch (e) {
+        print("Unsupported operation" + e.toString());
       }
-    } on PlatformException catch (e) {
-      print("Unsupported operation" + e.toString());
+      if (!mounted) return;
+      setState(() {
+        pearPanel = PearPanel.sharing;
+        _loadingPath = false;
+        _fileName = _path != null
+            ? _path.split('/').last
+            : _paths != null ? _paths.keys.toString() : '...';
+      });
+      await Future.delayed(const Duration(milliseconds: 600), () {
+        if ('$_fileName' != null) {
+          _pc.open();
+        }
+      });
     }
-    if (!mounted) return;
-    setState(() {
-      pearPanel = PearPanel.sharing;
-      _loadingPath = false;
-      _fileName = _path != null
-          ? _path.split('/').last
-          : _paths != null ? _paths.keys.toString() : '...';
-    });
-    await Future.delayed(const Duration(milliseconds: 600), () {
-      if ('$_fileName' != null) {
-        _pc.open();
-      }
-    });
   }
 
   // main build function
@@ -109,18 +142,19 @@ class _DevicesPageState extends State<DevicesPage> {
       child: Scaffold(
         appBar: PearDropAppBar().getAppBar('PearDrop'),
         body: _getBody(),
-        bottomNavigationBar: BottomVersionBar(
-          version: '1.0.0+0',
-          deviceName: WordList().ipToWords(deviceId),
-        ),
+        // bottomNavigationBar: BottomVersionBar(
+        //   version: '1.0.0+0',
+        //   deviceName: WordList().ipToWords(deviceId),
+        // ),
       ),
     );
   }
 
 // returns main app body
   Widget _getBody() {
-    double _panelHeightClosed = 0.0;
-    double _panelHeightOpen = MediaQuery.of(context).size.height * 0.55;
+    double _panelHeightClosed = 90.0;
+    // double _panelHeightOpen = MediaQuery.of(context).size.height * 0.55;
+    double _panelHeightOpen = MediaQuery.of(context).size.height * 0.85;
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
@@ -130,11 +164,16 @@ class _DevicesPageState extends State<DevicesPage> {
           minHeight: _panelHeightClosed,
           defaultPanelState: PanelState.CLOSED,
           backdropEnabled: true,
+          renderPanelSheet: false,
           backdropOpacity: 0.2,
           isDraggable: false,
           body: DevicesGrid(
             devices: devices,
             func: handleFileShare,
+          ),
+          collapsed: BottomVersionBar(
+            version: '1.0.0+0',
+            deviceName: WordList().ipToWords(deviceId),
           ),
           panelBuilder: (sc) => _getPanel(sc),
           borderRadius: BorderRadius.only(

@@ -76,7 +76,7 @@ Distributed under the XYZ license. See `LICENSE` for more information.
 <!-- Markdown link & img dfn's -->
 
 [discord-url]: https://discord.gg/gKYSMeJ
-[discord]: https://img.shields.io/discord/453710350454620160.svg
+[discord]: https://img.shields.io/discord/689176425701703810
 [issues]: https://img.shields.io/github/issues/GoldinGuy/PearDrop
 [issues-url]: https://github.com/GoldinGuy/PearDrop/issues
 [contributors-shield]: https://img.shields.io/github/contributors/GoldinGuy/PearDrop.svg?style=flat-square
