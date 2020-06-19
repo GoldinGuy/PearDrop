@@ -7,9 +7,7 @@ import 'package:peardrop/src/utilities/sharing_service.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/file_select_body.dart';
-import 'package:peardrop/src/widgets/sliding_panel_accept.dart';
-import 'package:peardrop/src/widgets/sliding_panel_receive.dart';
-import 'package:peardrop/src/widgets/sliding_panel_send.dart';
+import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'utilities/nearby_device.dart';
 import 'widgets/device_select_body.dart';
@@ -19,7 +17,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-// enum PearBody { selectingFile, pickingDevice, sharing }
+enum PearPanel { sharing, receiving, accepting }
 
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
@@ -28,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   bool fileSelected = false;
   SharingService share;
   PanelController _pc = new PanelController();
+  PearPanel pearPanel = PearPanel.sharing;
 
   @override
   void initState() {
@@ -67,9 +66,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void setPearPanel(bool panel) {
+  void setPearPanel(bool value, PearPanel panel) {
     setState(() {
-      pearPanelOpen = panel;
+      pearPanelOpen = value;
+      pearPanel = panel;
     });
     if (pearPanelOpen) {
       _pc.open();
@@ -100,7 +100,15 @@ class _HomePageState extends State<HomePage> {
                 fileShare: share.handleFileShare,
                 deviceName: WordList().ipToWords(deviceId).toString(),
                 setPanel: setPearPanel),
-            panelBuilder: (sc) => _getPanel(sc),
+            panelBuilder: (sc) => SlidingPanel(
+              peerDevice: devices[share.peerIndex],
+              sc: sc,
+              fileName: share.fileName,
+              pearPanel: pearPanel,
+              cancel: CloseButton(
+                onPressed: () => share.cancelShare(),
+              ),
+            ),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
@@ -122,38 +130,5 @@ class _HomePageState extends State<HomePage> {
         setPanel: setPearPanel,
       );
     }
-  }
-
-  // returns panel based on situation
-  Widget _getPanel(ScrollController sc) {
-    // if (pearPanel == PearPanel.sharing) {
-    return SlidingPanelSend(
-      peerDevice: devices[share.peerIndex],
-      sc: sc,
-      fileName: share.fileName,
-      cancel: CloseButton(
-        onPressed: () => share.cancelShare(),
-      ),
-    );
-    // } else if (pearPanel == PearPanel.receiving) {
-    //   return SlidingPanelReceive(
-    //     peerDevice: devices[share.peerIndex],
-    //     sc: sc,
-    //     fileName: share.fileName,
-    //     cancel: CloseButton(
-    //       onPressed: () => share.cancelShare(),
-    //     ),
-    //   );
-    // } else {
-    //   return SlidingPanelAccept(
-    //     peerDevice: devices[share.peerIndex],
-    //     sc: sc,
-    //     func: share.handleFileReceive,
-    //     fileName: share.fileName,
-    //     cancel: CloseButton(
-    //       onPressed: () => share.cancelShare(),
-    //     ),
-    //   );
-    // }
   }
 }

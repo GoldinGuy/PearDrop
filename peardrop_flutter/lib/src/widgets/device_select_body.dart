@@ -8,7 +8,7 @@ import 'package:peardrop/src/home.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
 typedef void DeviceSelectCallback(int index);
-typedef void SetPanelCallback(bool panelOpen);
+typedef void SetPanelCallback(bool panelOpen, PearPanel panel);
 
 class DeviceSelectBody extends StatelessWidget {
   DeviceSelectBody(
@@ -66,7 +66,7 @@ class DeviceSelectBody extends StatelessWidget {
                     child: Text(
                       'Your device is visible as ' +
                           deviceName +
-                          '. \nSelect a device below to share with',
+                          '. \nSelect a nearby device to share with',
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 15,
@@ -109,7 +109,7 @@ class DeviceSelectBody extends StatelessWidget {
                         child: InkWell(
                             borderRadius: BorderRadius.circular(20),
                             onTap: () {
-                              setPanel(true);
+                              setPanel(true, PearPanel.sharing);
                               fileShare(i);
                             },
                             child: Row(
