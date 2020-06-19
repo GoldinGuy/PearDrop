@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-enum PearPanel { sharing, receiving, accepting }
+enum PearPanel { sharing, receiving, accepting, done }
 
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   bool fileSelected = false;
   SharingService share;
   PanelController _pc = new PanelController();
-  PearPanel pearPanel = PearPanel.sharing;
+  PearPanel pearPanel = PearPanel.accepting;
 
   @override
   void initState() {
@@ -60,6 +60,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void reset() {
+    _pc.close();
+    setState(() {
+      fileSelected = false;
+      pearPanelOpen = false;
+      pearPanel = PearPanel.accepting;
+    });
+  }
+
   void setFileSelected(bool selected) {
     setState(() {
       fileSelected = selected;
@@ -81,15 +90,19 @@ class _HomePageState extends State<HomePage> {
 // returns main app body
   Widget _getBody() {
     if (fileSelected) {
-      double _panelHeightClosed = 0.0;
-      double _panelHeightOpen = MediaQuery.of(context).size.height * 0.25;
+      double _panelHeightOpen;
+      if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
+        _panelHeightOpen = MediaQuery.of(context).size.height * 0.35;
+      } else {
+        _panelHeightOpen = MediaQuery.of(context).size.height * 0.25;
+      }
       return Stack(
         alignment: Alignment.topCenter,
         children: <Widget>[
           SlidingUpPanel(
             controller: _pc,
             maxHeight: _panelHeightOpen,
-            minHeight: _panelHeightClosed,
+            minHeight: 0.0,
             defaultPanelState: PanelState.CLOSED,
             backdropEnabled: true,
             // renderPanelSheet: false,
@@ -105,9 +118,8 @@ class _HomePageState extends State<HomePage> {
               sc: sc,
               fileName: share.fileName,
               pearPanel: pearPanel,
-              cancel: CloseButton(
-                onPressed: () => share.cancelShare(),
-              ),
+              reset: reset,
+              accept: share.handleFileReceive,
             ),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(18.0),
