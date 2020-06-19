@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peardrop/src/home.dart';
 
-typedef FileSelectCallback();
+typedef void FileSelectCallback();
+typedef void PearBodyCallback(PearBody value);
 
 class FileSelectBody extends StatelessWidget {
-  FileSelectBody({this.func, this.deviceName});
+  FileSelectBody({this.fileSelect, this.deviceName, this.pearBody});
 
-  final FileSelectCallback func;
+  final FileSelectCallback fileSelect;
+  final PearBodyCallback pearBody;
   final String deviceName;
 
   Widget build(BuildContext context) {
@@ -41,7 +44,10 @@ class FileSelectBody extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
-              onTap: () => func(),
+              onTap: () {
+                pearBody(PearBody.pickingDevice);
+                fileSelect();
+              },
               child: Container(
                 width: 175,
                 height: 40,

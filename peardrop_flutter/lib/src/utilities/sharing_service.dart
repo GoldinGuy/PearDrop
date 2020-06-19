@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:peardrop/src/home.dart';
 
 class SharingService {
   String _path, fileName, _extension;
@@ -12,6 +13,8 @@ class SharingService {
   bool _multiPick = false, _loadingPath = false, fileSelected = false;
   FileType _pickingType = FileType.any;
   TextEditingController _controller = new TextEditingController();
+  int peerIndex = 0;
+  PearBody pearBody = PearBody.selectingFile;
 
   // handleFileSend(fileName, filePath, mime, ip) {}
 
@@ -21,7 +24,7 @@ class SharingService {
 
   // handles what happens after file is selected and device chosen
   handleFileShare(int index) {
-    // peerIndex = index;
+    peerIndex = index;
   }
 
   // handles what happens after file is accepted

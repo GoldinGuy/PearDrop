@@ -8,33 +8,36 @@ import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/devices_grid.dart';
 import 'package:peardrop/src/widgets/file_select_body.dart';
-import 'package:peardrop/src/widgets/peardrop_appbar.dart';
 import 'package:peardrop/src/widgets/sliding_panel_accept.dart';
 import 'package:peardrop/src/widgets/sliding_panel_receive.dart';
 import 'package:peardrop/src/widgets/sliding_panel_send.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'utilities/nearby_device.dart';
+import 'widgets/device_select_body.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
+
+  setPearBody() {}
 }
 
 enum PearPanel { sharing, receiving, accepting }
+enum PearBody { selectingFile, pickingDevice, sharing }
 
 class _HomePageState extends State<HomePage> {
   PanelController _pc = new PanelController();
   List<Device> devices = [];
-  int peerIndex = 0;
   InternetAddress deviceId = new InternetAddress('190.160.225.16');
   PearPanel pearPanel = PearPanel.sharing;
-  bool fileSelected = false;
+  PearBody pearBody;
   SharingService share;
 
   @override
   void initState() {
     super.initState();
     share = new SharingService();
+    pearBody = PearBody.selectingFile;
     // TODO: determine how best to use deviceInfo | deviceId = DeviceDetails().getDeviceDetails() as String;
     // dummy data
     devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
@@ -44,9 +47,15 @@ class _HomePageState extends State<HomePage> {
   // main build function
   @override
   Widget build(BuildContext context) {
+    Color background;
+    if (pearBody == PearBody.selectingFile) {
+      background = Color(0xff293851);
+    } else {
+      background = Color(0xff559364);
+    }
     return Material(
       child: Scaffold(
-        backgroundColor: Color(0xff293851),
+        backgroundColor: background,
         // appBar: PearDropAppBar().getAppBar('PearDrop'),
         body: _getBody(),
         bottomNavigationBar: BottomVersionBar(
@@ -56,9 +65,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  setPearBody(body) {
+    setState(() {
+      pearBody = body;
+    });
+  }
+
 // returns main app body
   Widget _getBody() {
-    if (fileSelected) {
+    if (pearBody == PearBody.sharing) {
       double _panelHeightClosed = 90.0;
       // double _panelHeightOpen = MediaQuery.of(context).size.height * 0.55;
       double _panelHeightOpen = MediaQuery.of(context).size.height * 0.85;
@@ -90,11 +105,18 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       );
-    } else {
+    } else if (pearBody == PearBody.selectingFile) {
       return FileSelectBody(
-        func: share.handleFileSelect,
+        fileSelect: share.handleFileSelect,
+        pearBody: setPearBody,
         deviceName: WordList().ipToWords(deviceId),
       );
+    } else if (pearBody == PearBody.pickingDevice) {
+      return DeviceSelectBody(
+          devices: devices,
+          fileShare: share.handleFileShare,
+          deviceName: WordList().ipToWords(deviceId),
+          pearBody: setPearBody);
     }
   }
 
@@ -102,7 +124,7 @@ class _HomePageState extends State<HomePage> {
   Widget _getPanel(ScrollController sc) {
     if (pearPanel == PearPanel.sharing) {
       return SlidingPanelSend(
-        peerDevice: devices[peerIndex],
+        peerDevice: devices[share.peerIndex],
         sc: sc,
         fileName: share.fileName,
         cancel: CloseButton(
@@ -111,7 +133,7 @@ class _HomePageState extends State<HomePage> {
       );
     } else if (pearPanel == PearPanel.receiving) {
       return SlidingPanelReceive(
-        peerDevice: devices[peerIndex],
+        peerDevice: devices[share.peerIndex],
         sc: sc,
         fileName: share.fileName,
         cancel: CloseButton(
@@ -120,7 +142,7 @@ class _HomePageState extends State<HomePage> {
       );
     } else if (pearPanel == PearPanel.accepting) {
       return SlidingPanelAccept(
-        peerDevice: devices[peerIndex],
+        peerDevice: devices[share.peerIndex],
         sc: sc,
         func: share.handleFileReceive,
         fileName: share.fileName,
