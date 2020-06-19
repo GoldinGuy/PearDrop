@@ -17,7 +17,7 @@ ExternalProject_Add(
 	peardrop_capi
 	DOWNLOAD_COMMAND ""
 	CONFIGURE_COMMAND ""
-	BUILD_COMMAND cargo build COMMAND cargo build --release
+    BUILD_COMMAND cargo build $<$<CONFIG:Release>:--release>
 	BINARY_DIR "${CMAKE_SOURCE_DIR}/.."
 	INSTALL_COMMAND ""
 	LOG_BUILD ON
