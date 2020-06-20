@@ -1,0 +1,16 @@
+name: peardrop
+description: Dart library for Peardrop.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  test: ^1.15.0
+
+dev_dependencies:
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
