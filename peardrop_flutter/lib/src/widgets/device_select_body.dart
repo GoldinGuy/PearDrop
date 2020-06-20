@@ -195,10 +195,7 @@ class DeviceSelectBody extends StatelessWidget {
                                             ),
                                           ),
                                           Text(
-                                            devices[i]
-                                                .getIP()
-                                                .address
-                                                .toString(),
+                                            devices[i].getIP().address,
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey),

@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                 devices: devices,
                 reset: reset,
                 fileShare: share.handleFileShare,
-                deviceName: WordList().ipToWords(deviceId).toString(),
+                deviceName: WordList().ipToWords(deviceId),
                 setPanel: setPearPanel),
             panelBuilder: (sc) => SlidingPanel(
               peerDevice: devices[share.peerIndex],
@@ -133,13 +133,13 @@ class _HomePageState extends State<HomePage> {
       return FileSelectBody(
         fileSelect: share.handleFileSelect,
         setFileSelected: setFileSelected,
-        deviceName: WordList().ipToWords(deviceId).toString(),
+        deviceName: WordList().ipToWords(deviceId),
       );
     } else {
       return DeviceSelectBody(
         devices: devices,
         fileShare: share.handleFileShare,
-        deviceName: WordList().ipToWords(deviceId).toString(),
+        deviceName: WordList().ipToWords(deviceId),
         setPanel: setPearPanel,
       );
     }

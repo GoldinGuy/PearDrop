@@ -23,16 +23,11 @@ void main() {
           window_size.setWindowMinSize(Size(440, 600));
           window_size.setWindowMaxSize(Size(800, 1200));
         }
-        // else if (Platform.isWindows) {
-        //   window_size.setWindowMinSize(Size(440, 600));
-        //   window_size.setWindowMaxSize(Size(440, 600));
-        // }
       }
     });
   }
   runApp(new PearDrop());
 }
-// void main() => runApp(PearDrop());
 
 class PearDrop extends StatelessWidget {
   @override
