@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peardrop/src/home.dart';
 
-typedef void FileSelectCallback();
+typedef void FileSelectCallback(FileSelectedCallback file);
 typedef void FileSelectedCallback(bool value);
 
 class FileSelectBody extends StatelessWidget {
@@ -18,25 +18,42 @@ class FileSelectBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+            padding: EdgeInsets.fromLTRB(15, 10, 15, 15),
             child: Image.asset('assets/images/share.gif'),
           ),
           // Image(image: new AssetImage("assets/images/share.gif")),
           Text(
             'Share With PearDrop',
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 23),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(35, 10, 35, 10),
-            child: Text(
-              'Your device is visible as ' +
-                  deviceName +
-                  '. Click below to start sharing, or begin from another nearby device',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 13,
-              ),
+            padding: EdgeInsets.fromLTRB(35, 15, 35, 10),
+            child: RichText(
+              text: TextSpan(
+                  text: 'Your device is visible as ',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: deviceName,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          '. \nClick below to start sharing, or begin from another nearby device',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ]),
               textAlign: TextAlign.center,
             ),
           ),
@@ -45,12 +62,11 @@ class FileSelectBody extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: () {
-                setFileSelected(true);
-                fileSelect();
+                fileSelect(setFileSelected);
               },
               child: Container(
-                width: 175,
-                height: 40,
+                width: 185,
+                height: 45,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -74,7 +90,7 @@ class FileSelectBody extends StatelessWidget {
                     'Select a file',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

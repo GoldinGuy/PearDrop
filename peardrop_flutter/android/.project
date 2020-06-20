@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>android</name>
-	<comment>Project android created by Buildship.</comment>
+	<name>PearDrop</name>
+	<comment>Cross platform file transfer</comment>
 	<projects>
 	</projects>
 	<buildSpec>

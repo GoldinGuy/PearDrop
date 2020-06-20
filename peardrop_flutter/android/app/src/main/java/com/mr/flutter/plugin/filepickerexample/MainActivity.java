@@ -1,4 +1,4 @@
-package com.mr.flutter.plugin.filepickerexample;
+package com.mr.flutter.plugin.peardrop_flutter;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

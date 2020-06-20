@@ -1,5 +1,3 @@
-// this is the main page of the app (the first you see) and will show nearby devices that (when clicked on) will allow you to select file(s) to share
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -22,8 +20,7 @@ enum PearPanel { sharing, receiving, accepting, done }
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
   InternetAddress deviceId = new InternetAddress('190.160.225.16');
-  bool pearPanelOpen = false;
-  bool fileSelected = false;
+  bool pearPanelOpen = false, fileSelected = false;
   SharingService share;
   PanelController _pc = new PanelController();
   PearPanel pearPanel = PearPanel.accepting;
@@ -37,6 +34,34 @@ class _HomePageState extends State<HomePage> {
     // dummy data
     devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
     devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
+  }
+
+// resets the app back to the main screen
+  void reset() {
+    setState(() {
+      fileSelected = false;
+    });
+    setPearPanel(false, PearPanel.accepting);
+  }
+
+// sets whether there is currently a file selected or not
+  void setFileSelected(bool selected) {
+    setState(() {
+      fileSelected = selected;
+    });
+  }
+
+// sets panel appearence and opens and closes it based on boolean
+  void setPearPanel(bool value, PearPanel panel) {
+    setState(() {
+      pearPanelOpen = value;
+      pearPanel = panel;
+    });
+    if (pearPanelOpen) {
+      _pc.open();
+    } else if (!pearPanelOpen) {
+      _pc.close();
+    }
   }
 
   // main build function
@@ -60,41 +85,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void reset() {
-    _pc.close();
-    setState(() {
-      fileSelected = false;
-      pearPanelOpen = false;
-      pearPanel = PearPanel.accepting;
-    });
-  }
-
-  void setFileSelected(bool selected) {
-    setState(() {
-      fileSelected = selected;
-    });
-  }
-
-  void setPearPanel(bool value, PearPanel panel) {
-    setState(() {
-      pearPanelOpen = value;
-      pearPanel = panel;
-    });
-    if (pearPanelOpen) {
-      _pc.open();
-    } else if (!pearPanelOpen) {
-      _pc.close();
-    }
-  }
-
 // returns main app body
   Widget _getBody() {
     if (fileSelected) {
       double _panelHeightOpen;
       if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
-        _panelHeightOpen = MediaQuery.of(context).size.height * 0.35;
+        setState(() {
+          _panelHeightOpen = MediaQuery.of(context).size.height * 0.35;
+        });
       } else {
-        _panelHeightOpen = MediaQuery.of(context).size.height * 0.25;
+        setState(() {
+          _panelHeightOpen = MediaQuery.of(context).size.height * 0.25;
+        });
       }
       return Stack(
         alignment: Alignment.topCenter,
@@ -105,11 +107,11 @@ class _HomePageState extends State<HomePage> {
             minHeight: 0.0,
             defaultPanelState: PanelState.CLOSED,
             backdropEnabled: true,
-            // renderPanelSheet: false,
             backdropOpacity: 0.2,
             isDraggable: false,
             body: DeviceSelectBody(
                 devices: devices,
+                reset: reset,
                 fileShare: share.handleFileShare,
                 deviceName: WordList().ipToWords(deviceId).toString(),
                 setPanel: setPearPanel),
@@ -124,7 +126,6 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
-            // onPanelSlide: (doublse pos) => setState(() {}),
           ),
         ],
       );

@@ -7,6 +7,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:peardrop/src/home.dart';
 
+typedef void FileSelectedCallback(bool value);
+
 class SharingService {
   String _path, fileName, _extension;
   Map<String, String> _paths;
@@ -17,8 +19,8 @@ class SharingService {
 
   // handleFileSend(fileName, filePath, mime, ip) {}
 
-  void handleFileSelect() {
-    openFileExplorer();
+  void handleFileSelect(FileSelectedCallback setFileSelected) {
+    openFileExplorer(setFileSelected);
   }
 
   // handles what happens after file is selected and device chosen
@@ -40,7 +42,7 @@ class SharingService {
   }
 
   // allows user to upload files
-  void openFileExplorer() async {
+  void openFileExplorer(FileSelectedCallback setFileSelected) async {
     _controller.addListener(() => _extension = _controller.text);
     String initialDirectory;
     if (Platform.isMacOS || Platform.isWindows) {
@@ -79,11 +81,14 @@ class SharingService {
         ? _path.split('/').last
         : _paths != null ? _paths.keys.toString() : '...';
     // });
-    await Future.delayed(const Duration(milliseconds: 600), () {
-      if ('$fileName' != null) {
-        fileSelected = true;
-        // _pc.open();
-      }
-    });
+
+    fileSelected = true;
+    setFileSelected(true);
+    // await Future.delayed(const Duration(milliseconds: 600), () {
+    //   if ('$fileName' != null) {
+
+    //     // _pc.open();
+    //   }
+    // });
   }
 }
