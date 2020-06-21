@@ -5,22 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:peardrop/src/home.dart';
 
-typedef void FileSelectedCallback(bool value);
+typedef void SetFileCallback(bool value, String name);
 
 class SharingService {
-  String _path, fileName, _extension;
+  String _path, _fileName = '', _extension;
   Map<String, String> _paths;
-  bool _multiPick = false, _loadingPath = false, fileSelected = false;
+  bool _multiPick = false, _loadingPath = false;
   FileType _pickingType = FileType.any;
   TextEditingController _controller = new TextEditingController();
   int peerIndex = 0;
 
   // handleFileSend(fileName, filePath, mime, ip) {}
 
-  void handleFileSelect(FileSelectedCallback setFileSelected) {
-    openFileExplorer(setFileSelected);
+  void handleFileSelect(SetFileCallback setFile) {
+    openFileExplorer(setFile);
   }
 
   // handles what happens after file is selected and device chosen
@@ -42,7 +41,7 @@ class SharingService {
   }
 
   // allows user to upload files
-  void openFileExplorer(FileSelectedCallback setFileSelected) async {
+  void openFileExplorer(SetFileCallback setFile) async {
     _controller.addListener(() => _extension = _controller.text);
     String initialDirectory;
     if (Platform.isMacOS || Platform.isWindows) {
@@ -51,7 +50,6 @@ class SharingService {
           allowsMultipleSelection: true, initialDirectory: initialDirectory);
       _path = '${result.paths.join('\n')}';
     } else if (Platform.isIOS || Platform.isAndroid) {
-      // setState(() => _loadingPath = true);
       _loadingPath = true;
       try {
         if (_multiPick) {
@@ -73,22 +71,13 @@ class SharingService {
         print("Unsupported operation" + e.toString());
       }
     }
-    // if (!mounted) return;
-    // setState(() {
-    // pearPanel = PearPanel.sharing;
+
     _loadingPath = false;
-    fileName = _path != null
+    _fileName = _path != null
         ? _path.split('/').last
         : _paths != null ? _paths.keys.toString() : '...';
-    // });
-
-    fileSelected = true;
-    setFileSelected(true);
-    // await Future.delayed(const Duration(milliseconds: 600), () {
-    //   if ('$fileName' != null) {
-
-    //     // _pc.open();
-    //   }
-    // });
+    if (_fileName != '' && _fileName != null) {
+      setFile(true, _fileName);
+    }
   }
 }

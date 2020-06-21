@@ -17,7 +17,7 @@ class DeviceSelectBody extends StatelessWidget {
   DeviceSelectBody(
       {this.devices,
       this.fileShare,
-      // this.fileName,
+      this.fileName,
       this.setPanel,
       this.deviceName,
       this.reset});
@@ -26,7 +26,7 @@ class DeviceSelectBody extends StatelessWidget {
   final DeviceSelectCallback fileShare;
   final ResetCallBack reset;
   final SetPanelCallback setPanel;
-  final String deviceName;
+  final String deviceName, fileName;
 
   Widget build(BuildContext context) {
     if (devices.length <= 0) {
@@ -41,11 +41,13 @@ class DeviceSelectBody extends StatelessWidget {
         ),
       );
     } else {
-      var topHeight = 20.0, deviceHeight = 0.0;
+      var topHeight = 20.0, deviceHeight = 2.5;
       topHeight = max((70 ~/ devices.length), 20).toDouble();
       if (Platform.isAndroid || Platform.isIOS) {
         deviceHeight = 25;
       }
+      final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
+      var file = fileReg.allMatches(fileName).map((m) => m.group(2)).toString();
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -79,16 +81,6 @@ class DeviceSelectBody extends StatelessWidget {
                   ),
                 ),
               ),
-              // Align(
-              //   alignment: Alignment.topRight,
-              //   child: Padding(
-              //     padding: EdgeInsets.all(10),
-              //     child: Text(
-              //       fileName,
-              //       style: TextStyle(color: Colors.white),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           SizedBox(
@@ -104,22 +96,22 @@ class DeviceSelectBody extends StatelessWidget {
                   Text('PearDrop',
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 23,
+                          fontSize: 24,
                           color: Colors.white)),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                    padding: EdgeInsets.fromLTRB(30, 13, 30, 18),
                     child: RichText(
                       text: TextSpan(
                           text: 'Your device is visible as ',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 17,
                             color: Colors.white,
                           ),
                           children: <TextSpan>[
                             TextSpan(
                               text: deviceName,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 17,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -127,7 +119,7 @@ class DeviceSelectBody extends StatelessWidget {
                             TextSpan(
                               text: '. \nSelect a nearby device to share with',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 17,
                                 color: Colors.white,
                               ),
                             ),
@@ -210,6 +202,16 @@ class DeviceSelectBody extends StatelessWidget {
                   ),
                 );
               },
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                file,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ]),

@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peardrop/src/home.dart';
 
-typedef void FileSelectCallback(FileSelectedCallback file);
-typedef void FileSelectedCallback(bool value);
+typedef void FileSelectCallback(SetFileCallback file);
+typedef void SetFileCallback(bool value, String name);
 
 class FileSelectBody extends StatelessWidget {
-  FileSelectBody({this.fileSelect, this.deviceName, this.setFileSelected});
+  FileSelectBody({this.fileSelect, this.deviceName, this.setFile});
 
   final FileSelectCallback fileSelect;
-  final FileSelectedCallback setFileSelected;
+  final SetFileCallback setFile;
   final String deviceName;
 
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class FileSelectBody extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: () {
-                fileSelect(setFileSelected);
+                fileSelect(setFile);
               },
               child: Container(
                 width: 185,

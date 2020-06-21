@@ -41,6 +41,7 @@ class _LinearPercentageProgressIndicatorState
   void _updateProgress() {
     const threeSec = const Duration(seconds: 3);
     new Timer.periodic(threeSec, (Timer t) {
+      if (!mounted) return;
       setState(() {
         _progressValue += 0.2;
         // we "finish" downloading here

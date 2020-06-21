@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   InternetAddress deviceId = new InternetAddress('190.160.225.16');
   bool pearPanelOpen = false, fileSelected = false;
   SharingService share;
+  String fileName = '';
   PanelController _pc = new PanelController();
   PearPanel pearPanel = PearPanel.accepting;
 
@@ -38,16 +39,18 @@ class _HomePageState extends State<HomePage> {
 
 // resets the app back to the main screen
   void reset() {
-    setState(() {
-      fileSelected = false;
-    });
+    // setState(() {
+    //   fileSelected = false;
+    // });
+    setFile(false, '');
     setPearPanel(false, PearPanel.accepting);
   }
 
 // sets whether there is currently a file selected or not
-  void setFileSelected(bool selected) {
+  void setFile(bool selected, String file) {
     setState(() {
       fileSelected = selected;
+      fileName = file;
     });
   }
 
@@ -67,6 +70,16 @@ class _HomePageState extends State<HomePage> {
   // main build function
   @override
   Widget build(BuildContext context) {
+    double _panelHeightOpen;
+    if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
+      _panelHeightOpen = MediaQuery.of(context).size.height * 0.35;
+    } else {
+      _panelHeightOpen = MediaQuery.of(context).size.height * 0.25;
+    }
+    setState(() {
+      _panelHeightOpen = _panelHeightOpen;
+      fileName = fileName;
+    });
     Color background;
     if (!fileSelected) {
       background = Color(0xff293851);
@@ -77,10 +90,36 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: background,
         // appBar: PearDropAppBar().getAppBar('PearDrop'),
-        body: _getBody(),
-        // bottomNavigationBar: BottomVersionBar(
-        //   version: '1.0.0+0',
-        // ),
+        body: Stack(
+          alignment: Alignment.topCenter,
+          children: <Widget>[
+            SlidingUpPanel(
+              controller: _pc,
+              maxHeight: _panelHeightOpen,
+              minHeight: 0.0,
+              defaultPanelState: PanelState.CLOSED,
+              backdropEnabled: true,
+              backdropOpacity: 0.2,
+              isDraggable: false,
+              body: _getBody(),
+              panelBuilder: (sc) => SlidingPanel(
+                peerDevice: devices[share.peerIndex],
+                sc: sc,
+                fileName: fileName,
+                pearPanel: pearPanel,
+                reset: reset,
+                accept: share.handleFileReceive,
+              ),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(18.0),
+                  topRight: Radius.circular(18.0)),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomVersionBar(
+          version: '1.0.0+0',
+          fileName: fileName,
+        ),
       ),
     );
   }
@@ -88,59 +127,18 @@ class _HomePageState extends State<HomePage> {
 // returns main app body
   Widget _getBody() {
     if (fileSelected) {
-      double _panelHeightOpen;
-      if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
-        setState(() {
-          _panelHeightOpen = MediaQuery.of(context).size.height * 0.35;
-        });
-      } else {
-        setState(() {
-          _panelHeightOpen = MediaQuery.of(context).size.height * 0.25;
-        });
-      }
-      return Stack(
-        alignment: Alignment.topCenter,
-        children: <Widget>[
-          SlidingUpPanel(
-            controller: _pc,
-            maxHeight: _panelHeightOpen,
-            minHeight: 0.0,
-            defaultPanelState: PanelState.CLOSED,
-            backdropEnabled: true,
-            backdropOpacity: 0.2,
-            isDraggable: false,
-            body: DeviceSelectBody(
-                devices: devices,
-                reset: reset,
-                fileShare: share.handleFileShare,
-                deviceName: WordList().ipToWords(deviceId),
-                setPanel: setPearPanel),
-            panelBuilder: (sc) => SlidingPanel(
-              peerDevice: devices[share.peerIndex],
-              sc: sc,
-              fileName: share.fileName,
-              pearPanel: pearPanel,
-              reset: reset,
-              accept: share.handleFileReceive,
-            ),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18.0),
-                topRight: Radius.circular(18.0)),
-          ),
-        ],
-      );
-    } else if (!fileSelected) {
+      return DeviceSelectBody(
+          devices: devices,
+          reset: reset,
+          fileName: fileName,
+          fileShare: share.handleFileShare,
+          deviceName: WordList().ipToWords(deviceId),
+          setPanel: setPearPanel);
+    } else {
       return FileSelectBody(
         fileSelect: share.handleFileSelect,
-        setFileSelected: setFileSelected,
+        setFile: setFile,
         deviceName: WordList().ipToWords(deviceId),
-      );
-    } else {
-      return DeviceSelectBody(
-        devices: devices,
-        fileShare: share.handleFileShare,
-        deviceName: WordList().ipToWords(deviceId),
-        setPanel: setPearPanel,
       );
     }
   }
