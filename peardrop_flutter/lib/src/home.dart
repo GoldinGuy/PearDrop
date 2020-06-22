@@ -35,13 +35,12 @@ class _HomePageState extends State<HomePage> {
     // dummy data
     devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
     devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
+    devices.add(Device(Icons.phone_android,
+        InternetAddress('2001:0db8:85a3:0000:0000:8a2e:0370:7334')));
   }
 
 // resets the app back to the main screen
   void reset() {
-    // setState(() {
-    //   fileSelected = false;
-    // });
     setFile(false, '');
     setPearPanel(false, PearPanel.accepting);
   }
@@ -55,9 +54,9 @@ class _HomePageState extends State<HomePage> {
   }
 
 // sets panel appearence and opens and closes it based on boolean
-  void setPearPanel(bool value, PearPanel panel) {
+  void setPearPanel(bool isOpen, PearPanel panel) {
     setState(() {
-      pearPanelOpen = value;
+      pearPanelOpen = isOpen;
       pearPanel = panel;
     });
     if (pearPanelOpen) {
@@ -70,25 +69,14 @@ class _HomePageState extends State<HomePage> {
   // main build function
   @override
   Widget build(BuildContext context) {
-    double _panelHeightOpen;
-    if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
-      _panelHeightOpen = MediaQuery.of(context).size.height * 0.35;
-    } else {
-      _panelHeightOpen = MediaQuery.of(context).size.height * 0.25;
-    }
+    double _panelHeightOpen = determinePanelHeight();
     setState(() {
       _panelHeightOpen = _panelHeightOpen;
       fileName = fileName;
     });
-    Color background;
-    if (!fileSelected) {
-      background = Color(0xff293851);
-    } else {
-      background = Color(0xff559364);
-    }
     return Material(
       child: Scaffold(
-        backgroundColor: background,
+        backgroundColor: Color(0xff293851),
         // appBar: PearDropAppBar().getAppBar('PearDrop'),
         body: Stack(
           alignment: Alignment.topCenter,
@@ -124,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-// returns main app body
+  // returns main app body
   Widget _getBody() {
     if (fileSelected) {
       return DeviceSelectBody(
@@ -140,6 +128,15 @@ class _HomePageState extends State<HomePage> {
         setFile: setFile,
         deviceName: WordList().ipToWords(deviceId),
       );
+    }
+  }
+
+  double determinePanelHeight() {
+    if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
+      return MediaQuery.of(context).size.height * 0.35;
+      // return 200;
+    } else {
+      return MediaQuery.of(context).size.height * 0.25;
     }
   }
 }

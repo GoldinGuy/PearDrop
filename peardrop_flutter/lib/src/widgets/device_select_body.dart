@@ -47,7 +47,12 @@ class DeviceSelectBody extends StatelessWidget {
         deviceHeight = 25;
       }
       final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
-      var file = fileReg.allMatches(fileName).map((m) => m.group(2)).toString();
+      var file = fileReg
+          .allMatches(fileName)
+          .map((m) => m.group(2))
+          .toString()
+          .replaceAll('(', '')
+          .replaceAll(')', '');
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -187,7 +192,18 @@ class DeviceSelectBody extends StatelessWidget {
                                             ),
                                           ),
                                           Text(
-                                            devices[i].getIP().address,
+                                            devices[i]
+                                                .getIP()
+                                                .address
+                                                .substring(
+                                                    0,
+                                                    min(
+                                                        devices[i]
+                                                            .getIP()
+                                                            .address
+                                                            .length,
+                                                        13)),
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey),
