@@ -12,8 +12,11 @@ void main() {
     window_size.getWindowInfo().then((window) {
       if (window.screen != null) {
         final screenFrame = window.screen.visibleFrame;
+        // TODO: determine best way to set window size in desktop mode
+        final width = (screenFrame.width / 3.8).roundToDouble(),
+            height = (screenFrame.height / 1.6).roundToDouble();
+        // final width = 470.0, height = 670.0;
         // final width = 430.0, height = 600.0;
-        final width = 470.0, height = 670.0;
         final left = ((screenFrame.width - width) / 2).roundToDouble();
         final top = ((screenFrame.height - height) / 3).roundToDouble();
         final frame = Rect.fromLTWH(left, top, width, height);

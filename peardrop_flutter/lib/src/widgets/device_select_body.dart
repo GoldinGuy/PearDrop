@@ -41,18 +41,19 @@ class DeviceSelectBody extends StatelessWidget {
         ),
       );
     } else {
-      var topHeight = 20.0, deviceHeight = 2.5;
+      var topHeight = 20.0, deviceHeight = 25.0;
+      var file = fileName;
       topHeight = max((70 ~/ devices.length), 20).toDouble();
-      if (Platform.isAndroid || Platform.isIOS) {
-        deviceHeight = 25;
+      if (Platform.isWindows || Platform.isMacOS) {
+        deviceHeight = 2.5;
+        final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
+        file = fileReg
+            .allMatches(fileName)
+            .map((m) => m.group(2))
+            .toString()
+            .replaceAll('(', '')
+            .replaceAll(')', '');
       }
-      final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
-      var file = fileReg
-          .allMatches(fileName)
-          .map((m) => m.group(2))
-          .toString()
-          .replaceAll('(', '')
-          .replaceAll(')', '');
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -225,6 +226,7 @@ class DeviceSelectBody extends StatelessWidget {
               padding: EdgeInsets.all(10),
               child: Text(
                 file,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),

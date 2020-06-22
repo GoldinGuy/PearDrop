@@ -34,8 +34,8 @@ class _HomePageState extends State<HomePage> {
     // TODO: determine how best to use deviceInfo | deviceId = DeviceDetails().getDeviceDetails() as String;
     // dummy data
     devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
-    devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
-    devices.add(Device(Icons.phone_android,
+    // devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
+    devices.add(Device(Icons.laptop_windows,
         InternetAddress('2001:0db8:85a3:0000:0000:8a2e:0370:7334')));
   }
 
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
   double determinePanelHeight() {
     if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
       return MediaQuery.of(context).size.height * 0.35;
-      // return 200;
+      // TODO: fix panel height being too small on some devices due to small app size return 200;
     } else {
       return MediaQuery.of(context).size.height * 0.25;
     }
