@@ -119,6 +119,15 @@ impl SenderPacket {
     }
 
     /**
+     * Creates an AdPacket from the given buffer.
+     */
+    pub fn from_buffer(buf: &[u8]) -> Result<Self, DekuError> {
+        // NOTE: Don't use TryFrom because it panics on extra data
+        let (_, res) = Self::from_bytes((&buf[..], 0))?;
+        Ok(res)
+    }
+
+    /**
      * Reads a SenderPacket from the given reader.
      */
     pub fn read(r: &mut dyn std::io::Read) -> Result<Self, DekuError> {
@@ -126,9 +135,15 @@ impl SenderPacket {
         let mut buf = vec![0; 4096];
         r.read(&mut buf)
             .map_err(|_| DekuError::InvalidParam("Failed to read".to_string()))?;
-        // NOTE: Don't use TryFrom because it panics on extra data
-        let (_, res) = Self::from_bytes((&buf[..], 0))?;
-        Ok(res)
+        Self::from_buffer(&buf[..])
+    }
+
+    /**
+     * Writes an AckPacket to a buffer.
+     */
+    pub fn to_buffer(&self) -> Result<Vec<u8>, DekuError> {
+        use std::convert::TryInto;
+        (*self).clone().try_into()
     }
 
     /**

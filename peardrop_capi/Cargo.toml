@@ -1,0 +1,12 @@
+[package]
+name = "peardrop_capi"
+version = "0.1.0"
+authors = ["anirudhb <anirudhb@users.noreply.github.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+peardrop_protocol = { path = "../peardrop_protocol" }
+num-traits = "0.2.12"
