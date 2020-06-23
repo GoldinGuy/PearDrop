@@ -17,3 +17,4 @@ Podfile.lock
 *.oldcode.txt
 .circle.dart
 .file_upload.dart
+.devices_page.dart

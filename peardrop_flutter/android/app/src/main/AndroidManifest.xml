@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mr.flutter.plugin.filepickerexample"
+    package="com.mr.flutter.plugin.peardrop_flutter"
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- The INTERNET permission is required for development. Specifically,
@@ -15,7 +15,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="file_picker_example"
+        android:label="peardrop_flutter"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label"
         tools:ignore="GoogleAppIndexingWarning">

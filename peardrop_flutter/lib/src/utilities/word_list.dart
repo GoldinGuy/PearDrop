@@ -262,58 +262,62 @@ class WordList {
     'FF': ['Zulu', 'Yucatan'],
   };
 
-  ipToWords(InternetAddress ip) {
+  String ipToWords(InternetAddress ip) {
     var ipHex = ip.address.toString();
     ipHex = ipHex.replaceAll('.', '');
-    ipHex = (int.parse(ipHex)).toRadixString(16);
-    // print('ip:' + ipHex);
-    ipHex = ipHex.toUpperCase();
+    if (ipHex.contains(':')) {
+      ipHex = ipHex.replaceAll(':', '');
+      var reg = new RegExp(r'[a-zA-Z]', multiLine: true);
+      ipHex = ipHex.replaceAll(reg, '');
+      ipHex = ipHex.substring(0, (ipHex.length / 2).round());
+    }
+    ipHex = (int.parse(ipHex)).toRadixString(16).toUpperCase();
     List<String> hexs = [];
     for (var i = 0; i < ipHex.length - 1; i += 2) {
       hexs.add(ipHex.substring(i, i + 2));
     }
-    return hexToWords(hexs);
+    return hexToWords(hexs).toString();
   }
 
-  hexToWord(hex, position) {
+  String hexToWord(String hex, int position) {
     return rawWords[hex][position % 2];
   }
 
-  hexToWords(hexs) {
+  String hexToWords(List<String> hexs) {
     // print(hexs);
     var words = [];
     var i = 0;
-    hexs.forEach((hex) {
+    hexs.forEach((String hex) {
       words.add(hexToWord(hex.toUpperCase(), i));
       i++;
     });
     // return words;
-    return words[0] + '-' + words[3];
+    return (words[0] + '-' + words[3]).toString();
   }
 
-  wordToHex(word) {
-    contains(a, w) {
-      var i = a.length;
-      while (i--) {
-        if (a[i].toUpperCase() == w.toUpperCase()) {
-          return true;
-        }
-      }
-      return false;
-    }
+  // wordToHex(word) {
+  //   contains(a, w) {
+  //     var i = a.length;
+  //     while (i--) {
+  //       if (a[i].toUpperCase() == w.toUpperCase()) {
+  //         return true;
+  //       }
+  //     }
+  //     return false;
+  //   }
 
-    for (int i = 0; i < rawWords.length; i++) {
-      if (contains(rawWords[i], word)) {
-        return i;
-      }
-    }
-  }
+  //   for (int i = 0; i < rawWords.length; i++) {
+  //     if (contains(rawWords[i], word)) {
+  //       return i;
+  //     }
+  //   }
+  // }
 
-  wordsToHex(words) {
-    var hexs = [];
-    words.forEach((word) {
-      hexs.add(wordToHex(word));
-    });
-    return hexs;
-  }
+  // wordsToHex(words) {
+  //   var hexs = [];
+  //   words.forEach((word) {
+  //     hexs.add(wordToHex(word));
+  //   });
+  //   return hexs;
+  // }
 }
