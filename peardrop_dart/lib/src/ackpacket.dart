@@ -25,7 +25,14 @@ class AckPacket {
     free(cbuffer);
   }
 
-  /// Gets the TCP extension's port of this AckPacket, if present.
+  /// Gets the type of this [AckPacket].
+  AckType get type {
+    var res = native_ackpacket_get_type(ptr);
+    assert(res != nullptr, 'Failed to get type of AckPacket');
+    return AckType.ptr(res);
+  }
+
+  /// Gets the TCP extension's port of this [AckPacket], if present.
   int get tcpPort {
     Pointer<Uint16> out = allocate();
     var res = native_ackpacket_ext_tcp_get(ptr, out);

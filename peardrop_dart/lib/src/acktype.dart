@@ -16,6 +16,8 @@ class AckType {
   /// Raw pointer to underlying acktype_t.
   Pointer<Void> ptr;
 
+  /// Creates an [AckType] from its underlying pointer.
+  AckType.ptr(this.ptr);
   /// Create a normal [AckType].
   AckType.normal(int type2) {
     ptr = native_acktype_create_normal(type2);
