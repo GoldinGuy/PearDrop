@@ -1,6 +1,8 @@
 import 'dart:io' show Platform;
 import 'dart:ffi';
 
+import 'package:ffi/ffi.dart';
+
 final String _libraryPath =
 Platform.isAndroid ? "libpeardrop_capi.so" :
 Platform.isMacOS ? "libpeardrop_capi.dylib" :
@@ -14,6 +16,7 @@ F _nativeF<F>(String name) { return _peardropNative.lookupFunction(name); }
 
 // For all the platforms we use, (u)intptr_t is equivalent to uint64_t since
 // we are only using 64-bit platforms (save android i686, but idk about that).
+// TODO: Fix
 
 final native_ackpacket_create = _nativeF<Pointer<Void> Function(Pointer<Void>)>("ackpacket_create");
 final native_ackpacket_ext_tcp_get = _nativeF<Int32 Function(Pointer<Void>, Pointer<Uint16>)>("ackpacket_ext_tcp_get");
@@ -38,12 +41,12 @@ final native_adpacket_free = _nativeF<Function(Pointer<Void>)>("adpacket_free");
 final native_adpacket_read = _nativeF<Pointer<Void> Function(Pointer<Uint8>, Uint64)>("adpacket_read");
 final native_adpacket_write = _nativeF<Int32 Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>)>("adpacket_write");
 
-final native_senderpacket_create = _nativeF<Pointer<Void> Function(Pointer<Uint8>, Pointer<Uint8>, Uint16)>("senderpacket_create");
+final native_senderpacket_create = _nativeF<Pointer<Void> Function(Pointer<Utf8>, Pointer<Utf8>, Uint64)>("senderpacket_create");
 final native_senderpacket_free = _nativeF<Function(Pointer<Void>)>("senderpacket_free");
 final native_senderpacket_get_data_length = _nativeF<Int32 Function(Pointer<Void>, Pointer<Uint64>)>("senderpacket_get_data_length");
-final native_senderpacket_get_filename = _nativeF<Pointer<Uint8> Function(Pointer<Void>)>("senderpacket_get_filename");
-final native_senderpacket_get_mimetype = _nativeF<Pointer<Uint8> Function(Pointer<Void>)>("senderpacket_get_mimetype");
+final native_senderpacket_get_filename = _nativeF<Pointer<Utf8> Function(Pointer<Void>)>("senderpacket_get_filename");
+final native_senderpacket_get_mimetype = _nativeF<Pointer<Utf8> Function(Pointer<Void>)>("senderpacket_get_mimetype");
 final native_senderpacket_read = _nativeF<Pointer<Void> Function(Pointer<Uint8>, Uint64)>("senderpacket_read");
 final native_senderpacket_write = _nativeF<Int32 Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>)>("senderpacket_write");
 
-final native_string_free = _nativeF<Function(Pointer<Uint8>)>("string_free");
+final native_string_free = _nativeF<Function(Pointer<Utf8>)>("string_free");
