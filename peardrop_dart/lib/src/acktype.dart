@@ -5,10 +5,10 @@ import 'package:ffi/ffi.dart';
 import 'ffi.dart';
 
 /// The type of an [AckType].
-enum AckTypeType {
-  SENDER_PACKET,
-  DATA_PACKET,
-  AD_PACKET,
+abstract class AckTypeType {
+  static const int SENDER_PACKET = 0;
+  static const int DATA_PACKET = 1;
+  static const int AD_PACKET = 2;
 }
 
 /// Type of packet an [AckPacket] is acknowledging.
@@ -17,32 +17,42 @@ class AckType {
   Pointer<Void> ptr;
 
   /// Create a normal [AckType].
-  AckType.normal(AckTypeType type2) {
-    ptr = native_acktype_create_normal(type2 as Uint8);
-    assert(ptr != nullptr, 'Failed to create normal acktype');
+  AckType.normal(int type2) {
+    ptr = native_acktype_create_normal(type2);
+    assert(ptr != nullptr, 'Failed to create normal AckType');
   }
   /// Create an [AckType] that accepts.
-  AckType.accept(AckTypeType type2) {
-    ptr = native_acktype_create_accept(type2 as Uint8);
-    assert(ptr != nullptr, 'Failed to create accept acktype');
+  AckType.accept(int type2) {
+    ptr = native_acktype_create_accept(type2);
+    assert(ptr != nullptr, 'Failed to create accept AckType');
   }
   /// Create an [AckType] that rejects.
-  AckType.reject(AckTypeType type2) {
-    ptr = native_acktype_create_reject(type2 as Uint8);
-    assert(ptr != nullptr, 'Failed to create reject acktype');
+  AckType.reject(int type2) {
+    ptr = native_acktype_create_reject(type2);
+    assert(ptr != nullptr, 'Failed to create reject AckType');
   }
   /// Creates an [AckType] from a raw value.
-  AckType.raw(Uint8 raw) {
+  AckType.raw(int raw) {
     ptr = native_acktype_from_raw(raw);
-    assert(ptr != nullptr, 'Failed to create acktype from raw');
+    assert(ptr != nullptr, 'Failed to create AckType from raw');
   }
 
   /// Get the type of this [AckType].
-  AckTypeType get type {
+  int get type {
     Pointer<Uint8> out = allocate();
     var res = native_acktype_get_type(ptr, out);
-    assert((res as int) == 0, 'Failed to get type of acktype');
-    AckTypeType value = out.value as AckTypeType;
+    assert(res == 0, 'Failed to get type of AckType');
+    var value = out.value;
+    free(out);
+    return value;
+  }
+
+  /// Get whether this [AckType] is accepted, will be false if not applicable.
+  bool get isAccepted {
+    Pointer<Uint8> out = allocate();
+    var res = native_acktype_is_accepted(ptr, out);
+    assert(res == 0, 'Failed to get whether AckType is accepted');
+    bool value = out.value != 0;
     free(out);
     return value;
   }
@@ -51,7 +61,7 @@ class AckType {
   int get raw {
     Pointer<Uint8> out = allocate();
     var res = native_acktype_to_raw(ptr, out);
-    assert((res as int) == 0, 'Failed to get raw of acktype');
+    assert(res == 0, 'Failed to get raw value of AckType');
     int value = out.value;
     free(out);
     return value;
