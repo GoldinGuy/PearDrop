@@ -9,6 +9,7 @@ import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'utilities/nearby_device.dart';
 import 'widgets/device_select_body.dart';
+import 'widgets/inactive/peardrop_appbar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -104,10 +105,10 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomVersionBar(
-          version: '1.0.0+0',
-          fileName: fileName,
-        ),
+        // bottomNavigationBar: BottomVersionBar(
+        //   version: '1.0.0+0',
+        //   fileName: fileName,
+        // ),
       ),
     );
   }
