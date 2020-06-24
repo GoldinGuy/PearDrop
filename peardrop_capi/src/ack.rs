@@ -32,6 +32,18 @@ pub extern "C" fn ackpacket_create(type_: *mut acktype) -> *mut ackpacket {
     Box::into_raw(Box::new(packet)) as *mut _
 }
 
+/// Gets the type of this AckPacket. Caller's responsibility for freeing it.
+///
+/// Returns NULL on error.
+#[no_mangle]
+pub extern "C" fn ackpacket_get_type(packet: *const ackpacket) -> *mut acktype {
+    if packet.is_null() {
+        return std::ptr::null_mut();
+    }
+    let packet = unsafe { &mut *(packet as *mut AckPacket) };
+    Box::into_raw(Box::new(packet.get_type().clone())) as *mut _
+}
+
 /// Add or update the TCP extension on an AckPacket.
 ///
 /// Returns non-zero on error.
@@ -48,7 +60,7 @@ pub extern "C" fn ackpacket_ext_tcp_update(packet: *mut ackpacket, port: u16) ->
             match ext {
                 // TODO: It may be expensive to clone an extension, look into no-copy
                 AckExtension::TCP { ad_port: _ } => e = Some(ext.clone()),
-                _ => {},
+                _ => {}
             }
         }
         if let Some(e) = e {
@@ -73,10 +85,14 @@ pub extern "C" fn ackpacket_ext_tcp_get(packet: *const ackpacket, out_port: *mut
     }
     // XXX: Not an unsafe block because let port is completely safe.
     let packet = unsafe { &*(packet as *const AckPacket) };
-    let port = packet.extensions.iter().find_map(|x| match x {
-        AckExtension::TCP { ad_port: port } => Some(*port),
-        _ => None,
-    }).unwrap_or_default();
+    let port = packet
+        .extensions
+        .iter()
+        .find_map(|x| match x {
+            AckExtension::TCP { ad_port: port } => Some(*port),
+            _ => None,
+        })
+        .unwrap_or_default();
     unsafe { *out_port = port };
     0
 }
@@ -85,8 +101,11 @@ pub extern "C" fn ackpacket_ext_tcp_get(packet: *const ackpacket, out_port: *mut
 ///
 /// Returns non-zero on error.
 #[no_mangle]
-pub extern "C" fn ackpacket_write(packet: *const ackpacket, out_buf: *mut *mut u8, out_len: *mut usize)
-    -> i32 {
+pub extern "C" fn ackpacket_write(
+    packet: *const ackpacket,
+    out_buf: *mut *mut u8,
+    out_len: *mut usize,
+) -> i32 {
     if packet.is_null() || out_buf.is_null() || out_len.is_null() {
         return 1;
     }
