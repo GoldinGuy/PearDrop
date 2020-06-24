@@ -62,6 +62,13 @@ flutter:
 
   assets:
     - assets/images/share.gif
+    - assets/images/header1.png
+    - assets/images/header2.png
+    - assets/images/header3.png
+    - assets/images/header4.png
+    - assets/images/header5.png
+    - assets/images/header6.png
+    - assets/images/header7.png
 
   fonts:
     - family: Montserrat
