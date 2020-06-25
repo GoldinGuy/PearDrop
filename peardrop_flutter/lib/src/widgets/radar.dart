@@ -40,7 +40,7 @@ class RenderRadar extends RenderBox
         RenderBoxContainerDefaultsMixin<RenderBox, RadarParentData> {
   RenderRadar({@required TickerProvider vsync}) : assert(vsync != null) {
     _controller =
-        AnimationController(vsync: vsync, duration: Duration(seconds: 2));
+        AnimationController(vsync: vsync, duration: Duration(seconds: 4));
     _controller.addListener(() {
       if (_controller.value != _lastValue) {
         markNeedsPaint();
