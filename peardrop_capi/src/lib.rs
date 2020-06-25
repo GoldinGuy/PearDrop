@@ -17,7 +17,7 @@ fn write_vec(v_buf: Result<Vec<u8>, DekuError>, out_buf: *mut *mut u8, out_len: 
             };
             std::mem::forget(v);
             0
-        },
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 use super::*;
-use std::ffi::{CString, CStr};
+use std::ffi::{CStr, CString};
 
 pub type senderpacket = std::ffi::c_void;
 
@@ -21,7 +21,11 @@ pub extern "C" fn senderpacket_read(buf: *const u8, len: i32) -> *mut senderpack
 ///
 /// Returns NULL on error.
 #[no_mangle]
-pub extern "C" fn senderpacket_create(filename: *const u8, mimetype: *const u8, data_len: u64) -> *mut senderpacket {
+pub extern "C" fn senderpacket_create(
+    filename: *const u8,
+    mimetype: *const u8,
+    data_len: u64,
+) -> *mut senderpacket {
     if filename.is_null() || mimetype.is_null() {
         return std::ptr::null_mut();
     }
@@ -37,7 +41,12 @@ pub extern "C" fn senderpacket_create(filename: *const u8, mimetype: *const u8, 
     }
     let mimetype = mimetype.unwrap();
     // Create packet and return
-    let packet = SenderPacket::new(filename, mimetype, std::collections::HashSet::new(), data_len);
+    let packet = SenderPacket::new(
+        filename,
+        mimetype,
+        std::collections::HashSet::new(),
+        data_len,
+    );
     Box::into_raw(Box::new(packet)) as *mut _
 }
 
@@ -45,7 +54,11 @@ pub extern "C" fn senderpacket_create(filename: *const u8, mimetype: *const u8, 
 ///
 /// Returns non-zero on error.
 #[no_mangle]
-pub extern "C" fn senderpacket_write(packet: *const senderpacket, out_buf: *mut *mut u8, out_len: *mut usize) -> i32 {
+pub extern "C" fn senderpacket_write(
+    packet: *const senderpacket,
+    out_buf: *mut *mut u8,
+    out_len: *mut usize,
+) -> i32 {
     if packet.is_null() || out_buf.is_null() || out_len.is_null() {
         return 1;
     }
@@ -64,7 +77,10 @@ pub extern "C" fn senderpacket_free(packet: *mut senderpacket) {
 ///
 /// Returns non-zero on error.
 #[no_mangle]
-pub extern "C" fn senderpacket_get_data_length(packet: *const senderpacket, out_len: *mut u64) -> i32 {
+pub extern "C" fn senderpacket_get_data_length(
+    packet: *const senderpacket,
+    out_len: *mut u64,
+) -> i32 {
     if packet.is_null() || out_len.is_null() {
         return 1;
     }

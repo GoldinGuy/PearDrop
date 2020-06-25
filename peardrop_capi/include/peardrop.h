@@ -44,6 +44,13 @@ int32_t ackpacket_ext_tcp_update(ackpacket *packet, uint16_t port);
 void ackpacket_free(ackpacket *packet);
 
 /**
+ * Gets the type of this AckPacket. Caller's responsibility for freeing it.
+ *
+ * Returns NULL on error.
+ */
+acktype *ackpacket_get_type(const ackpacket *packet);
+
+/**
  * Creates an AckPacket from the given buffer.
  *
  * Returns NULL on error.

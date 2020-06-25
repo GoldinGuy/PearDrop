@@ -39,7 +39,7 @@ pub extern "C" fn adpacket_ext_tcp_update(packet: *mut adpacket, port: u16) -> i
             match ext {
                 // TODO: It may be expensive to clone an extension, look into no-copy
                 AdExtension::TCP { ad_port: _ } => e = Some(ext.clone()),
-                _ => {},
+                _ => {}
             }
         }
         if let Some(e) = e {
@@ -64,10 +64,14 @@ pub extern "C" fn adpacket_ext_tcp_get(packet: *const adpacket, out_port: *mut u
     }
     // XXX: Not an unsafe block because let port is completely safe.
     let packet = unsafe { &*(packet as *const AdPacket) };
-    let port = packet.extensions.iter().find_map(|x| match x {
-        AdExtension::TCP { ad_port: port } => Some(*port),
-        _ => None,
-    }).unwrap_or_default();
+    let port = packet
+        .extensions
+        .iter()
+        .find_map(|x| match x {
+            AdExtension::TCP { ad_port: port } => Some(*port),
+            _ => None,
+        })
+        .unwrap_or_default();
     unsafe { *out_port = port };
     0
 }
@@ -76,7 +80,11 @@ pub extern "C" fn adpacket_ext_tcp_get(packet: *const adpacket, out_port: *mut u
 ///
 /// Returns non-zero on error.
 #[no_mangle]
-pub extern "C" fn adpacket_write(packet: *const adpacket, out_buf: *mut *mut u8, out_len: *mut usize) -> i32 {
+pub extern "C" fn adpacket_write(
+    packet: *const adpacket,
+    out_buf: *mut *mut u8,
+    out_len: *mut usize,
+) -> i32 {
     if packet.is_null() || out_buf.is_null() || out_len.is_null() {
         return 1;
     }
