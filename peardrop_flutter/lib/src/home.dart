@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:peardrop/src/utilities/device_details.dart';
 import 'package:peardrop/src/utilities/sharing_service.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
-import 'package:peardrop/src/widgets/bottom_version.dart';
 import 'package:peardrop/src/widgets/file_select_body.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
