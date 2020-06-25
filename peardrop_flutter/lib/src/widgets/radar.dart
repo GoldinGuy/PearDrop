@@ -59,7 +59,7 @@ class RenderRadar extends RenderBox
   AnimationController _controller;
   double _lastValue;
   bool isRunning = false;
-  Animation<num> _tween;
+  Animation<double> _tween;
 
   /// Radius of the initial circle.
   final int initialRadius = 20;
@@ -87,18 +87,21 @@ class RenderRadar extends RenderBox
       isRunning = true;
     }
     _lastValue = _controller.value;
-    var currentRadians = _tween.value as double;
+    var currentRadians = _tween.value + pi;
     // Calculate number of waves, starting from the bottom
     var center = size.bottomCenter(Offset.zero);
     // draw waves
-    var arcSize = size.height * 0.66;
+    var arcSize = size.height * 0.8;
     var wavePaint = Paint()
-      ..color = Colors.white12
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 2.0
-      ..isAntiAlias = true;
-    var arcSlice = 0.1 * pi;
-    context.canvas.drawArc(Rect.fromCircle(center: center, radius: arcSize),
-        currentRadians, currentRadians + arcSlice, true, wavePaint);
+      ..shader = RadialGradient(
+        colors: [
+          Colors.white12,
+          Colors.white12.withAlpha(0),
+        ],
+        stops: [0.8, 1.0],
+      ).createShader(Rect.fromCircle(center: center, radius: arcSize))
+      ..style = PaintingStyle.fill;
+    var arcSlice = 0.1*pi;
+    context.canvas.drawArc(Rect.fromCircle(center: center, radius: arcSize), currentRadians, arcSlice, true, wavePaint);
   }
 }
