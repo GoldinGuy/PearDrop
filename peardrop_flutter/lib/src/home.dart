@@ -97,6 +97,7 @@ class _HomePageState extends State<HomePage> {
                 fileName: fileName,
                 pearPanel: pearPanel,
                 reset: reset,
+                setPearPanel: setPearPanel,
                 accept: share.handleFileReceive,
               ),
               borderRadius: BorderRadius.only(
@@ -137,7 +138,8 @@ class _HomePageState extends State<HomePage> {
       return MediaQuery.of(context).size.height * 0.35;
       // TODO: fix panel height being too small on some devices due to small app size return 200;
     } else {
-      return MediaQuery.of(context).size.height * 0.51;
+      // return MediaQuery.of(context).size.height * 0.51;
+      return 360;
     }
   }
 }
