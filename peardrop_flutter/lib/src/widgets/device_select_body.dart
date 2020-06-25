@@ -83,10 +83,10 @@ class DeviceSelectBody extends StatelessWidget {
                       child: Icon(
                         Icons.arrow_back,
                         color: Colors.white,
-                        size: 24,
+                        size: 22,
                       ),
                     ),
-                    borderSide: BorderSide(color: Colors.white30),
+                    borderSide: BorderSide(color: Colors.white12),
                     color: Colors.white,
                     onPressed: () => reset(),
                     shape: RoundedRectangleBorder(
@@ -108,10 +108,10 @@ class DeviceSelectBody extends StatelessWidget {
                     child: Icon(
                       Icons.info,
                       color: Colors.white,
-                      size: 24,
+                      size: 22,
                     ),
                   ),
-                  borderSide: BorderSide(color: Colors.white30),
+                  borderSide: BorderSide(color: Colors.white12),
                   color: Colors.white,
                   // TODO: display TOS information when pressed
                   onPressed: () => {},
@@ -124,7 +124,7 @@ class DeviceSelectBody extends StatelessWidget {
           // TODO: design MultiChildRenderObjectWidget that can generate mutliple devices, fading them in and out as they appear nearby and displaying them in a random location within a set size
           Expanded(
             child: GridView.count(
-              crossAxisCount: 3,
+              crossAxisCount: 2,
               children: List.generate(devices.length, (i) {
                 return Column(
                   children: [
