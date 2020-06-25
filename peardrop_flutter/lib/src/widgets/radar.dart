@@ -9,7 +9,7 @@ class Radar extends StatefulWidget {
   final Key key;
   final List<Widget> children;
 
-  Radar({ this.key, this.children });
+  Radar({this.key, this.children});
 
   @override
   createState() => RadarState();
@@ -25,7 +25,8 @@ class RadarState extends State<Radar> with SingleTickerProviderStateMixin {
 class Radar2 extends MultiChildRenderObjectWidget {
   final TickerProvider vsync;
 
-  Radar2({ Key key, List<Widget> children, @required this.vsync }) : super(key: key, children: children);
+  Radar2({Key key, List<Widget> children, @required this.vsync})
+      : super(key: key, children: children);
 
   @override
   RenderRadar createRenderObject(BuildContext context) {
@@ -34,12 +35,12 @@ class Radar2 extends MultiChildRenderObjectWidget {
 }
 
 class RenderRadar extends RenderBox
-  with ContainerRenderObjectMixin<RenderBox, RadarParentData>,
-       RenderBoxContainerDefaultsMixin<RenderBox, RadarParentData> {
-
-  RenderRadar({@required TickerProvider vsync})
-    : assert(vsync != null) {
-    _controller = AnimationController(vsync: vsync, duration: Duration(seconds: 2));
+    with
+        ContainerRenderObjectMixin<RenderBox, RadarParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, RadarParentData> {
+  RenderRadar({@required TickerProvider vsync}) : assert(vsync != null) {
+    _controller =
+        AnimationController(vsync: vsync, duration: Duration(seconds: 2));
     _controller.addListener(() {
       if (_controller.value != _lastValue) {
         markNeedsPaint();
@@ -52,7 +53,7 @@ class RenderRadar extends RenderBox
         _controller.forward();
       }
     });
-    _tween = Tween(begin: pi, end: 2*pi).animate(_controller);
+    _tween = Tween(begin: pi, end: 2 * pi).animate(_controller);
   }
 
   AnimationController _controller;
@@ -62,6 +63,7 @@ class RenderRadar extends RenderBox
 
   /// Radius of the initial circle.
   final int initialRadius = 20;
+
   /// Gap between wave circles.
   final int waveGap = 20;
 
@@ -95,7 +97,8 @@ class RenderRadar extends RenderBox
       ..style = PaintingStyle.fill
       ..strokeWidth = 2.0
       ..isAntiAlias = true;
-    var arcSlice = 0.1*pi;
-    context.canvas.drawArc(Rect.fromCircle(center: center, radius: arcSize), currentRadians, currentRadians + arcSlice, true, wavePaint);
+    var arcSlice = 0.1 * pi;
+    context.canvas.drawArc(Rect.fromCircle(center: center, radius: arcSize),
+        currentRadians, currentRadians + arcSlice, true, wavePaint);
   }
 }
