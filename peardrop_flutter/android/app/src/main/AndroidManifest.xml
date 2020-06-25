@@ -15,7 +15,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="peardrop_flutter"
+        android:label="PearDrop"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label"
         tools:ignore="GoogleAppIndexingWarning">

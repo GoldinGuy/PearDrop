@@ -6,6 +6,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  connectivity: ^0.4.8+6
+
   cupertino_icons: ^0.1.2
 
   sliding_up_panel: ^1.0.2
@@ -61,15 +63,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/share.gif
     - assets/images/icon.png
     - assets/images/header1.png
     - assets/images/header2.png
     - assets/images/header3.png
-    - assets/images/header4.png
-    - assets/images/header5.png
-    - assets/images/header6.png
-    - assets/images/header7.png
 
   fonts:
     - family: Montserrat
