@@ -62,6 +62,7 @@ flutter:
 
   assets:
     - assets/images/share.gif
+    - assets/images/icon.png
     - assets/images/header1.png
     - assets/images/header2.png
     - assets/images/header3.png

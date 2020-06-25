@@ -70,21 +70,68 @@ class DeviceSelectBody extends StatelessWidget {
             height: deviceHeight,
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () {
-                      reset();
-                    },
+              // Align(
+              //   alignment: Alignment.topLeft,
+              //   child:
+              Padding(
+                  padding: EdgeInsets.all(7),
+                  // child: InkWell(
+                  //     onTap: () {
+                  //       reset();
+                  //     },
+                  child: OutlineButton(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    borderSide: BorderSide(
+                      color: Color(0xff559364),
+                    ),
+                    color: Colors.white,
+                    onPressed: () => reset(),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                  )),
+              // ),
+              // ),
+              Padding(
+                padding: EdgeInsets.all(15),
+                child: Text('PearDrop',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 22,
+                        color: Colors.white)),
+                // child: Text(
+                //   file,
+                //   overflow: TextOverflow.ellipsis,
+                //   style: TextStyle(color: Colors.white),
+                //   textAlign: TextAlign.center,
+                // ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(7),
+                child: OutlineButton(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                     child: Icon(
-                      Icons.arrow_back_ios,
+                      Icons.info,
                       color: Colors.white,
                       size: 24,
                     ),
                   ),
+                  borderSide: BorderSide(
+                    color: Color(0xff559364),
+                  ),
+                  color: Colors.white,
+                  onPressed: () => reset(),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0)),
                 ),
               ),
             ],
@@ -99,40 +146,40 @@ class DeviceSelectBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('PearDrop',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 24,
-                          color: Colors.white)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30, 13, 30, 18),
-                    child: RichText(
-                      text: TextSpan(
-                          text: 'Your device is visible as ',
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.white,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: deviceName,
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: '. \nSelect a nearby device to share with',
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ]),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
+                  // Text('PearDrop',
+                  //     style: TextStyle(
+                  //         fontWeight: FontWeight.w700,
+                  //         fontSize: 24,
+                  //         color: Colors.white)),
+                  // Padding(
+                  //   padding: EdgeInsets.fromLTRB(30, 13, 30, 18),
+                  //   child: RichText(
+                  //     text: TextSpan(
+                  //         text: 'Your device is visible as ',
+                  //         style: TextStyle(
+                  //           fontSize: 17,
+                  //           color: Colors.white,
+                  //         ),
+                  //         children: <TextSpan>[
+                  //           TextSpan(
+                  //             text: deviceName,
+                  //             style: TextStyle(
+                  //               fontSize: 17,
+                  //               color: Colors.white,
+                  //               fontWeight: FontWeight.bold,
+                  //             ),
+                  //           ),
+                  //           TextSpan(
+                  //             text: '. \nSelect a nearby device to share with',
+                  //             style: TextStyle(
+                  //               fontSize: 17,
+                  //               color: Colors.white,
+                  //             ),
+                  //           ),
+                  //         ]),
+                  //     textAlign: TextAlign.center,
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -221,16 +268,82 @@ class DeviceSelectBody extends StatelessWidget {
               },
             ),
           ),
-          Center(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                file,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
+          Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: 100 / 2.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 150.0,
+                  // margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 40.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 4.0,
+                        offset: const Offset(0.0, 4.0),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(deviceName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 19,
+                              color: Colors.black)),
+                      Text('Connected to TP-Link',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Colors.black)),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.grey[200],
+                        ),
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.fromLTRB(15, 8, 15, 13),
+                        child: Text(file,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Color(0xff559364),
+                            )),
+                      )
+                    ],
+                  ),
+                ),
               ),
-            ),
+              Container(
+                width: 85,
+                height: 85,
+                decoration:
+                    ShapeDecoration(shape: CircleBorder(), color: Colors.white),
+                child: DecoratedBox(
+                  // child: Icon(
+                  //   Icons.phone_iphone,
+                  //   size: 50,
+                  //   color: Color(0xff91c27d),
+                  // ),
+                  decoration: ShapeDecoration(
+                    shape: CircleBorder(),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: Image.asset('assets/images/icon.png').image,
+                    ),
+                  ),
+                  // ),
+                ),
+              )
+            ],
           ),
         ]),
       );

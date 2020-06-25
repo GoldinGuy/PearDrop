@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:peardrop/src/home.dart';
 
 typedef void FileSelectCallback(SetFileCallback file);
 typedef void SetFileCallback(bool value, String name);
@@ -17,10 +16,6 @@ class FileSelectBody extends StatelessWidget {
     Image.asset('assets/images/header1.png'),
     Image.asset('assets/images/header2.png'),
     Image.asset('assets/images/header3.png'),
-    Image.asset('assets/images/header4.png'),
-    Image.asset('assets/images/header5.png'),
-    Image.asset('assets/images/header6.png'),
-    Image.asset('assets/images/header7.png'),
   ];
 
   Widget build(BuildContext context) {
