@@ -40,6 +40,7 @@ class _PercentageProgressIndicatorState
   void startTimer() {
     percentage = 0.0;
     newPercentage = 0.0;
+    if (!mounted) return;
     new Timer.periodic(
       Duration(seconds: 2),
       (Timer timer) => setState(() {
