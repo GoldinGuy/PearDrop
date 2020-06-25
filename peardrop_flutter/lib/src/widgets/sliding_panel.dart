@@ -68,7 +68,7 @@ class SlidingPanel extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "File Transfer",
+                        "File Sharing",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 19.0,
@@ -221,7 +221,7 @@ class SlidingPanel extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "File Transfer",
+                        "File Receiving",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 19.0,
