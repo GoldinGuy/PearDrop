@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>file_picker_example</string>
+	<string>Peardrop</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -23,9 +23,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Used to demonstrate file picker plugin</string>
+	<string>Send and receive files</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to demonstrate file picker plugin</string>
+	<string>Send and receive files</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
