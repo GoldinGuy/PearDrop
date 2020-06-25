@@ -54,23 +54,6 @@ class _WaveRouteState extends State<Wave> with SingleTickerProviderStateMixin {
       child: Container(
         height: 0,
       ),
-      // child: Column(
-      //   mainAxisAlignment: MainAxisAlignment.end,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: <Widget>[
-      //     Center(
-      //       child: Text(
-      //         'Locating nearby devices',
-      //         textAlign: TextAlign.center,
-      //         style: const TextStyle(
-      //           fontSize: 26.0,
-      //           fontWeight: FontWeight.w500,
-      //           color: Color(0xFF759055),
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 
@@ -84,7 +67,7 @@ class _WaveRouteState extends State<Wave> with SingleTickerProviderStateMixin {
 class CircleWavePainter extends CustomPainter {
   final double waveRadius;
   final Paint wavePaint = Paint()
-    ..color = Colors.white30
+    ..color = Colors.white12
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0
     ..isAntiAlias = true;
