@@ -39,7 +39,7 @@ Changes to this Privacy Policy
 
 If we decide to change our privacy policy, we will post those changes to this statement and other places we deem appropriate. We reserve the right to modify this statement at any time, so please review it frequently. You understand that through your use of the Products, you consent to the use (as set forth in this Agreement, the Privacy Policy) of your information for processing by PearDrop.
 
-3. PearDrop'S RIGHTS.
+3. PEARDROP'S RIGHTS.
 
 All right, title, and interest in and to the Products and all underlying ideas, concepts, procedures, processes, principles, know-how, methods of operation, images, source code, and specifications related thereto, together with any updates, enhancements, modifications, improvements or derivatives works thereto, in each case including all copyrights, trade names, trademarks and other intellectual property rights therein (collectively, the “PearDrop IP”), is, and shall remain the sole and exclusive property of PearDrop. Certain PearDrop IP is protected by United States copyright laws (and other laws relating to intellectual property). The Products are licensed, not sold, to you hereunder and, except for the express limited license rights granted to you in accordance with the terms of this Agreement, no right, title or interest in or to the PearDrop IP is granted or otherwise transferred by PearDrop in connection with this Agreement. PearDrop shall have, and you hereby grant to PearDrop, a royalty-free, perpetual, worldwide, non-exclusive, irrevocable right to use or incorporate into the Products and/or any specifications, without restriction or obligation, any suggestions, enhancements, recommendations or other feedback provided by you with respect to the Products.
 
