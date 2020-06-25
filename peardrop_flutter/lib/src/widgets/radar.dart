@@ -87,7 +87,7 @@ class RenderRadar extends RenderBox
       isRunning = true;
     }
     _lastValue = _controller.value;
-    var currentRadians = _tween.value + pi;
+    var currentRadians = _tween.value;
     // Calculate number of waves, starting from the bottom
     var center = size.bottomCenter(offset);
     // draw waves
