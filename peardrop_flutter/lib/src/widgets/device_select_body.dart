@@ -60,7 +60,6 @@ class DeviceSelectBody extends StatelessWidget {
         SizedBox(
           height: deviceHeight,
         ),
-
         // TODO: design MultiChildRenderObjectWidget that can generate mutliple devices, fading them in and out as they appear nearby and displaying them in a random location within a set size
         Expanded(
           child: GridView.count(
@@ -156,11 +155,12 @@ class DeviceSelectBody extends StatelessWidget {
                                 ),
                               ),
                               InkWell(
-                                onTap: () => {},
+                                onTap: () =>
+                                    Navigator.pushNamed(context, '/tos'),
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 15),
                                   child: Icon(
-                                    Icons.info,
+                                    Icons.info_outline,
                                     color: Colors.black,
                                     size: 22,
                                   ),
