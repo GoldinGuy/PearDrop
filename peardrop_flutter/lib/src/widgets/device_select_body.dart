@@ -30,6 +30,8 @@ class DeviceSelectBody extends StatelessWidget {
   final String deviceName, fileName;
 
   Widget build(BuildContext context) {
+    double deviceSize = MediaQuery.of(context).size.width / 5;
+
     if (devices.length <= 0) {
       return Center(
         child: Padding(
@@ -42,9 +44,9 @@ class DeviceSelectBody extends StatelessWidget {
         ),
       );
     } else {
-      var topHeight = 20.0, deviceHeight = 25.0;
+      var deviceHeight = 25.0;
       var file = fileName;
-      topHeight = max((70 ~/ devices.length), 20).toDouble();
+      // topHeight = max((70 ~/ devices.length), 20).toDouble();
       if (Platform.isWindows || Platform.isMacOS) {
         deviceHeight = 2.5;
         final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
@@ -111,152 +113,55 @@ class DeviceSelectBody extends StatelessWidget {
                   ),
                   borderSide: BorderSide(color: Colors.white30),
                   color: Colors.white,
-                  onPressed: () => reset(),
+                  // TODO: display TOS information when pressed
+                  onPressed: () => {},
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30.0)),
                 ),
               ),
             ],
           ),
-
+          // TODO: design MultiChildRenderObjectWidget that can generate mutliple devices, fading them in and out as they appear nearby and displaying them in a random location within a set size
           Expanded(
-            child: SizedBox(
-              height: topHeight,
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: List.generate(devices.length, (i) {
+                return Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.grey[200],
+                      ),
+                      padding: EdgeInsets.all(8),
+                      margin: EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        devices[i].getName(),
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    RawMaterialButton(
+                      onPressed: () {
+                        setPanel(true, PearPanel.sharing);
+                        fileShare(i);
+                      },
+                      elevation: 0.0,
+                      fillColor: Color(0xff91c27d),
+                      child: Icon(
+                        devices[i].getIcon(),
+                        size: 35.0,
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.all(15.0),
+                      shape: CircleBorder(),
+                    ),
+                  ],
+                );
+              }),
             ),
           ),
-
-          // Center(
-          //   child: Container(
-          //     height: 110,
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //       children: [
-          // Text('PearDrop',
-          //     style: TextStyle(
-          //         fontWeight: FontWeight.w700,
-          //         fontSize: 24,
-          //         color: Colors.white)),
-          // Padding(
-          //   padding: EdgeInsets.fromLTRB(30, 13, 30, 18),
-          //   child: RichText(
-          //     text: TextSpan(
-          //         text: 'Your device is visible as ',
-          //         style: TextStyle(
-          //           fontSize: 17,
-          //           color: Colors.white,
-          //         ),
-          //         children: <TextSpan>[
-          //           TextSpan(
-          //             text: deviceName,
-          //             style: TextStyle(
-          //               fontSize: 17,
-          //               color: Colors.white,
-          //               fontWeight: FontWeight.bold,
-          //             ),
-          //           ),
-          //           TextSpan(
-          //             text: '. \nSelect a nearby device to share with',
-          //             style: TextStyle(
-          //               fontSize: 17,
-          //               color: Colors.white,
-          //             ),
-          //           ),
-          //         ]),
-          //     textAlign: TextAlign.center,
-          //   ),
-          // )
-          //       ],
-          //     ),
-          //   ),
-          // ),
-
-          // --------------------------
-
-          // Expanded(
-          //   child: ListView.builder(
-          //     // shrinkWrap: true,
-          //     itemCount: devices.length,
-          //     itemBuilder: (context, i) {
-          //       return AnimationConfiguration.staggeredList(
-          //         position: i,
-          //         duration: const Duration(milliseconds: 375),
-          //         child: SlideAnimation(
-          //           verticalOffset: 50.0,
-          //           child: FadeInAnimation(
-          //             child: FadeInAnimation(
-          //               child: Container(
-          //                 width: MediaQuery.of(context).size.width,
-          //                 height: 88.0,
-          //                 margin: const EdgeInsets.symmetric(
-          //                     vertical: 8.0, horizontal: 40.0),
-          //                 decoration: BoxDecoration(
-          //                   color: Colors.white,
-          //                   borderRadius:
-          //                       const BorderRadius.all(Radius.circular(20.0)),
-          //                   boxShadow: <BoxShadow>[
-          //                     BoxShadow(
-          //                       color: Colors.black12,
-          //                       blurRadius: 4.0,
-          //                       offset: const Offset(0.0, 4.0),
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 child: InkWell(
-          //                     borderRadius: BorderRadius.circular(20),
-          //                     onTap: () {
-          //                       setPanel(true, PearPanel.sharing);
-          //                       fileShare(i);
-          //                     },
-          //                     child: Row(
-          //                         mainAxisAlignment: MainAxisAlignment.center,
-          //                         crossAxisAlignment: CrossAxisAlignment.center,
-          //                         children: [
-          //                           Icon(
-          //                             devices[i].getIcon(),
-          //                             size: 40.0,
-          //                             color: Colors.black,
-          //                           ),
-          //                           Padding(
-          //                             padding:
-          //                                 EdgeInsets.fromLTRB(18, 22, 15, 22),
-          //                             child: Column(
-          //                               children: [
-          //                                 Text(
-          //                                   devices[i].getName(),
-          //                                   style: TextStyle(
-          //                                     fontSize: 17,
-          //                                   ),
-          //                                 ),
-          //                                 Text(
-          //                                   devices[i]
-          //                                       .getIP()
-          //                                       .address
-          //                                       .substring(
-          //                                           0,
-          //                                           min(
-          //                                               devices[i]
-          //                                                   .getIP()
-          //                                                   .address
-          //                                                   .length,
-          //                                               13)),
-          //                                   overflow: TextOverflow.ellipsis,
-          //                                   style: TextStyle(
-          //                                       fontSize: 14,
-          //                                       color: Colors.grey),
-          //                                 ),
-          //                               ],
-          //                             ),
-          //                           ),
-          //                         ])),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
+          // bottom widget displaying user device and file information
           Stack(
             alignment: Alignment.topCenter,
             children: <Widget>[
@@ -264,7 +169,19 @@ class DeviceSelectBody extends StatelessWidget {
                 padding: EdgeInsets.only(top: 50),
                 child: Column(
                   children: [
-                    Wave(),
+                    // Wave(),
+                    Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        CustomPaint(
+                          size: Size(double.infinity, double.infinity),
+                          painter: CircleWavePainter(0),
+                          child: Container(
+                            height: 0,
+                          ),
+                        ),
+                      ],
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: 150.0,
@@ -295,7 +212,7 @@ class DeviceSelectBody extends StatelessWidget {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14,
-                                  color: Colors.black)),
+                                  color: Colors.grey[600])),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
@@ -323,11 +240,6 @@ class DeviceSelectBody extends StatelessWidget {
                 decoration:
                     ShapeDecoration(shape: CircleBorder(), color: Colors.white),
                 child: DecoratedBox(
-                  // child: Icon(
-                  //   Icons.phone_iphone,
-                  //   size: 50,
-                  //   color: Color(0xff91c27d),
-                  // ),
                   decoration: ShapeDecoration(
                     shape: CircleBorder(),
                     image: DecorationImage(
