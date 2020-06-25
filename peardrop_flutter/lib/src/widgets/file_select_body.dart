@@ -41,7 +41,6 @@ class FileSelectBody extends StatelessWidget {
                 height: 288,
               ),
             ),
-            // Image(image: new AssetImage("assets/images/share.gif")),
             Text(
               'Share With PearDrop',
               style: TextStyle(
