@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:peardrop/src/utilities/device_details.dart';
 import 'package:peardrop/src/utilities/sharing_service.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/bottom_version.dart';
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     share = new SharingService();
     fileSelected = false;
-    // TODO: determine how best to use deviceInfo | deviceId = DeviceDetails().getDeviceDetails() as String;
+    DeviceDetails.getDeviceDetails();
     // dummy data
     devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
     // devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
@@ -120,6 +121,7 @@ class _HomePageState extends State<HomePage> {
       return DeviceSelectBody(
           devices: devices,
           reset: reset,
+          version: '1.0.0+0',
           fileName: fileName,
           fileShare: share.handleFileShare,
           deviceName: WordList().ipToWords(deviceId),
