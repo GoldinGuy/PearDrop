@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
-import 'progress_indicator.dart';
+import '../progress_indicator.dart';
 
 class SlidingPanelReceive extends StatelessWidget {
   SlidingPanelReceive({
