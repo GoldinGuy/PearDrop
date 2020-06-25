@@ -148,8 +148,8 @@ class DeviceSelectBody extends StatelessWidget {
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 15),
                                   child: Icon(
-                                    Icons.arrow_back_ios,
-                                    color: Colors.black,
+                                    Icons.cancel,
+                                    color: Colors.grey[700],
                                     size: 22,
                                   ),
                                 ),
@@ -160,8 +160,8 @@ class DeviceSelectBody extends StatelessWidget {
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 15),
                                   child: Icon(
-                                    Icons.info_outline,
-                                    color: Colors.black,
+                                    Icons.info,
+                                    color: Colors.grey[700],
                                     size: 22,
                                   ),
                                 ),

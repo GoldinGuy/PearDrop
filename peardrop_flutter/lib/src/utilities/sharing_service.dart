@@ -76,7 +76,7 @@ class SharingService {
     _fileName = _path != null
         ? _path.split('/').last
         : _paths != null ? _paths.keys.toString() : '...';
-    if (_fileName != '' && _fileName != null) {
+    if (_fileName != '' && _fileName != null && _fileName != '...') {
       setFile(true, _fileName);
     }
   }
