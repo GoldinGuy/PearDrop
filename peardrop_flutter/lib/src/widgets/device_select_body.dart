@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:peardrop/src/home.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
+import 'package:peardrop/src/widgets/radar.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:peardrop/src/widgets/wave.dart';
 
@@ -62,8 +63,7 @@ class DeviceSelectBody extends StatelessWidget {
         ),
         // TODO: design MultiChildRenderObjectWidget that can generate mutliple devices, fading them in and out as they appear nearby and displaying them in a random location within a set size
         Expanded(
-          child: GridView.count(
-            crossAxisCount: 2,
+          child: Radar(
             children: List.generate(devices.length, (i) {
               return Column(
                 children: [
@@ -109,7 +109,7 @@ class DeviceSelectBody extends StatelessWidget {
               child: Column(
                 children: [
                   // Wave(),
-                  Stack(
+                  /*Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
                       CustomPaint(
@@ -120,7 +120,7 @@ class DeviceSelectBody extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
+                  ),*/
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 150.0,
