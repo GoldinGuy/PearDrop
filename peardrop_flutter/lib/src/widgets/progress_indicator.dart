@@ -63,22 +63,26 @@ class _PercentageProgressIndicatorState
         width: 95.0,
         child: new CustomPaint(
           foregroundPainter: new MyPainter(
-              lineColor: Color(0xff559364),
+              lineColor: Colors.grey,
               completeColor: Color(0xff91c27d),
               completePercent: percentage,
               width: 8.0),
           child: new Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(5.0),
             child: new RaisedButton(
                 elevation: 0,
-                color: Color(0xff91c27d),
-                splashColor: Color(0xff559364),
+                color: Colors.white,
+                splashColor: Colors.white,
                 shape: new CircleBorder(),
-                child: Icon(
-                  centerIcon,
-                  color: Colors.white,
-                  size: 45,
+                child: Text(
+                  percentage.toInt().toString() + '%',
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600),
                 ),
+                // child: Icon(
+                //   centerIcon,
+                //   color: Colors.white,
+                //   size: 45,
+                // ),
                 onPressed: () {
                   startTimer();
                 }),
