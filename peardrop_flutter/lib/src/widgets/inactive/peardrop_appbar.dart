@@ -19,7 +19,9 @@ class PearDropAppBar {
                 end: Alignment.bottomRight,
                 colors: <Color>[
               Color(0xff91c27d),
-              Color(0xff559364),
+              Color(0xff91c27d),
+              // Color(0xff91c27d),
+              // Color(0xff559364),
             ])),
       ),
     );
