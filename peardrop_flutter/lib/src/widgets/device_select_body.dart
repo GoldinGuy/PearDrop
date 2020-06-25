@@ -72,55 +72,7 @@ class DeviceSelectBody extends StatelessWidget {
           SizedBox(
             height: deviceHeight,
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     Padding(
-          //         padding: EdgeInsets.all(7),
-          //         child: OutlineButton(
-          //           child: Padding(
-          //             padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-          //             child: Icon(
-          //               Icons.arrow_back,
-          //               color: Colors.white,
-          //               size: 22,
-          //             ),
-          //           ),
-          //           borderSide: BorderSide(color: Colors.white),
-          //           color: Colors.white,
-          //           onPressed: () => reset(),
-          //           shape: RoundedRectangleBorder(
-          //               borderRadius: new BorderRadius.circular(30.0)),
-          //         )),
-          //     Padding(
-          //       padding: EdgeInsets.all(15),
-          //       child: Text('PearDrop',
-          //           style: TextStyle(
-          //               fontWeight: FontWeight.w700,
-          //               fontSize: 22,
-          //               color: Colors.white)),
-          //     ),
-          //     Padding(
-          //       padding: EdgeInsets.all(7),
-          //       child: OutlineButton(
-          //         child: Padding(
-          //           padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-          //           child: Icon(
-          //             Icons.info,
-          //             color: Colors.white,
-          //             size: 22,
-          //           ),
-          //         ),
-          //         borderSide: BorderSide(color: Colors.white),
-          //         color: Colors.white,
-          //         // TODO: display TOS information when pressed
-          //         onPressed: () => {},
-          //         shape: RoundedRectangleBorder(
-          //             borderRadius: new BorderRadius.circular(30.0)),
-          //       ),
-          //     ),
-          //   ],
-          // ),
+
           // TODO: design MultiChildRenderObjectWidget that can generate mutliple devices, fading them in and out as they appear nearby and displaying them in a random location within a set size
           Expanded(
             child: GridView.count(
