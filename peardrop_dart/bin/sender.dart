@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:peardrop/peardrop.dart';
+import 'package:libpeardrop/libpeardrop.dart';
 
 void main(List<String> arguments) async {
   var filename = arguments.first;

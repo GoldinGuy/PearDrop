@@ -22,7 +22,5 @@ jobs:
         run: cargo build -v --release
         working-directory: ./peardrop_capi
       - name: Test
-        run: |
-          flutter packages get
-          flutter test
+        run: flutter test test
         working-directory: ./peardrop_dart

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:peardrop/src/acktype.dart';
+import 'package:libpeardrop/src/acktype.dart';
 
 void main() {
   test('data', () {

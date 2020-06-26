@@ -3,8 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:peardrop/src/acktype.dart';
-import 'package:peardrop/src/ackpacket.dart';
+import 'package:libpeardrop/src/acktype.dart';
+import 'package:libpeardrop/src/ackpacket.dart';
 
 void main() {
   test('write', () {
