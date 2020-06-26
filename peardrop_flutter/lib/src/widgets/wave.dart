@@ -67,7 +67,7 @@ class _WaveRouteState extends State<Wave> with SingleTickerProviderStateMixin {
 class CircleWavePainter extends CustomPainter {
   final double waveRadius;
   final Paint wavePaint = Paint()
-    ..color = Colors.white12
+    ..color = Colors.white10
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0
     ..isAntiAlias = true;

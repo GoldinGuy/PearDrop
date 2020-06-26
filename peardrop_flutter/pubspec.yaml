@@ -16,6 +16,9 @@ dependencies:
 
   device_info: ^0.4.2+4
 
+  # peardrop_dart:
+  #   path: ../peardrop_dart/
+
   flutter_staggered_animations: "^0.1.2"
 
   file_chooser:
