@@ -62,10 +62,10 @@ class RenderRadar extends RenderBox
   Animation<double> _tween;
 
   /// Radius of the initial circle.
-  final int initialRadius = 20;
+  final double initialRadius = 20;
 
   /// Gap between wave circles.
-  final int waveGap = 20;
+  final double waveGap = 60;
 
   @override
   bool get sizedByParent => true;
@@ -89,10 +89,10 @@ class RenderRadar extends RenderBox
     _lastValue = _controller.value;
     var currentRadians = _tween.value;
     // Calculate number of waves, starting from the bottom
-    var center = size.bottomCenter(offset);
-    // draw waves
+    var center = size.bottomCenter(offset).translate(0, 30);
+    // draw arc
     var arcSize = size.height * 0.8;
-    var wavePaint = Paint()
+    var arcPaint = Paint()
       ..shader = RadialGradient(
         colors: [
           Colors.white12,
@@ -101,7 +101,21 @@ class RenderRadar extends RenderBox
         stops: [0.8, 1.0],
       ).createShader(Rect.fromCircle(center: center, radius: arcSize))
       ..style = PaintingStyle.fill;
-    var arcSlice = 0.1*pi;
-    context.canvas.drawArc(Rect.fromCircle(center: center, radius: arcSize), currentRadians, arcSlice, true, wavePaint);
+    var arcSlice = 0.1 * pi;
+    context.canvas.drawArc(Rect.fromCircle(center: center, radius: arcSize),
+        currentRadians, arcSlice, true, arcPaint);
+    // draw waves
+    var radius = initialRadius;
+    var wavePaint = Paint()
+      ..color = Colors.white12
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..isAntiAlias = true;
+    while (radius < max(size.height, size.width)) {
+      context.canvas.drawCircle(center, radius, wavePaint);
+      radius += waveGap;
+    }
+    // for now, draw children on the 5th wave
+    var wave5radius = initialRadius+5*waveGap;
   }
 }
