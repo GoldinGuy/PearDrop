@@ -39,8 +39,10 @@ class RenderRadar extends RenderBox
         ContainerRenderObjectMixin<RenderBox, RadarParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, RadarParentData> {
   RenderRadar({@required TickerProvider vsync}) : assert(vsync != null) {
-    _controller =
-        AnimationController(vsync: vsync, duration: Duration(seconds: 4));
+    _controller = AnimationController(
+      vsync: vsync,
+      duration: Duration(seconds: 4),
+    );
     _controller.addListener(() {
       if (_controller.value != _lastValue) {
         markNeedsPaint();
@@ -116,6 +118,6 @@ class RenderRadar extends RenderBox
       radius += waveGap;
     }
     // for now, draw children on the 5th wave
-    var wave5radius = initialRadius+5*waveGap;
+    var wave5radius = initialRadius + 5 * waveGap;
   }
 }

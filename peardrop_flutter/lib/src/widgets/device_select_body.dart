@@ -61,6 +61,34 @@ class DeviceSelectBody extends StatelessWidget {
         SizedBox(
           height: deviceHeight,
         ),
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () => reset(),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 15, top: 15),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => Navigator.pushNamed(context, '/tos'),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 15, top: 15),
+                  child: Icon(
+                    Icons.info,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+              )
+            ]),
+
         // TODO: design MultiChildRenderObjectWidget that can generate mutliple devices, fading them in and out as they appear nearby and displaying them in a random location within a set size
         Expanded(
           child: Radar(
@@ -106,21 +134,9 @@ class DeviceSelectBody extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(top: 50),
+              // padding: EdgeInsets.only(top: 50),
               child: Column(
                 children: [
-                  // Wave(),
-                  /*Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      CustomPaint(
-                        size: Size(double.infinity, double.infinity),
-                        painter: CircleWavePainter(0),
-                        child: Container(
-                          height: 0,
-                        ),
-                      ),
-                    ],
-                  ),*/
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 150.0,
@@ -140,33 +156,33 @@ class DeviceSelectBody extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () => reset(),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 15),
-                                  child: Icon(
-                                    Icons.cancel,
-                                    color: Colors.grey[700],
-                                    size: 22,
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () =>
-                                    Navigator.pushNamed(context, '/tos'),
-                                child: Padding(
-                                  padding: EdgeInsets.only(right: 15),
-                                  child: Icon(
-                                    Icons.info,
-                                    color: Colors.grey[700],
-                                    size: 22,
-                                  ),
-                                ),
-                              )
-                            ]),
+                        // Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       InkWell(
+                        //         onTap: () => reset(),
+                        //         child: Padding(
+                        //           padding: EdgeInsets.only(left: 15),
+                        //           child: Icon(
+                        //             Icons.cancel,
+                        //             color: Colors.grey[700],
+                        //             size: 22,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       InkWell(
+                        //         onTap: () =>
+                        //             Navigator.pushNamed(context, '/tos'),
+                        //         child: Padding(
+                        //           padding: EdgeInsets.only(right: 15),
+                        //           child: Icon(
+                        //             Icons.info,
+                        //             color: Colors.grey[700],
+                        //             size: 22,
+                        //           ),
+                        //         ),
+                        //       )
+                        //     ]),
 
                         Text(deviceName,
                             style: TextStyle(
@@ -203,6 +219,7 @@ class DeviceSelectBody extends StatelessWidget {
             Container(
               width: 85,
               height: 85,
+              // margin: EdgeInsets.only(bottom: 50),
               decoration:
                   ShapeDecoration(shape: CircleBorder(), color: Colors.white),
               child: DecoratedBox(
@@ -215,7 +232,7 @@ class DeviceSelectBody extends StatelessWidget {
                 ),
                 // ),
               ),
-            )
+            ),
           ],
         ),
       ]),

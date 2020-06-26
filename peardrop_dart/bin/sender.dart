@@ -1,6 +1,10 @@
 import 'dart:io';
 
+<<<<<<< HEAD
 import 'package:libpeardrop/libpeardrop.dart';
+=======
+import 'package:peardrop_dart/peardrop.dart';
+>>>>>>> add plugin as dep, back-button
 
 void main(List<String> arguments) async {
   var filename = arguments.first;
