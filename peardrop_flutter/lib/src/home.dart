@@ -13,7 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'utilities/nearby_device.dart';
 import 'widgets/device_select_body.dart';
 import 'package:http/http.dart' as http;
-import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -88,6 +87,7 @@ class _HomePageState extends State<HomePage> {
     Stream<PeardropReceiver> stream =
         await Peardrop.send(list, fileName, mime(fileName));
     try {
+      print('looking for devices');
       stream.listen((PeardropReceiver receiver) {
         setState(() { devices.add(Device(Icons.phone_iphone, receiver)); });
         print('devices: ' + devices.toString());
