@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get_ip/get_ip.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:peardrop/src/utilities/device_details.dart';
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   int peerIndex = 0;
   FileSelect select;
   String filePath = '', deviceName = 'Unknown';
+  InternetAddress ip;
   PeardropFile file;
   PanelController _pc = new PanelController();
   PearPanel pearPanel = PearPanel.accepting;
@@ -136,25 +138,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getDeviceName() async {
-    try {
-      // const url = 'https://api.ipify.org';
-      const url = 'https://ip.seeip.org';
-      var response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        var temp = WordList().ipToWords(InternetAddress(response.body));
-        setState(() {
-          deviceName = temp;
-        });
-      } else {
-        print(response.statusCode);
-        print(response.body);
-        deviceName = 'Unknown';
-      }
-    } catch (e) {
-      print(e);
-      deviceName = 'Unknown';
+    if (Platform.isIOS || Platform.isAndroid) {
+      ip = InternetAddress(await GetIp.ipAddress);
+    } else {
+      ip = InternetAddress("192.168.1.110");
     }
+    deviceName = WordList().ipToWords(ip);
   }
 
   @override

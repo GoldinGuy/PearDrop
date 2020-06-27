@@ -81,7 +81,10 @@ class RenderRadar extends RenderBox
     size = constraints.biggest;
     assert(size.isFinite);
     if (childCount == 0) return;
-    if (_lastOffset == null) return;
+    if (_lastOffset == null) {
+      markNeedsLayout();
+      return;
+    }
 
     var center = size.bottomCenter(_lastOffset).translate(0, 42.5);
     // for now, draw children on the 5th wave
@@ -126,7 +129,6 @@ class RenderRadar extends RenderBox
     }
     if (_lastOffset != offset) {
       _lastOffset = offset;
-      markNeedsLayout();
       return;
     }
     _lastValue = _controller.value;
