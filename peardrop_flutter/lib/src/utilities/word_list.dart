@@ -263,18 +263,10 @@ class WordList {
   };
 
   String ipToWords(InternetAddress ip) {
-    var ipHex = ip.address.toString();
-    ipHex = ipHex.replaceAll('.', '');
-    if (ipHex.contains(':')) {
-      ipHex = ipHex.replaceAll(':', '');
-      var reg = new RegExp(r'[a-zA-Z]', multiLine: true);
-      ipHex = ipHex.replaceAll(reg, '');
-      ipHex = ipHex.substring(0, (ipHex.length / 2).round());
-    }
-    ipHex = (int.parse(ipHex)).toRadixString(16).toUpperCase();
     List<String> hexs = [];
-    for (var i = 0; i < ipHex.length - 1; i += 2) {
-      hexs.add(ipHex.substring(i, i + 2));
+    List<int> rhex = ip.rawAddress;
+    for (var i = 0; i < rhex.length; i += 1) {
+      hexs.add(rhex[i].toRadixString(16));
     }
     return hexToWords(hexs).toString();
   }
