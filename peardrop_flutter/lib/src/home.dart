@@ -140,11 +140,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getDeviceName() async {
-    if (Platform.isIOS || Platform.isAndroid) {
-      ip = InternetAddress(await GetIp.ipAddress);
-    } else {
-      ip = InternetAddress("192.168.1.110");
-    }
+    ip = (await NetworkInterface.list(includeLinkLocal: false, includeLoopback: false))
+      .map((interface) => interface.addresses.last)
+      .first;
     deviceName = WordList().ipToWords(ip);
   }
 
