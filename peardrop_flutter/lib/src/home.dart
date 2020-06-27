@@ -39,8 +39,8 @@ class _HomePageState extends State<HomePage> {
     _getDeviceName();
     DeviceDetails.getDeviceDetails();
     // dummy data
-    devices.add(
-        Device.dummy(Icons.laptop_windows, InternetAddress('3.219.241.180')));
+    //devices.add(
+    //    Device.dummy(Icons.laptop_windows, InternetAddress('3.219.241.180')));
     _handleFileAccept();
   }
 
@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> {
               isDraggable: false,
               body: _getBody(),
               panelBuilder: (sc) => SlidingPanel(
-                peerDevice: devices[peerIndex],
+                peerDevice: peerIndex < devices.length ? devices[peerIndex] : null,
                 sc: sc,
                 pearPanel: pearPanel,
                 reset: reset,
