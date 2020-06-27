@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:file_picker_cross/file_picker_cross.dart';
+import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 typedef void SetFileCallback(bool value, String name);
@@ -12,7 +13,7 @@ class FileSelect {
   String _path, _filePath = '', _extension;
   Map<String, String> _paths;
   bool _multiPick = false, _loadingPath = false;
-  FileTypeCross _pickingType = FileTypeCross.any;
+  FileType _pickingType = FileType.any;
   TextEditingController _controller = new TextEditingController();
 
   // allows user to upload files
@@ -51,7 +52,10 @@ class FileSelect {
     // _filePath = _path != null
     //     ? _path.split('/').last
     //     : _paths != null ? _paths.keys.toString() : '...';
-    if (_filePath != '' && _filePath != null && _filePath != '...') {
+    if (_filePath == '' || _filePath == null || _filePath == '...') {
+      _filePath = '';
+      setFile(false, _filePath);
+    } else {
       setFile(true, _filePath);
     }
   }
