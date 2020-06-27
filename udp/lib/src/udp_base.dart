@@ -76,9 +76,11 @@ class UDP {
     var ep = localEndpoint;
 
     // Doesn't work on iOS
-    // if (localEndpoint.isMulticast) {
-    //   ep = Endpoint.any(port: localEndpoint.port);
-    // }
+    if (!Platform.isIOS) {
+      if (localEndpoint.isMulticast) {
+        ep = Endpoint.any(port: localEndpoint.port);
+      }
+    }
 
     return await RawDatagramSocket.bind(ep.address, ep.port.value)
         .then((socket) {
