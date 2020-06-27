@@ -1,6 +1,3 @@
 [submodule "peardrop_capi/test/externals/googletest"]
 	path = peardrop_capi/test/externals/googletest
 	url = https://github.com/google/googletest
-[submodule "udp"]
-	path = udp
-	url = https://github.com/xenoken/udp
