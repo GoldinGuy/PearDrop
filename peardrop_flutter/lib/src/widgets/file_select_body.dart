@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-typedef void FileSelectCallback(SetFileCallback file);
-typedef void SetFileCallback(bool value, String name);
+typedef void FileSelectCallback();
+// typedef void SetFileCallback(bool value, String name);
 
 class FileSelectBody extends StatelessWidget {
-  FileSelectBody({this.fileSelect, this.deviceName, this.setFile});
+  FileSelectBody({this.fileSelect, this.deviceName});
 
   final FileSelectCallback fileSelect;
-  final SetFileCallback setFile;
+  // final SetFileCallback setFile;
   final String deviceName;
   final List<Image> headers = [
     Image.asset('assets/images/header1.png'),
@@ -83,7 +83,7 @@ class FileSelectBody extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(20),
                 onTap: () {
-                  fileSelect(setFile);
+                  fileSelect();
                 },
                 child: Container(
                   width: 185,

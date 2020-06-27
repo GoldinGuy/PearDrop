@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:libpeardrop/libpeardrop.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:peardrop/src/utilities/device_details.dart';
-import 'package:peardrop/src/utilities/sharing_service.dart';
+import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/file_select_body.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'utilities/nearby_device.dart';
 import 'widgets/device_select_body.dart';
 
@@ -21,15 +24,17 @@ class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
   InternetAddress deviceId = new InternetAddress('190.160.225.16');
   bool pearPanelOpen = false, fileSelected = false;
-  SharingService share;
-  String fileName = '';
+  int peerIndex = 0;
+  FileSelect select;
+  String filePath = '';
+  PeardropFile file;
   PanelController _pc = new PanelController();
   PearPanel pearPanel = PearPanel.accepting;
 
   @override
   void initState() {
     super.initState();
-    share = new SharingService();
+    select = new FileSelect();
     fileSelected = false;
     DeviceDetails.getDeviceDetails();
     // dummy data
@@ -37,19 +42,79 @@ class _HomePageState extends State<HomePage> {
     // devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
     devices.add(Device(Icons.laptop_windows,
         InternetAddress('2001:0db8:85a3:0000:0000:8a2e:0370:7334')));
+
+    _handleFileAccept();
+  }
+
+// handles what happens when file is being accepted
+  void _handleFileAccept() async {
+    while (true) {
+      try {
+        file = await Peardrop.receive();
+        if (file != null) {
+          setState(() {
+            file = file;
+          });
+          setPearPanel(true, PearPanel.accepting);
+          setFile(true, file.filename);
+        }
+      } catch (e) {
+        print('error caught: $e');
+      }
+    }
+  }
+
+  // handles what happens after file is accepted
+  void _handleFileReceive() {
+    file.accept();
+  }
+
+  // handleFileSend(fileName, filePath, mime, ip) {}
+  void _handleFileSelect() async {
+    select.openFileExplorer(setFile);
+
+    String fileName = select.nameFromPath(filePath);
+    List<int> list = await select.readFileByte(filePath);
+    Future<Stream<PeardropReceiver>> stream =
+        Peardrop.send(list, fileName, mime(fileName));
+
+    // try {
+    //   await for (var value in stream) {
+    //     PeardropReceiver;
+    //   }
+    // } catch (e) {
+    //   print('error caught: $e');
+    // }
+  }
+
+//   Sending:
+// Call Peardrop.send with the file information, which returns a Future<Stream<PeardropReceiver>>.
+// Each receiver is bound to the original file, so calling PeardropReceiver.send will attempt to send the file to the receiver, possibly throwing an exception if rejected.
+
+// Receiving:
+// Call Peardrop.receive which returns a Future<PeardropFile>.
+// The file has information available, from which you can call PeardropFile.accept (yielding the contents of the file, List<int>), or PeardropFile.reject (which rejects the send).
+
+  // handles what happens after file is selected and device chosen
+  void _handleFileShare(int index) {
+    peerIndex = index;
   }
 
 // resets the app back to the main screen
   void reset() {
-    setFile(false, '');
+    setFile(false, null);
     setPearPanel(false, PearPanel.accepting);
   }
 
+  void _cancel() {
+    file.reject();
+  }
+
 // sets whether there is currently a file selected or not
-  void setFile(bool selected, String file) {
+  void setFile(bool selected, String name) {
     setState(() {
       fileSelected = selected;
-      fileName = file;
+      filePath = name;
     });
   }
 
@@ -72,7 +137,7 @@ class _HomePageState extends State<HomePage> {
     double _panelHeightOpen = determinePanelHeight();
     setState(() {
       _panelHeightOpen = _panelHeightOpen;
-      fileName = fileName;
+      filePath = filePath;
     });
     return Material(
       child: Scaffold(
@@ -91,13 +156,14 @@ class _HomePageState extends State<HomePage> {
               isDraggable: false,
               body: _getBody(),
               panelBuilder: (sc) => SlidingPanel(
-                peerDevice: devices[share.peerIndex],
+                peerDevice: devices[peerIndex],
                 sc: sc,
-                fileName: fileName,
                 pearPanel: pearPanel,
                 reset: reset,
                 setPearPanel: setPearPanel,
-                accept: share.handleFileReceive,
+                filePath: filePath,
+                cancel: _cancel,
+                accept: _handleFileReceive,
               ),
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(18.0),
@@ -120,14 +186,13 @@ class _HomePageState extends State<HomePage> {
           devices: devices,
           reset: reset,
           version: '1.0.0+0',
-          fileName: fileName,
-          fileShare: share.handleFileShare,
+          fileName: select.nameFromPath(filePath),
+          fileShare: _handleFileShare,
           deviceName: WordList().ipToWords(deviceId),
           setPanel: setPearPanel);
     } else {
       return FileSelectBody(
-        fileSelect: share.handleFileSelect,
-        setFile: setFile,
+        fileSelect: _handleFileSelect,
         deviceName: WordList().ipToWords(deviceId),
       );
     }

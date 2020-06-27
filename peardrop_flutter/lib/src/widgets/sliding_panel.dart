@@ -10,24 +10,27 @@ import '../home.dart';
 
 typedef void FileReceiveCallBack();
 typedef void ResetCallBack();
+typedef void CancelCallBack();
 typedef void SetPearPanelCallback(bool isOpen, PearPanel panel);
 
 class SlidingPanel extends StatelessWidget {
   SlidingPanel(
       {this.peerDevice,
       this.sc,
-      this.fileName,
+      this.filePath,
       this.pearPanel,
       this.setPearPanel,
       this.accept,
+      this.cancel,
       this.reset});
 
-  final String fileName;
+  final String filePath;
   final Device peerDevice;
   final ScrollController sc;
   final FileReceiveCallBack accept;
   final PearPanel pearPanel;
   final ResetCallBack reset;
+  final CancelCallBack cancel;
   final SetPearPanelCallback setPearPanel;
 
   @override
@@ -57,9 +60,11 @@ class SlidingPanel extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     CloseButton(
-                      color: Colors.black,
-                      onPressed: () => setPearPanel(false, PearPanel.accepting),
-                    )
+                        color: Colors.black,
+                        onPressed: () {
+                          setPearPanel(false, PearPanel.accepting);
+                          cancel();
+                        })
                   ],
                 ),
                 Padding(
@@ -90,7 +95,7 @@ class SlidingPanel extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        fileName,
+                        filePath,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -243,7 +248,7 @@ class SlidingPanel extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        fileName,
+                        filePath,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -381,7 +386,7 @@ class SlidingPanel extends StatelessWidget {
                                 ),
                               ),
                               Center(
-                                child: Text(fileName,
+                                child: Text(filePath,
                                     style: TextStyle(fontSize: 14)),
                               ),
                             ],
@@ -392,6 +397,7 @@ class SlidingPanel extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(40, 17, 40, 5),
                           child: GestureDetector(
                             onTap: () {
+                              setPearPanel(false, PearPanel.receiving);
                               accept();
                             },
                             child: Container(
@@ -476,7 +482,7 @@ class SlidingPanel extends StatelessWidget {
                                 ),
                               ),
                               Center(
-                                child: Text(fileName,
+                                child: Text(filePath,
                                     style: TextStyle(fontSize: 14)),
                               ),
                             ],

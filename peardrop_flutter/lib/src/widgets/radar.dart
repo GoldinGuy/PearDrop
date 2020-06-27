@@ -38,7 +38,8 @@ class RenderRadar extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, RadarParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, RadarParentData> {
-  RenderRadar({@required TickerProvider vsync, List<RenderBox> children}) : assert(vsync != null) {
+  RenderRadar({@required TickerProvider vsync, List<RenderBox> children})
+      : assert(vsync != null) {
     addAll(children);
     _controller =
         AnimationController(vsync: vsync, duration: Duration(seconds: 4));
@@ -87,7 +88,8 @@ class RenderRadar extends RenderBox
     var wave5radius = initialRadius + 5 * waveGap;
     var childGap = 8.0;
     // find intersection of circle and left edge, take the one with the lower y coord
-    var leftEdgeI = smm(clsi(center, wave5radius, Offset.zero, Offset(0, size.height)), 1, -1);
+    var leftEdgeI = smm(
+        clsi(center, wave5radius, Offset.zero, Offset(0, size.height)), 1, -1);
 
     // find position of first child, distance + half width, higher x coord
     RenderBox child = firstChild;
@@ -96,14 +98,16 @@ class RenderRadar extends RenderBox
       var b = smm(cci(oldPosition, childGap, center, wave5radius), -1, 1);
       return b;
     }
+
     var position = nextPosition(leftEdgeI, child);
     while (child != null) {
       // Draw child, subtracting height halfway
       // Set offset
       final RadarParentData parentData = child.parentData as RadarParentData;
-      parentData.offset = position.translate(0, -child.size.height/2);
+      parentData.offset = position.translate(0, -child.size.height / 2);
       // Move position by width of child
-      position = smm(cci(position, child.size.width, center, wave5radius), -1, 1);
+      position =
+          smm(cci(position, child.size.width, center, wave5radius), -1, 1);
       child = parentData.nextSibling;
       if (child != null) position = nextPosition(position, child);
     }
@@ -159,7 +163,9 @@ class RenderRadar extends RenderBox
 }
 
 /// Utility: convert CG offset into math coordinates, and vice versa.
-Offset cg2m(Offset p) { return Offset(p.dx, -p.dy); }
+Offset cg2m(Offset p) {
+  return Offset(p.dx, -p.dy);
+}
 
 /// Simple min/max for offsets, -1 = lower/x, 1 = higher/y
 Offset smm(List<Offset> offsets, int xy, int lh) {
@@ -190,30 +196,31 @@ Offset smm(List<Offset> offsets, int xy, int lh) {
 List<Offset> cci(Offset c, double r, Offset C, double R) {
   var EPS = double.minPositive;
   // Invert Y coords of c, C to put it in normal coords
-  c = cg2m(c); C = cg2m(C);
+  c = cg2m(c);
+  C = cg2m(C);
   // https://stackoverflow.com/a/44956948
   double distance(Offset p1, Offset p2) {
     Offset d = p1 - p2;
-    return sqrt(d.dx*d.dx + d.dy*d.dy);
+    return sqrt(d.dx * d.dx + d.dy * d.dy);
   }
 
   var d = distance(c, C);
 
   // no solutions
-  if (d > r+R) return null;
+  if (d > r + R) return null;
   // no solutions
-  if (d < (r-R).abs()) return null;
+  if (d < (r - R).abs()) return null;
   // infinite solutions
   if (d == 0 && r == R) return null;
 
-  var a = (r*r-R*R+d*d)/(2.0*d);
-  var h = sqrt(r*r-a*a);
-  var P = Offset(c.dx+a*(C.dx-c.dx)/d, c.dy+a*(C.dy-c.dy)/d);
+  var a = (r * r - R * R + d * d) / (2.0 * d);
+  var h = sqrt(r * r - a * a);
+  var P = Offset(c.dx + a * (C.dx - c.dx) / d, c.dy + a * (C.dy - c.dy) / d);
 
-  var p1 = Offset(P.dx+h*(C.dy-c.dy)/d, P.dy-h*(C.dx-c.dx)/d);
-  var p2 = Offset(P.dx-h*(C.dy-c.dy)/d, P.dy+h*(C.dx-c.dx)/d);
+  var p1 = Offset(P.dx + h * (C.dy - c.dy) / d, P.dy - h * (C.dx - c.dx) / d);
+  var p2 = Offset(P.dx - h * (C.dy - c.dy) / d, P.dy + h * (C.dx - c.dx) / d);
 
-  if (d == r+R) return [cg2m(p1)];
+  if (d == r + R) return [cg2m(p1)];
   return [cg2m(p1), cg2m(p2)];
 }
 
@@ -223,30 +230,33 @@ List<Offset> cci(Offset c, double r, Offset C, double R) {
 List<Offset> clsi(Offset c, double r, Offset p1, Offset p2) {
   var EPS = double.minPositive;
   // Convert points
-  c = cg2m(c); p1 = cg2m(p1); p2 = cg2m(p2);
+  c = cg2m(c);
+  p1 = cg2m(p1);
+  p2 = cg2m(p2);
   // https://stackoverflow.com/a/23017208
-  var a2 = ((p2.dx-p1.dx)*(c.dy-p1.dy) - (c.dx-p1.dx)*(p2.dy-p1.dy)).abs();
-  var _lab = p2-p1;
-  var lab = sqrt(_lab.dx*_lab.dx + _lab.dy*_lab.dy);
+  var a2 = ((p2.dx - p1.dx) * (c.dy - p1.dy) - (c.dx - p1.dx) * (p2.dy - p1.dy))
+      .abs();
+  var _lab = p2 - p1;
+  var lab = sqrt(_lab.dx * _lab.dx + _lab.dy * _lab.dy);
 
-  var h = a2/lab;
+  var h = a2 / lab;
 
   // no solution
   if (h > r) {
     return null;
   }
 
-  var D = Offset((p2.dx-p1.dx)/lab, (p2.dy-p1.dy)/lab);
-  var t = D.dx*(c.dx-p1.dx) + D.dy*(c.dy-p1.dy);
+  var D = Offset((p2.dx - p1.dx) / lab, (p2.dy - p1.dy) / lab);
+  var t = D.dx * (c.dx - p1.dx) + D.dy * (c.dy - p1.dy);
 
-  var dt = sqrt(r*r-h*h);
+  var dt = sqrt(r * r - h * h);
 
-  var E = Offset(p1.dx + (t-dt)*D.dx, p1.dy + (t-dt)*D.dy);
+  var E = Offset(p1.dx + (t - dt) * D.dx, p1.dy + (t - dt) * D.dy);
 
   // one solution
   if (h == r) return [cg2m(E)];
   // two solutions
-  var F = Offset(p1.dx - (t-dt)*D.dx, p1.dy - (t-dt)*D.dy);
+  var F = Offset(p1.dx - (t - dt) * D.dx, p1.dy - (t - dt) * D.dy);
 
   return [cg2m(E), cg2m(F)];
 }

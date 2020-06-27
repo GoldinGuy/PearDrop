@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:peardrop/src/home.dart';
+import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/widgets/radar.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
-import 'package:peardrop/src/widgets/wave.dart';
 
 typedef void DeviceSelectCallback(int index);
 typedef void SetPanelCallback(bool panelOpen, PearPanel panel);
@@ -31,20 +31,11 @@ class DeviceSelectBody extends StatelessWidget {
   final String deviceName, fileName, version;
 
   Widget build(BuildContext context) {
-    // double deviceSize = MediaQuery.of(context).size.width / 5;
     var deviceHeight = 25.0;
-    var file = fileName;
-    // topHeight = max((70 ~/ devices.length), 20).toDouble();
     if (Platform.isWindows || Platform.isMacOS) {
       deviceHeight = 2.5;
-      final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
-      file = fileReg
-          .allMatches(fileName)
-          .map((m) => m.group(2))
-          .toString()
-          .replaceAll('(', '')
-          .replaceAll(')', '');
     }
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -67,7 +58,7 @@ class DeviceSelectBody extends StatelessWidget {
               InkWell(
                 onTap: () => reset(),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 15, top: 15),
+                  padding: EdgeInsets.all(15),
                   child: Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
@@ -78,7 +69,7 @@ class DeviceSelectBody extends StatelessWidget {
               InkWell(
                 onTap: () => Navigator.pushNamed(context, '/tos'),
                 child: Padding(
-                  padding: EdgeInsets.only(right: 15, top: 15),
+                  padding: EdgeInsets.all(15),
                   child: Icon(
                     Icons.info,
                     color: Colors.white,
@@ -101,7 +92,7 @@ class DeviceSelectBody extends StatelessWidget {
                       color: Colors.grey[200],
                     ),
                     padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(bottom: 5),
+                    margin: EdgeInsets.only(bottom: 6),
                     child: Text(
                       devices[i].getName(),
                       style:
@@ -156,34 +147,6 @@ class DeviceSelectBody extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       InkWell(
-                        //         onTap: () => reset(),
-                        //         child: Padding(
-                        //           padding: EdgeInsets.only(left: 15),
-                        //           child: Icon(
-                        //             Icons.cancel,
-                        //             color: Colors.grey[700],
-                        //             size: 22,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       InkWell(
-                        //         onTap: () =>
-                        //             Navigator.pushNamed(context, '/tos'),
-                        //         child: Padding(
-                        //           padding: EdgeInsets.only(right: 15),
-                        //           child: Icon(
-                        //             Icons.info,
-                        //             color: Colors.grey[700],
-                        //             size: 22,
-                        //           ),
-                        //         ),
-                        //       )
-                        //     ]),
-
                         Text(deviceName,
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
@@ -202,7 +165,7 @@ class DeviceSelectBody extends StatelessWidget {
                           ),
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.fromLTRB(15, 5, 15, 16),
-                          child: Text(file,
+                          child: Text(fileName,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
