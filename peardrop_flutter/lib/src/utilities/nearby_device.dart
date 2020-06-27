@@ -19,6 +19,12 @@ class Device {
     _iconName = icon;
   }
 
+  Device.dummy(IconData icon, InternetAddress address) {
+    _deviceName = WordList().ipToWords(address);
+    _ipAddress = address;
+    _iconName = icon;
+  }
+
   String getName() {
     return _deviceName;
   }

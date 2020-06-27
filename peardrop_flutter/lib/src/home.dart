@@ -38,13 +38,20 @@ class _HomePageState extends State<HomePage> {
     fileSelected = false;
     DeviceDetails.getDeviceDetails();
     // dummy data
-    devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
-    // devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
-    devices.add(Device(Icons.laptop_windows,
-        InternetAddress('2001:0db8:85a3:0000:0000:8a2e:0370:7334')));
-
+    devices.add(
+        Device.dummy(Icons.laptop_windows, InternetAddress('3.219.241.180')));
+    // devices.add(Device(Icons.laptop_windows,
+    //     InternetAddress('2001:0db8:85a3:0000:0000:8a2e:0370:7334')));
     _handleFileAccept();
   }
+
+  //   Sending:
+// Call Peardrop.send with the file information, which returns a Future<Stream<PeardropReceiver>>.
+// Each receiver is bound to the original file, so calling PeardropReceiver.send will attempt to send the file to the receiver, possibly throwing an exception if rejected.
+
+// Receiving:
+// Call Peardrop.receive which returns a Future<PeardropFile>.
+// The file has information available, from which you can call PeardropFile.accept (yielding the contents of the file, List<int>), or PeardropFile.reject (which rejects the send).
 
 // handles what happens when file is being accepted
   void _handleFileAccept() async {
@@ -74,36 +81,25 @@ class _HomePageState extends State<HomePage> {
     select.openFileExplorer(setFile);
     String fileName = select.nameFromPath(filePath);
     List<int> list = await select.readFileByte(filePath);
-    Stream<PeardropReceiver> stream =
-        await Peardrop.send(list, fileName, mime(fileName));
-    try {
-      stream.listen((PeardropReceiver receiver) {
-        devices.add(Device(Icons.phone_iphone, receiver));
-      });
-    } catch (e) {
-      print('error caught: $e');
+    while (true) {
+      Stream<PeardropReceiver> stream =
+          await Peardrop.send(list, fileName, mime(fileName));
+      try {
+        stream.listen((PeardropReceiver receiver) {
+          devices.add(Device(Icons.phone_iphone, receiver));
+          print('devices' + devices.toString());
+        });
+      } catch (e) {
+        print('error caught: $e');
+      }
     }
   }
 
-  // await for (PeardropReceiver receiver in stream) {
-  //   devices.add(Device(Icons.phone_iphone, receiver));
-  //    Icons.phone_iphone, InternetAddress('$receiver.ip'), receiver));
-
-  // }
-
-//   Sending:
-// Call Peardrop.send with the file information, which returns a Future<Stream<PeardropReceiver>>.
-// Each receiver is bound to the original file, so calling PeardropReceiver.send will attempt to send the file to the receiver, possibly throwing an exception if rejected.
-
-// Receiving:
-// Call Peardrop.receive which returns a Future<PeardropFile>.
-// The file has information available, from which you can call PeardropFile.accept (yielding the contents of the file, List<int>), or PeardropFile.reject (which rejects the send).
-
   // handles what happens after file is selected and device chosen
-  void _handleFileShare(int index) {
+  void _handleFileShare(int index) async {
     peerIndex = index;
     try {
-      devices[peerIndex].getReceiver().send();
+      await devices[peerIndex].getReceiver().send();
     } catch (e) {
       print('error caught: $e');
     }
