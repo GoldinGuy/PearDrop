@@ -19,11 +19,34 @@ class FileSelect {
   void openFileExplorer(SetFileCallback setFile) async {
     _controller.addListener(() => _extension = _controller.text);
     String initialDirectory;
-    final file = FilePickerCross(type: _pickingType, fileExtension: (_extension?.isNotEmpty ?? false)
-        ? _extension?.replaceAll(' ', '')?.split(',').first
-        : null);
-    await file.pick();
-    _path = file.path;
+    if (Platform.isMacOS || Platform.isWindows) {
+      initialDirectory = (await getApplicationDocumentsDirectory()).path;
+      final result = await showOpenPanel(
+          allowsMultipleSelection: true, initialDirectory: initialDirectory);
+      _path = '${result.paths.join('\n')}';
+    } else if (Platform.isIOS || Platform.isAndroid) {
+      _loadingPath = true;
+      try {
+        if (_multiPick) {
+          _path = null;
+          _paths = await FilePicker.getMultiFilePath(
+              type: _pickingType,
+              allowedExtensions: (_extension?.isNotEmpty ?? false)
+                  ? _extension?.replaceAll(' ', '')?.split(',')
+                  : null);
+        } else {
+          _paths = null;
+          _path = await FilePicker.getFilePath(
+              type: _pickingType,
+              allowedExtensions: (_extension?.isNotEmpty ?? false)
+                  ? _extension?.replaceAll(' ', '')?.split(',')
+                  : null);
+        }
+      } on PlatformException catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
+    }
+    _loadingPath = false;
     _filePath = _path;
     // _filePath = _path != null
     //     ? _path.split('/').last
