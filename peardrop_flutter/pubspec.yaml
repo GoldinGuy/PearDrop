@@ -18,6 +18,10 @@ dependencies:
 
   device_info: ^0.4.2+4
 
+  get_ip: ^0.4.0
+
+  http: ^0.12.1
+
   libpeardrop:
     path: ../peardrop_dart/
 

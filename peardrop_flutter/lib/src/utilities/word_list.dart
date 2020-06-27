@@ -292,6 +292,7 @@ class WordList {
       i++;
     });
     // return words;
+    // return (words[0] + '-' + words[1] + words[2] + words[3]).toString();
     return (words[0] + '-' + words[3]).toString();
   }
 

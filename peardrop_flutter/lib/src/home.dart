@@ -12,6 +12,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'utilities/nearby_device.dart';
 import 'widgets/device_select_body.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,11 +23,10 @@ enum PearPanel { sharing, receiving, accepting, done }
 
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
-  InternetAddress deviceId = new InternetAddress('190.160.225.16');
   bool pearPanelOpen = false, fileSelected = false;
   int peerIndex = 0;
   FileSelect select;
-  String filePath = '';
+  String filePath = '', deviceName = 'Unknown';
   PeardropFile file;
   PanelController _pc = new PanelController();
   PearPanel pearPanel = PearPanel.accepting;
@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     select = new FileSelect();
     fileSelected = false;
+    _getDeviceName();
     DeviceDetails.getDeviceDetails();
     // dummy data
     devices.add(
@@ -136,6 +137,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _getDeviceName() async {
+    try {
+      // const url = 'https://api.ipify.org';
+      const url = 'https://ip.seeip.org';
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var temp = WordList().ipToWords(InternetAddress(response.body));
+        setState(() {
+          deviceName = temp;
+        });
+      } else {
+        print(response.statusCode);
+        print(response.body);
+        deviceName = 'Unknown';
+      }
+    } catch (e) {
+      print(e);
+      deviceName = 'Unknown';
+    }
+  }
+
   // main build function
   @override
   Widget build(BuildContext context) {
@@ -193,12 +216,12 @@ class _HomePageState extends State<HomePage> {
           version: '1.0.0+0',
           fileName: select.nameFromPath(filePath),
           fileShare: _handleFileShare,
-          deviceName: WordList().ipToWords(deviceId),
+          deviceName: deviceName,
           setPanel: setPearPanel);
     } else {
       return FileSelectBody(
         fileSelect: _handleFileSelect,
-        deviceName: WordList().ipToWords(deviceId),
+        deviceName: deviceName,
       );
     }
   }

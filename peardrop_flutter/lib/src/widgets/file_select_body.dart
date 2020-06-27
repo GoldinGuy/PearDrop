@@ -52,7 +52,7 @@ class FileSelectBody extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(35, 15, 35, 10),
               child: RichText(
                 text: TextSpan(
-                    text: 'Your device is visible as ',
+                    text: 'Visible as ',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,
