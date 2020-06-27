@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
     var temp = File(filePath);
     List<int> list = await temp.readAsBytes();
     Stream<PeardropReceiver> stream =
-        await Peardrop.send(list, fileName, mime(fileName));
+        await Peardrop.send(list, fileName ?? '', mime(fileName) ?? '');
     try {
       stream.listen((PeardropReceiver receiver) {
         bool duplicate = false;
@@ -103,11 +103,11 @@ class _HomePageState extends State<HomePage> {
 
   void _handleFileShare(int index) async {
     peerIndex = index;
-    try {
+    //try {
       await devices[peerIndex].getReceiver().send();
-    } catch (e) {
-      print('error caught: $e');
-    }
+    //} catch (e) {
+    //  print('error caught: $e');
+    //}
   }
 
   void reset() {

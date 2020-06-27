@@ -36,6 +36,7 @@ abstract class Peardrop {
     var apacket = AckPacket(AckType.accept(AckTypeType.AD_PACKET));
     apacket.tcpPort = selfPort;
     tcpSocket.add(apacket.write());
+    await tcpSocket.flush();
     await tcpSocket.close();
     var server = await ServerSocket.bind(InternetAddress.anyIPv4, selfPort);
     var queue = StreamQueue(server);
@@ -89,6 +90,7 @@ class PeardropFile {
   Future<List<int>> accept() async {
     var packet = AckPacket(AckType.accept(AckTypeType.SENDER_PACKET));
     _socket.add(packet.write());
+    await _socket.flush();
     // Receive data
     var bb = BytesBuilder();
     var remaining = data_len;
@@ -105,6 +107,7 @@ class PeardropFile {
     var out = bb.toBytes();
     packet = AckPacket(AckType.normal(AckTypeType.DATA_PACKET));
     _socket.add(packet.write());
+    await _socket.flush();
     await _socket.close();
     return out;
   }
@@ -112,6 +115,7 @@ class PeardropFile {
   Future<void> reject() async {
     var packet = AckPacket(AckType.reject(AckTypeType.SENDER_PACKET));
     _socket.add(packet.write());
+    await _socket.flush();
     await _socket.close();
   }
 }
@@ -139,12 +143,14 @@ class PeardropReceiver {
     var _queue = StreamQueue(_socket);
     SenderPacket spacket = SenderPacket(_filename, _mimetype, _file.length);
     _socket.add(spacket.write());
+    await _socket.flush();
     var data = await _queue.next;
     AckPacket packet = AckPacket.read(data);
     if (!packet.type.isAccepted) {
       throw PeardropException._("Receiver rejected send");
     }
     _socket.add(_file);
+    await _socket.flush();
     data = await _queue.next;
     packet = AckPacket.read(data);
     if (packet.type.type != AckTypeType.DATA_PACKET) {
