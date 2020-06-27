@@ -72,20 +72,24 @@ class _HomePageState extends State<HomePage> {
   // handleFileSend(fileName, filePath, mime, ip) {}
   void _handleFileSelect() async {
     select.openFileExplorer(setFile);
-
     String fileName = select.nameFromPath(filePath);
     List<int> list = await select.readFileByte(filePath);
-    Future<Stream<PeardropReceiver>> stream =
-        Peardrop.send(list, fileName, mime(fileName));
-
-    // try {
-    //   await for (var value in stream) {
-    //     PeardropReceiver;
-    //   }
-    // } catch (e) {
-    //   print('error caught: $e');
-    // }
+    Stream<PeardropReceiver> stream =
+        await Peardrop.send(list, fileName, mime(fileName));
+    try {
+      stream.listen((PeardropReceiver receiver) {
+        devices.add(Device(Icons.phone_iphone, receiver));
+      });
+    } catch (e) {
+      print('error caught: $e');
+    }
   }
+
+  // await for (PeardropReceiver receiver in stream) {
+  //   devices.add(Device(Icons.phone_iphone, receiver));
+  //    Icons.phone_iphone, InternetAddress('$receiver.ip'), receiver));
+
+  // }
 
 //   Sending:
 // Call Peardrop.send with the file information, which returns a Future<Stream<PeardropReceiver>>.
@@ -98,6 +102,11 @@ class _HomePageState extends State<HomePage> {
   // handles what happens after file is selected and device chosen
   void _handleFileShare(int index) {
     peerIndex = index;
+    try {
+      devices[peerIndex].getReceiver().send();
+    } catch (e) {
+      print('error caught: $e');
+    }
   }
 
 // resets the app back to the main screen
