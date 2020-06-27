@@ -53,21 +53,28 @@ class FileSelect {
     //     ? _path.split('/').last
     //     : _paths != null ? _paths.keys.toString() : '...';
     if (_filePath != '' && _filePath != null && _filePath != '...') {
-      setFile(false, _filePath);
+      setFile(true, _filePath);
     }
   }
 
   String nameFromPath(String filePath) {
-    if (Platform.isWindows || Platform.isMacOS) {
-      final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
-      String fileName = fileReg
-          .allMatches(filePath)
-          .map((m) => m.group(2))
-          .toString()
-          .replaceAll('(', '')
-          .replaceAll(')', '');
-      print('fileName: ' + fileName);
-      return fileName;
+    if (filePath == _path) {
+      String fileName = _path != null
+          ? _path.split('/').last
+          : _paths != null ? _paths.keys.toString() : '...';
+      if (Platform.isWindows || Platform.isMacOS) {
+        final fileReg = RegExp(r'(.+)\\(.+)', multiLine: true);
+        fileName = fileReg
+            .allMatches(filePath)
+            .map((m) => m.group(2))
+            .toString()
+            .replaceAll('(', '')
+            .replaceAll(')', '');
+        print('fileName: ' + fileName);
+        return fileName;
+      } else {
+        return fileName;
+      }
     } else {
       return filePath;
     }

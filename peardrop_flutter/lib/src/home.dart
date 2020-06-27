@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'utilities/nearby_device.dart';
 import 'widgets/device_select_body.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -78,15 +79,12 @@ class _HomePageState extends State<HomePage> {
     await select.openFileExplorer(setFile);
     String fileName = select.nameFromPath(filePath);
     // List<int> list = await select.readFileByte(filePath);
-    print('fileName: ' + fileName);
-
+    // print('fileName: ' + fileName);
     // var myUri = Uri.parse(filePath);
     // var temp = File.fromUri(myUri);
     var temp = File(filePath);
     List<int> list = await temp.readAsBytes();
-    // while (true) {
-    print('list: ' + list.toString());
-
+    // print('list: ' + list.toString());
     Stream<PeardropReceiver> stream =
         await Peardrop.send(list, fileName, mime(fileName));
     try {
@@ -96,7 +94,6 @@ class _HomePageState extends State<HomePage> {
       });
     } catch (e) {
       print('error caught: $e');
-      // }
     }
   }
 

@@ -19,6 +19,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="PearDrop"
         android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"
         tools:replace="android:label"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
