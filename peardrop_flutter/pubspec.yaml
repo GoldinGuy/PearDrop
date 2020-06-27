@@ -14,13 +14,13 @@ dependencies:
 
   mime_type: ^0.3.2
 
-  permission_handler: ^5.0.1+1
+  # permission_handler: ^5.0.1+1
 
   file_picker: ^1.9.0+1
 
   device_info: ^0.4.2+4
 
-  get_ip: ^0.4.0
+  # get_ip: ^0.4.0
 
   http: ^0.12.1
 
