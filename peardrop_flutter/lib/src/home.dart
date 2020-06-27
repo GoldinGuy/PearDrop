@@ -41,12 +41,10 @@ class _HomePageState extends State<HomePage> {
     // dummy data
     devices.add(
         Device.dummy(Icons.laptop_windows, InternetAddress('3.219.241.180')));
-    // devices.add(Device(Icons.laptop_windows,
-    //     InternetAddress('2001:0db8:85a3:0000:0000:8a2e:0370:7334')));
     _handleFileAccept();
   }
 
-  //   Sending:
+//   Sending:
 // Call Peardrop.send with the file information, which returns a Future<Stream<PeardropReceiver>>.
 // Each receiver is bound to the original file, so calling PeardropReceiver.send will attempt to send the file to the receiver, possibly throwing an exception if rejected.
 
@@ -72,31 +70,36 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // handles what happens after file is accepted
   void _handleFileReceive() {
     file.accept();
   }
 
-  // handleFileSend(fileName, filePath, mime, ip) {}
-  void _handleFileSelect() async {
-    select.openFileExplorer(setFile);
+  Future<void> _handleFileSelect() async {
+    await select.openFileExplorer(setFile);
     String fileName = select.nameFromPath(filePath);
-    List<int> list = await select.readFileByte(filePath);
-    while (true) {
-      Stream<PeardropReceiver> stream =
-          await Peardrop.send(list, fileName, mime(fileName));
-      try {
-        stream.listen((PeardropReceiver receiver) {
-          devices.add(Device(Icons.phone_iphone, receiver));
-          print('devices' + devices.toString());
-        });
-      } catch (e) {
-        print('error caught: $e');
-      }
+    // List<int> list = await select.readFileByte(filePath);
+    print('fileName: ' + fileName);
+
+    // var myUri = Uri.parse(filePath);
+    // var temp = File.fromUri(myUri);
+    var temp = File(filePath);
+    List<int> list = await temp.readAsBytes();
+    // while (true) {
+    print('list: ' + list.toString());
+
+    Stream<PeardropReceiver> stream =
+        await Peardrop.send(list, fileName, mime(fileName));
+    try {
+      stream.listen((PeardropReceiver receiver) {
+        devices.add(Device(Icons.phone_iphone, receiver));
+        print('devices: ' + devices.toString());
+      });
+    } catch (e) {
+      print('error caught: $e');
+      // }
     }
   }
 
-  // handles what happens after file is selected and device chosen
   void _handleFileShare(int index) async {
     peerIndex = index;
     try {
@@ -106,7 +109,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-// resets the app back to the main screen
   void reset() {
     setFile(false, null);
     setPearPanel(false, PearPanel.accepting);
@@ -116,11 +118,10 @@ class _HomePageState extends State<HomePage> {
     file.reject();
   }
 
-// sets whether there is currently a file selected or not
-  void setFile(bool selected, String name) {
+  void setFile(bool selected, String path) {
     setState(() {
       fileSelected = selected;
-      filePath = name;
+      filePath = path;
     });
   }
 
@@ -159,7 +160,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // main build function
   @override
   Widget build(BuildContext context) {
     double _panelHeightOpen = determinePanelHeight();
@@ -207,7 +207,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // returns main app body
   Widget _getBody() {
     if (fileSelected) {
       return DeviceSelectBody(

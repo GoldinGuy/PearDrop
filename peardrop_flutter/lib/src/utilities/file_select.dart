@@ -47,13 +47,13 @@ class FileSelect {
         print("Unsupported operation" + e.toString());
       }
     }
-
     _loadingPath = false;
-    _filePath = _path != null
-        ? _path.split('/').last
-        : _paths != null ? _paths.keys.toString() : '...';
+    _filePath = _path;
+    // _filePath = _path != null
+    //     ? _path.split('/').last
+    //     : _paths != null ? _paths.keys.toString() : '...';
     if (_filePath != '' && _filePath != null && _filePath != '...') {
-      setFile(true, _filePath);
+      setFile(false, _filePath);
     }
   }
 
@@ -73,17 +73,19 @@ class FileSelect {
     }
   }
 
-  Future<Uint8List> readFileByte(String filePath) async {
-    Uri myUri = Uri.parse(filePath);
-    File audioFile = new File.fromUri(myUri);
+  Future<Uint8List> _readFileByte(String filePath) async {
+    var myUri = Uri.parse(filePath);
+    var temp = File.fromUri(myUri);
+
     Uint8List bytes;
-    await audioFile.readAsBytes().then((value) {
+    await temp.readAsBytes().then((value) {
       bytes = Uint8List.fromList(value);
       print('reading of bytes is completed');
     }).catchError((onError) {
       print('Exception Error while reading audio from path:' +
           onError.toString());
     });
+
     return bytes;
   }
 }
