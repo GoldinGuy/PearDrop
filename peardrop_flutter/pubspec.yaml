@@ -14,7 +14,7 @@ dependencies:
 
   mime_type: ^0.3.2
 
-  # permission_handler: ^5.0.1+1
+  permission_handler: ^5.0.1+1
 
   file_picker: ^1.9.0+1
 

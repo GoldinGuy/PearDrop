@@ -101,6 +101,7 @@ class DeviceSelectBody extends StatelessWidget {
                   ),
                   RawMaterialButton(
                     onPressed: () {
+                      print("pressed");
                       setPanel(true, PearPanel.sharing);
                       fileShare(i);
                     },

@@ -103,7 +103,7 @@ class RenderRadar extends RenderBox
     while (child != null) {
       // Draw child, subtracting height halfway
       // Set offset
-      final RadarParentData parentData = child.parentData as RadarParentData;
+      final parentData = child.parentData as RadarParentData;
       parentData.offset = position.translate(0, -child.size.height / 2);
       // Move position by width of child
       position =
@@ -111,6 +111,11 @@ class RenderRadar extends RenderBox
       child = parentData.nextSibling;
       if (child != null) position = nextPosition(position, child);
     }
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {Offset position}) {
+    return defaultHitTestChildren(result, position: position);
   }
 
   @override

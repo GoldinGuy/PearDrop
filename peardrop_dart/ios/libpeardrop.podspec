@@ -3,7 +3,7 @@
 # Run `pod lib lint peardrop.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'peardrop'
+  s.name             = 'libpeardrop'
   s.version          = '0.0.1'
   s.summary          = 'Dart bindings for Peardrop protocol.'
   s.description      = <<-DESC

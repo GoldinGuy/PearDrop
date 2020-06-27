@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
         await Peardrop.send(list, fileName, mime(fileName));
     try {
       stream.listen((PeardropReceiver receiver) {
-        devices.add(Device(Icons.phone_iphone, receiver));
+        setState(() { devices.add(Device(Icons.phone_iphone, receiver)); });
         print('devices: ' + devices.toString());
       });
     } catch (e) {
