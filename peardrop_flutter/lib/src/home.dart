@@ -80,18 +80,22 @@ class _HomePageState extends State<HomePage> {
     await select.openFileExplorer(setFile);
     String fileName = select.nameFromPath(filePath);
     // List<int> list = await select.readFileByte(filePath);
-    // print('fileName: ' + fileName);
+    print('fileName: ' + fileName);
     // var myUri = Uri.parse(filePath);
     // var temp = File.fromUri(myUri);
     var temp = File(filePath);
     List<int> list = await temp.readAsBytes();
-    // print('list: ' + list.toString());
+    print('list: ' + list.toString());
     Stream<PeardropReceiver> stream =
         await Peardrop.send(list, fileName, mime(fileName));
     try {
       print('looking for devices');
       stream.listen((PeardropReceiver receiver) {
-        setState(() { devices.add(Device(Icons.phone_iphone, receiver)); });
+        if (receiver.ip != ip) {
+          setState(() {
+            devices.add(Device(Icons.phone_iphone, receiver));
+          });
+        }
         print('devices: ' + devices.toString());
       });
     } catch (e) {

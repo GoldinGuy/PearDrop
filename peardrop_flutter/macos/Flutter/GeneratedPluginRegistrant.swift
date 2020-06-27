@@ -22,4 +22,3 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
   PeardropPlugin.register(with: registry.registrar(forPlugin: "PeardropPlugin"))
 }
-    

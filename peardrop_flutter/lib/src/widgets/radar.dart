@@ -81,12 +81,12 @@ class RenderRadar extends RenderBox
     size = constraints.biggest;
     assert(size.isFinite);
     if (childCount == 0) return;
-    if (_lastOffset == null) {
-      markNeedsLayout();
-      return;
-    }
+    //if (_lastOffset == null) {
+    //  markNeedsLayout();
+    //  return;
+    //}
 
-    var center = size.bottomCenter(_lastOffset).translate(0, 42.5);
+    var center = size.bottomCenter(Offset.zero).translate(0, 42.5);
     // for now, draw children on the 5th wave
     var wave5radius = initialRadius + 5 * waveGap;
     var childGap = 8.0;
@@ -127,10 +127,10 @@ class RenderRadar extends RenderBox
       _controller.forward();
       isRunning = true;
     }
-    if (_lastOffset != offset) {
-      _lastOffset = offset;
-      return;
-    }
+    //if (_lastOffset != offset) {
+    // _lastOffset = offset;
+    //  return;
+    //}
     _lastValue = _controller.value;
     var currentRadians = _tween.value;
     // Calculate number of waves, starting from the bottom
