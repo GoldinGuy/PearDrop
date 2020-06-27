@@ -75,36 +75,38 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _handleFileSelect() async {
     await select.openFileExplorer(setFile);
-    String fileName = select.nameFromPath(filePath);
-    setPearPanel(false, PearPanel.sharing);
-    var temp = File(filePath);
-    List<int> list = await temp.readAsBytes();
-    Stream<PeardropReceiver> stream =
-        await Peardrop.send(list, fileName ?? '', mime(fileName) ?? '');
-    try {
-      stream.listen((PeardropReceiver receiver) {
-        bool duplicate = false;
-        for (var device in devices) {
-          if (device.getIP() == receiver.ip) {
-            duplicate = true;
+    if (filePath != '') {
+      setPearPanel(false, PearPanel.sharing);
+      String fileName = select.nameFromPath(filePath);
+      var temp = File(filePath);
+      List<int> list = await temp.readAsBytes();
+      Stream<PeardropReceiver> stream =
+          await Peardrop.send(list, fileName ?? '', mime(fileName) ?? '');
+      try {
+        stream.listen((PeardropReceiver receiver) {
+          bool duplicate = false;
+          for (var device in devices) {
+            if (device.getIP() == receiver.ip) {
+              duplicate = true;
+            }
           }
-        }
-        if (receiver.ip != ip && !duplicate) {
-          setState(() {
-            devices.add(Device(Icons.phone_iphone, receiver));
-          });
-        }
-        print('devices: ' + devices.toString());
-      });
-    } catch (e) {
-      print('error caught: $e');
+          if (receiver.ip != ip && !duplicate) {
+            setState(() {
+              devices.add(Device(Icons.phone_iphone, receiver));
+            });
+          }
+          print('devices: ' + devices.toString());
+        });
+      } catch (e) {
+        print('error caught: $e');
+      }
     }
   }
 
   void _handleFileShare(int index) async {
     peerIndex = index;
     //try {
-      await devices[peerIndex].getReceiver().send();
+    await devices[peerIndex].getReceiver().send();
     //} catch (e) {
     //  print('error caught: $e');
     //}

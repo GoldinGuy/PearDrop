@@ -63,7 +63,7 @@ class SlidingPanel extends StatelessWidget {
                     CloseButton(
                         color: Colors.black,
                         onPressed: () {
-                          setPearPanel(false, PearPanel.accepting);
+                          setPearPanel(false, PearPanel.sharing);
                           cancel();
                         })
                   ],
@@ -217,7 +217,7 @@ class SlidingPanel extends StatelessWidget {
                   children: [
                     CloseButton(
                       color: Colors.black,
-                      onPressed: () => setPearPanel(false, PearPanel.accepting),
+                      onPressed: () => setPearPanel(false, PearPanel.sharing),
                     )
                   ],
                 ),
