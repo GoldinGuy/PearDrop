@@ -264,9 +264,11 @@ class WordList {
 
   String ipToWords(InternetAddress ip) {
     List<String> hexs = [];
+    print("ip = $ip");
+    print("raw = ${ip.rawAddress}");
     List<int> rhex = ip.rawAddress;
     for (var i = 0; i < rhex.length; i += 1) {
-      hexs.add(rhex[i].toRadixString(16));
+      hexs.add(rhex[i].toRadixString(16).padLeft(2, '0'));
     }
     return hexToWords(hexs).toString();
   }
@@ -276,7 +278,7 @@ class WordList {
   }
 
   String hexToWords(List<String> hexs) {
-    // print(hexs);
+    print(hexs);
     var words = [];
     var i = 0;
     hexs.forEach((String hex) {
