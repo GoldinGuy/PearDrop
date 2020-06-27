@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/widgets/linear_progress_indicator.dart';
 import 'package:peardrop/src/widgets/progress_indicator.dart';
@@ -248,7 +249,7 @@ class SlidingPanel extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        filePath,
+                        FileSelect().nameFromPath(filePath),
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -386,7 +387,7 @@ class SlidingPanel extends StatelessWidget {
                                 ),
                               ),
                               Center(
-                                child: Text(filePath,
+                                child: Text(FileSelect().nameFromPath(filePath),
                                     style: TextStyle(fontSize: 14)),
                               ),
                             ],
@@ -482,7 +483,7 @@ class SlidingPanel extends StatelessWidget {
                                 ),
                               ),
                               Center(
-                                child: Text(filePath,
+                                child: Text(FileSelect().nameFromPath(filePath),
                                     style: TextStyle(fontSize: 14)),
                               ),
                             ],

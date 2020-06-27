@@ -40,9 +40,6 @@ class _HomePageState extends State<HomePage> {
     fileSelected = false;
     _getDeviceName();
     DeviceDetails.getDeviceDetails();
-    // dummy data
-    //devices.add(
-    //    Device.dummy(Icons.laptop_windows, InternetAddress('3.219.241.180')));
     _handleFileAccept();
   }
 
@@ -79,19 +76,20 @@ class _HomePageState extends State<HomePage> {
   Future<void> _handleFileSelect() async {
     await select.openFileExplorer(setFile);
     String fileName = select.nameFromPath(filePath);
-    // List<int> list = await select.readFileByte(filePath);
-    print('fileName: ' + fileName);
-    // var myUri = Uri.parse(filePath);
-    // var temp = File.fromUri(myUri);
+    setPearPanel(false, PearPanel.sharing);
     var temp = File(filePath);
     List<int> list = await temp.readAsBytes();
-    print('list: ' + list.toString());
     Stream<PeardropReceiver> stream =
         await Peardrop.send(list, fileName, mime(fileName));
     try {
-      print('looking for devices');
       stream.listen((PeardropReceiver receiver) {
-        if (receiver.ip != ip) {
+        bool duplicate = false;
+        for (var device in devices) {
+          if (device.getIP() == receiver.ip) {
+            duplicate = true;
+          }
+        }
+        if (receiver.ip != ip && !duplicate) {
           setState(() {
             devices.add(Device(Icons.phone_iphone, receiver));
           });
@@ -174,7 +172,8 @@ class _HomePageState extends State<HomePage> {
               isDraggable: false,
               body: _getBody(),
               panelBuilder: (sc) => SlidingPanel(
-                peerDevice: peerIndex < devices.length ? devices[peerIndex] : null,
+                peerDevice:
+                    peerIndex < devices.length ? devices[peerIndex] : null,
                 sc: sc,
                 pearPanel: pearPanel,
                 reset: reset,

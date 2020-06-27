@@ -78,8 +78,6 @@ class DeviceSelectBody extends StatelessWidget {
                 ),
               )
             ]),
-
-        // TODO: design MultiChildRenderObjectWidget that can generate mutliple devices, fading them in and out as they appear nearby and displaying them in a random location within a set size
         Expanded(
           child: Radar(
             children: List.generate(devices.length, (i) {
