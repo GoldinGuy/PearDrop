@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:peardrop/src/home.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
@@ -94,6 +93,7 @@ class DeviceSelectBody extends StatelessWidget {
           child: Radar(
             children: List.generate(devices.length, (i) {
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     decoration: BoxDecoration(

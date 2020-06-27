@@ -61,6 +61,7 @@ class RenderRadar extends RenderBox
   double _lastValue;
   bool isRunning = false;
   Animation<double> _tween;
+  Offset _lastOffset;
 
   /// Radius of the initial circle.
   final double initialRadius = 20;
@@ -69,16 +70,43 @@ class RenderRadar extends RenderBox
   final double waveGap = 60;
 
   @override
-  bool get sizedByParent => true;
-  @override
-  void performResize() {
-    size = constraints.biggest;
-  }
-
-  @override
   void setupParentData(RenderObject child) {
     if (child.parentData is! RadarParentData)
       child.parentData = RadarParentData();
+  }
+
+  @override
+  void performLayout() {
+    size = constraints.biggest;
+    assert(size.isFinite);
+    if (childCount == 0) return;
+    if (_lastOffset == null) return;
+
+    var center = size.bottomCenter(_lastOffset).translate(0, 42.5);
+    // for now, draw children on the 5th wave
+    var wave5radius = initialRadius + 5 * waveGap;
+    var childGap = 8.0;
+    // find intersection of circle and left edge, take the one with the lower y coord
+    var leftEdgeI = smm(clsi(center, wave5radius, Offset.zero, Offset(0, size.height)), 1, -1);
+
+    // find position of first child, distance + half width, higher x coord
+    RenderBox child = firstChild;
+    Offset nextPosition(Offset oldPosition, RenderBox newChild) {
+      newChild.layout(constraints.loosen(), parentUsesSize: true);
+      var b = smm(cci(oldPosition, childGap, center, wave5radius), -1, 1);
+      return b;
+    }
+    var position = nextPosition(leftEdgeI, child);
+    while (child != null) {
+      // Draw child, subtracting height halfway
+      // Set offset
+      final RadarParentData parentData = child.parentData as RadarParentData;
+      parentData.offset = position.translate(0, -child.size.height/2);
+      // Move position by width of child
+      position = smm(cci(position, child.size.width, center, wave5radius), -1, 1);
+      child = parentData.nextSibling;
+      if (child != null) position = nextPosition(position, child);
+    }
   }
 
   @override
@@ -87,10 +115,15 @@ class RenderRadar extends RenderBox
       _controller.forward();
       isRunning = true;
     }
+    if (_lastOffset != offset) {
+      _lastOffset = offset;
+      markNeedsLayout();
+      return;
+    }
     _lastValue = _controller.value;
     var currentRadians = _tween.value;
     // Calculate number of waves, starting from the bottom
-    var center = size.bottomCenter(offset).translate(0, 30);
+    var center = size.bottomCenter(offset).translate(0, 42.5);
     // draw arc
     var arcSize = size.height * 0.8;
     var arcPaint = Paint()
@@ -116,30 +149,12 @@ class RenderRadar extends RenderBox
       context.canvas.drawCircle(center, radius, wavePaint);
       radius += waveGap;
     }
-    // for now, draw children on the 5th wave
-    var wave5radius = initialRadius + 5 * waveGap;
-    var childGap = 8.0;
-    // find intersection of circle and left edge, take the one with the lower y coord
-    var leftEdgeI = smm(clsi(center, wave5radius, Offset.zero, Offset(0, size.height)), 1, -1);
-    // find position of first child, distance + half width, higher x coord
-    var child = firstChild;
-    Offset nextPosition(Offset oldPosition, RenderBox newChild) {
-      newChild.performResize();
-      assert(newChild.size != null);
-      var a = cci(oldPosition, childGap, center, wave5radius);
-      assert(a != null);
-      var b = smm(a, -1, 1);
-      return smm(cci(smm(cci(oldPosition, childGap, center, wave5radius), -1, 1), child.size.width/2, center, wave5radius), -1, 1);
-    }
-    var position = nextPosition(leftEdgeI, child);
-    while (child != null) {
-      // Draw child, subtracing width and height halfway
-      context.paintChild(child, position.translate(-child.size.width/2, -child.size.height/2));
-      // Re-intersect, and get next position
-      position = smm(cci(position, child.size.width/2, center, wave5radius), -1, 1);
-      child = childAfter(child);
-      position = nextPosition(position, child);
-    }
+    // Paint children
+    defaultPaint(context, offset);
+  }
+
+  void dispose() {
+    _controller.dispose();
   }
 }
 
@@ -150,18 +165,22 @@ Offset cg2m(Offset p) { return Offset(p.dx, -p.dy); }
 Offset smm(List<Offset> offsets, int xy, int lh) {
   var offsets2 = offsets.toList();
   offsets2.sort((a, b) {
-    if (xy == -1)
-      if (lh == -1)
+    if (xy == -1) {
+      if (lh == -1) {
         return a.dx.compareTo(b.dx);
-      else if (lh == 1)
+      } else if (lh == 1) {
         return b.dx.compareTo(a.dx);
-    else if (xy == 1)
-      if (lh == -1)
-        return a.dy.compareTo(b.dy);
-      else if (lh == 1)
+      }
+    } else if (xy == 1) {
+      if (lh == -1) {
         return b.dy.compareTo(a.dy);
+      } else if (lh == 1) {
+        return a.dy.compareTo(b.dy);
+      }
+    }
     return null;
   });
+  //print("smm: choosing ${offsets2.first} from ${offsets}");
   return offsets2.first;
 }
 
@@ -172,43 +191,30 @@ List<Offset> cci(Offset c, double r, Offset C, double R) {
   var EPS = double.minPositive;
   // Invert Y coords of c, C to put it in normal coords
   c = cg2m(c); C = cg2m(C);
-  // https://stackoverflow.com/a/4495694
-  double acossafe(double x) {
-    if (x >= 1.0) return 0;
-    if (x <= -1.0) return pi;
-    return acos(x);
+  // https://stackoverflow.com/a/44956948
+  double distance(Offset p1, Offset p2) {
+    Offset d = p1 - p2;
+    return sqrt(d.dx*d.dx + d.dy*d.dy);
   }
 
-  Offset rotatePoint(Offset fp, Offset pt, double a) {
-    var p = pt - fp;
-    return Offset(p.dx*cos(a)+p.dy*sin(a), p.dy*cos(a)-p.dx*sin(a));
-  }
+  var d = distance(c, C);
 
-  if (r > R) {
-    // swap r, R
-    var tmp1 = r; r = R; R = tmp1;
-  }
-  var D = c - C;
-  var d = sqrt(D.dx*D.dx + D.dy*D.dy);
-
+  // no solutions
+  if (d > r+R) return null;
+  // no solutions
+  if (d < (r-R).abs()) return null;
   // infinite solutions
-  if (d < EPS && (R-r).abs() < EPS) return null;
-  // no solution, same center different radius
-  else if (d < EPS) return null;
+  if (d == 0 && r == R) return null;
 
-  var P = Offset((D.dx / d) * R + C.dx, (D.dy / d) * R + C.dy);
+  var a = (r*r-R*R+d*d)/(2.0*d);
+  var h = sqrt(r*r-a*a);
+  var P = Offset(c.dx+a*(C.dx-c.dx)/d, c.dy+a*(C.dy-c.dy)/d);
 
-  // single intersection
-  if (((R+r)-d).abs() < EPS || (R-(r+d)).abs() < EPS) return [cg2m(P)];
+  var p1 = Offset(P.dx+h*(C.dy-c.dy)/d, P.dy-h*(C.dx-c.dx)/d);
+  var p2 = Offset(P.dx-h*(C.dy-c.dy)/d, P.dy+h*(C.dx-c.dx)/d);
 
-  // no intersection
-  if ((d+r) < R || (r+R) < d) return [];
-
-  var angle = acossafe((r*r-d*d-R*R)/(-2.0*d*R));
-  var pt1 = rotatePoint(C, P, angle);
-  var pt2 = rotatePoint(C, P, -angle);
-
-  return [cg2m(pt1), cg2m(pt2)];
+  if (d == r+R) return [cg2m(p1)];
+  return [cg2m(p1), cg2m(p2)];
 }
 
 /// Utility: circle-line-segment intersection.
@@ -219,27 +225,28 @@ List<Offset> clsi(Offset c, double r, Offset p1, Offset p2) {
   // Convert points
   c = cg2m(c); p1 = cg2m(p1); p2 = cg2m(p2);
   // https://stackoverflow.com/a/23017208
-  var D = p2 - p1;
+  var a2 = ((p2.dx-p1.dx)*(c.dy-p1.dy) - (c.dx-p1.dx)*(p2.dy-p1.dy)).abs();
+  var _lab = p2-p1;
+  var lab = sqrt(_lab.dx*_lab.dx + _lab.dy*_lab.dy);
 
-  var A = D.dx*D.dx + D.dy*D.dy;
-  var B = 2 * (D.dx * (p1.dx-c.dx) + D.dy * (p1.dy-c.dy));
-  var C = (p1.dx-c.dx)*(p1.dx-c.dx) + (p1.dy-c.dy)*(p1.dy-c.dy) - r*r;
+  var h = a2/lab;
 
-  var det = B*B - 4*A*C;
-  if ((A <= EPS) || (det < 0)) {
-    // no solutions
+  // no solution
+  if (h > r) {
     return null;
   }
-  else if (det == 0) {
-    // one solution
-    var t = -B / (2*A);
-    return [cg2m(Offset(p1.dx+t*D.dx, p1.dy+t*D.dy))];
-  } else {
-    // two solutions
-    var t = (-B + sqrt(det)) / (2*A);
-    var i1 = Offset(p1.dx+t*D.dx, p1.dy+t*D.dy);
-    t = (-B - sqrt(det)) / (2*A);
-    var i2 = Offset(p1.dx+t*D.dx, p1.dy+t*D.dy);
-    return [cg2m(i1), cg2m(i2)];
-  }
+
+  var D = Offset((p2.dx-p1.dx)/lab, (p2.dy-p1.dy)/lab);
+  var t = D.dx*(c.dx-p1.dx) + D.dy*(c.dy-p1.dy);
+
+  var dt = sqrt(r*r-h*h);
+
+  var E = Offset(p1.dx + (t-dt)*D.dx, p1.dy + (t-dt)*D.dy);
+
+  // one solution
+  if (h == r) return [cg2m(E)];
+  // two solutions
+  var F = Offset(p1.dx - (t-dt)*D.dx, p1.dy - (t-dt)*D.dy);
+
+  return [cg2m(E), cg2m(F)];
 }
