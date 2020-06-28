@@ -7,11 +7,12 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:peardrop/src/home.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
+import 'package:peardrop/src/widgets/progress_device.dart';
 import 'package:peardrop/src/widgets/radar.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 
 typedef void DeviceSelectCallback(int index);
-typedef void SetPanelCallback(bool panelOpen, PearPanel panel);
+// typedef void SetPanelCallback(bool panelOpen, PearPanel panel);
 typedef void ResetCallBack();
 
 class DeviceSelectBody extends StatelessWidget {
@@ -19,7 +20,6 @@ class DeviceSelectBody extends StatelessWidget {
       {this.devices,
       this.fileShare,
       this.fileName,
-      this.setPanel,
       this.version,
       this.deviceName,
       this.reset});
@@ -27,7 +27,7 @@ class DeviceSelectBody extends StatelessWidget {
   final List<Device> devices;
   final DeviceSelectCallback fileShare;
   final ResetCallBack reset;
-  final SetPanelCallback setPanel;
+  // final SetPanelCallback setPanel;
   final String deviceName, fileName, version;
 
   Widget build(BuildContext context) {
@@ -60,7 +60,8 @@ class DeviceSelectBody extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Icon(
-                    Icons.arrow_back_ios,
+                    // Icons.arrow_back_ios,
+                    Icons.cancel,
                     color: Colors.white,
                     size: 24,
                   ),
@@ -97,22 +98,27 @@ class DeviceSelectBody extends StatelessWidget {
                           TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  RawMaterialButton(
-                    onPressed: () {
-                      print("pressed");
-                      setPanel(true, PearPanel.sharing);
-                      fileShare(i);
-                    },
-                    elevation: 0.0,
-                    fillColor: Color(0xff91c27d),
-                    child: Icon(
-                      devices[i].getIcon(),
-                      size: 35.0,
-                      color: Colors.white,
-                    ),
-                    padding: EdgeInsets.all(15.0),
-                    shape: CircleBorder(),
-                  ),
+                  DeviceProgressIndicator(
+                    fileShare: fileShare,
+                    i: i,
+                    devices: devices,
+                  )
+                  // RawMaterialButton(
+                  //   onPressed: () {
+                  //     print("pressed");
+                  //     setPanel(true, PearPanel.sharing);
+                  //     fileShare(i);
+                  //   },
+                  //   elevation: 0.0,
+                  //   fillColor: Color(0xff91c27d),
+                  //   child: Icon(
+                  //     devices[i].getIcon(),
+                  //     size: 35.0,
+                  //     color: Colors.white,
+                  //   ),
+                  //   padding: EdgeInsets.all(15.0),
+                  //   shape: CircleBorder(),
+                  // ),
                 ],
               );
             }),
@@ -124,7 +130,6 @@ class DeviceSelectBody extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(top: 50),
-              // padding: EdgeInsets.only(top: 50),
               child: Column(
                 children: [
                   Container(
@@ -151,7 +156,6 @@ class DeviceSelectBody extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                                 fontSize: 19,
                                 color: Colors.black)),
-                        // TODO: display actual network name
                         Text(version,
                             style: TextStyle(
                                 fontWeight: FontWeight.w500,

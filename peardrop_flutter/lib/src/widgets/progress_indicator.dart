@@ -58,23 +58,21 @@ class _PercentageProgressIndicatorState
   @override
   Widget build(BuildContext context) {
     centerIcon = widget.centerIcon;
-    return new Center(
-      child: new Container(
-        height: 95.0,
-        width: 95.0,
-        child: new CustomPaint(
+    return Center(
+      child: Container(
+        child: CustomPaint(
           foregroundPainter: new MyPainter(
               lineColor: Colors.grey,
               completeColor: Color(0xff91c27d),
               completePercent: percentage,
               width: 8.0),
-          child: new Padding(
+          child: Padding(
             padding: const EdgeInsets.all(5.0),
-            child: new RaisedButton(
+            child: RaisedButton(
                 elevation: 0,
                 color: Colors.white,
                 splashColor: Colors.white,
-                shape: new CircleBorder(),
+                shape: CircleBorder(),
                 child: Text(
                   percentage.toInt().toString() + '%',
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600),
