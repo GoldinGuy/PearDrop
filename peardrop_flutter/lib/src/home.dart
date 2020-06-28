@@ -148,7 +148,16 @@ class _HomePageState extends State<HomePage> {
               backdropEnabled: true,
               backdropOpacity: 0.2,
               isDraggable: false,
-              body: _getBody(),
+              body: DeviceSelectBody(
+                devices: devices,
+                reset: reset,
+                fileSelect: _handleFileSelect,
+                version: '1.0.0+0',
+                fileName: select.nameFromPath(filePath),
+                fileShare: _handleFileShare,
+                deviceName: deviceName,
+                // setPanel: setPearPanel
+              ),
               panelBuilder: (sc) => SlidingPanel(
                 peerDevice:
                     peerIndex < devices.length ? devices[peerIndex] : null,

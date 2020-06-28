@@ -1,23 +1,20 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:peardrop/src/home.dart';
-import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/widgets/progress_device.dart';
 import 'package:peardrop/src/widgets/radar.dart';
-import 'package:peardrop/src/widgets/sliding_panel.dart';
 
 typedef void DeviceSelectCallback(int index);
 typedef void ResetCallBack();
+typedef void FileSelectCallback();
 
 class DeviceSelectBody extends StatelessWidget {
   DeviceSelectBody(
       {this.devices,
       this.fileShare,
+      this.fileSelect,
       this.fileName,
       this.version,
       this.deviceName,
@@ -27,7 +24,9 @@ class DeviceSelectBody extends StatelessWidget {
   final DeviceSelectCallback fileShare;
   final ResetCallBack reset;
   final String deviceName, fileName, version;
+  final FileSelectCallback fileSelect;
 
+  @override
   Widget build(BuildContext context) {
     var deviceHeight = 25.0;
     if (Platform.isWindows || Platform.isMacOS) {
@@ -59,7 +58,7 @@ class DeviceSelectBody extends StatelessWidget {
                   padding: EdgeInsets.all(15),
                   child: Icon(
                     // Icons.arrow_back_ios,
-                    Icons.cancel,
+                    Icons.info,
                     color: Colors.white,
                     size: 24,
                   ),
@@ -70,7 +69,7 @@ class DeviceSelectBody extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(15),
                   child: Icon(
-                    Icons.info,
+                    Icons.library_books,
                     color: Colors.white,
                     size: 24,
                   ),
@@ -143,35 +142,21 @@ class DeviceSelectBody extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 13,
                                 color: Colors.grey)),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200],
-                          ),
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.fromLTRB(15, 5, 15, 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                child: Icon(
-                                  Icons.description,
-                                  size: 20,
-                                ),
+                        InkWell(
+                          onTap: () {
+                            fileSelect();
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
                               ),
-                              Expanded(
-                                child: Text(fileName,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      color: Color(0xff559364),
-                                    )),
-                              ),
-                            ],
-                          ),
-                        )
+                              padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.fromLTRB(15, 5, 15, 16),
+                              child: Expanded(
+                                child: getFileContainer(),
+                              )),
+                        ),
                       ],
                     ),
                   ),
@@ -199,5 +184,62 @@ class DeviceSelectBody extends StatelessWidget {
         ),
       ]),
     );
+  }
+
+  Widget getFileContainer() {
+    if (fileName != null && fileName != '') {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+            child: Icon(
+              Icons.expand_more,
+              size: 20,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+            child: Icon(
+              Icons.description,
+              size: 20,
+            ),
+          ),
+          Expanded(
+            child: Text(fileName,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Color(0xff559364),
+                )),
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+            child: Icon(
+              Icons.expand_more,
+              size: 20,
+            ),
+          ),
+          Center(
+            child: Text('Select a file to start sharing',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Color(0xff559364),
+                )),
+          ),
+        ],
+      );
+    }
   }
 }
