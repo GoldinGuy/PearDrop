@@ -12,7 +12,6 @@ import 'package:peardrop/src/widgets/radar.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 
 typedef void DeviceSelectCallback(int index);
-// typedef void SetPanelCallback(bool panelOpen, PearPanel panel);
 typedef void ResetCallBack();
 
 class DeviceSelectBody extends StatelessWidget {
@@ -27,7 +26,6 @@ class DeviceSelectBody extends StatelessWidget {
   final List<Device> devices;
   final DeviceSelectCallback fileShare;
   final ResetCallBack reset;
-  // final SetPanelCallback setPanel;
   final String deviceName, fileName, version;
 
   Widget build(BuildContext context) {
@@ -103,22 +101,6 @@ class DeviceSelectBody extends StatelessWidget {
                     i: i,
                     devices: devices,
                   )
-                  // RawMaterialButton(
-                  //   onPressed: () {
-                  //     print("pressed");
-                  //     setPanel(true, PearPanel.sharing);
-                  //     fileShare(i);
-                  //   },
-                  //   elevation: 0.0,
-                  //   fillColor: Color(0xff91c27d),
-                  //   child: Icon(
-                  //     devices[i].getIcon(),
-                  //     size: 35.0,
-                  //     color: Colors.white,
-                  //   ),
-                  //   padding: EdgeInsets.all(15.0),
-                  //   shape: CircleBorder(),
-                  // ),
                 ],
               );
             }),

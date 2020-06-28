@@ -20,8 +20,6 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-// enum PearPanel { sharing, receiving, accepting, done }
-
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
   bool pearPanelOpen = false, fileSelected = false;
@@ -31,7 +29,6 @@ class _HomePageState extends State<HomePage> {
   InternetAddress ip;
   PeardropFile file;
   final PanelController _pc = PanelController();
-  // PearPanel pearPanel = PearPanel.accepting;
 
   @override
   void initState() {
@@ -67,8 +64,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> _handleFileSelect() async {
     await select.openFileExplorer(setFile);
     if (filePath != '') {
-      // do {
-
       String fileName = select.nameFromPath(filePath);
       var temp = File(filePath);
       List<int> list = await temp.readAsBytes();
@@ -92,7 +87,6 @@ class _HomePageState extends State<HomePage> {
       } catch (e) {
         print('error caught: $e');
       }
-      // } while (devices.isEmpty);
     }
   }
 
@@ -117,19 +111,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-// sets panel appearence and opens and closes it based on boolean
-  // void setPearPanel(bool isOpen, PearPanel panel) {
-  //   setState(() {
-  //     pearPanelOpen = isOpen;
-  //     pearPanel = panel;
-  //   });
-  //   if (pearPanelOpen) {
-  //     _pc.open();
-  //   } else if (!pearPanelOpen) {
-  //     _pc.close();
-  //   }
-  // }
-
   void setPearPanel(bool isOpen) {
     setState(() {
       pearPanelOpen = isOpen;
@@ -151,11 +132,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // double _panelHeightOpen = determinePanelHeight();
-    setState(() {
-      // _panelHeightOpen = _panelHeightOpen;
-      filePath = filePath;
-    });
+    setState(() {});
     return Material(
       child: Scaffold(
         backgroundColor: Color(0xff293851),
