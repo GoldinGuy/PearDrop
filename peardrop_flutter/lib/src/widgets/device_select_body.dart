@@ -150,13 +150,27 @@ class DeviceSelectBody extends StatelessWidget {
                           ),
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.fromLTRB(15, 5, 15, 16),
-                          child: Text(fileName,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: Color(0xff559364),
-                              )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                child: Icon(
+                                  Icons.description,
+                                  size: 20,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(fileName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      color: Color(0xff559364),
+                                    )),
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
