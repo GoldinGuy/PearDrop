@@ -5,6 +5,7 @@ import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:peardrop/src/utilities/device_details.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
+import 'package:peardrop/src/utilities/ip.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -68,14 +69,14 @@ class _HomePageState extends State<HomePage> {
       Stream<PeardropReceiver> stream =
           await Peardrop.send(list, fileName ?? '', mime(fileName) ?? '');
       try {
-        stream.listen((PeardropReceiver receiver) {
+        stream.listen((PeardropReceiver receiver) async {
           bool duplicate = false;
           for (var device in devices) {
             if (device.getIP() == receiver.ip) {
               duplicate = true;
             }
           }
-          if (receiver.ip != ip && !duplicate) {
+          if (!(await isSelfIP(receiver.ip)) && !duplicate) {
             setState(() {
               devices.add(Device(Icons.phone_iphone, receiver));
             });
@@ -116,10 +117,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getDeviceName() async {
-    ip = (await NetworkInterface.list(
-            includeLinkLocal: false, includeLoopback: false))
-        .map((interface) => interface.addresses.last)
-        .first;
+    ip = await getMainIP();
     setState(() {
       deviceName = WordList().ipToWords(ip);
     });
