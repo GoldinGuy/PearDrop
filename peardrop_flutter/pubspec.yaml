@@ -20,7 +20,8 @@ dependencies:
 
   device_info: ^0.4.2+4
 
-  get_ip: ^0.4.0
+  get_ip:
+    path: ../packages/get_ip/
 
   http: ^0.12.1
 
