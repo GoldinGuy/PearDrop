@@ -1,19 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get_ip/get_ip.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:peardrop/src/utilities/device_details.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
-import 'package:peardrop/src/widgets/file_select_body.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'utilities/nearby_device.dart';
-import 'widgets/device_select_body.dart';
-import 'package:http/http.dart' as http;
+import 'widgets/peardrop_body.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -35,8 +31,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     select = FileSelect();
     fileSelected = false;
-    devices.add(
-        Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
+    // devices.add(
+    //     Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
     _getDeviceName();
     DeviceDetails.getDeviceDetails();
     _handleFileAccept();
@@ -147,14 +143,14 @@ class _HomePageState extends State<HomePage> {
               backdropEnabled: true,
               backdropOpacity: 0.2,
               isDraggable: false,
-              body: DeviceSelectBody(
-                devices: devices,
-                fileSelect: _handleFileSelect,
-                version: '1.0.0+0',
-                fileName: select.nameFromPath(filePath),
-                fileShare: _handleFileShare,
-                deviceName: deviceName,
-              ),
+              body: PearDropBody(
+                  devices: devices,
+                  fileSelect: _handleFileSelect,
+                  version: '1.0.0+0',
+                  fileName: select.nameFromPath(filePath),
+                  fileShare: _handleFileShare,
+                  deviceName: deviceName,
+                  fileSelected: fileSelected),
               panelBuilder: (sc) => SlidingPanel(
                 peerDevice:
                     peerIndex < devices.length ? devices[peerIndex] : null,
@@ -177,32 +173,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  Widget _getBody() {
-    if (fileSelected) {
-      return DeviceSelectBody(
-        devices: devices,
-        version: '1.0.0+0',
-        fileName: select.nameFromPath(filePath),
-        fileShare: _handleFileShare,
-        deviceName: deviceName,
-        // setPanel: setPearPanel
-      );
-    } else {
-      return FileSelectBody(
-        fileSelect: _handleFileSelect,
-        deviceName: deviceName,
-      );
-    }
-  }
-
-  // double determinePanelHeight() {
-  //   if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
-  //     return MediaQuery.of(context).size.height * 0.35;
-  //     // TODO: fix panel height being too small on some devices due to small app size return 200;
-  //   } else {
-  //     // return MediaQuery.of(context).size.height * 0.51;
-  //     return 360;
-  //   }
-  // }
 }

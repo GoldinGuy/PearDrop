@@ -14,9 +14,9 @@ void main() {
     window_size.getWindowInfo().then((window) {
       if (window.screen != null) {
         final screenFrame = window.screen.visibleFrame;
-        double width = (screenFrame.width / 4.2).roundToDouble(),
-            height = (screenFrame.height / 1.8).roundToDouble();
-        // double width = 460, height = 650;
+        // double width = (screenFrame.width / 4.4).roundToDouble(),
+        //     height = (screenFrame.height / 1.5).roundToDouble();
+        double width = 420, height = 780;
         final left = ((screenFrame.width - width) / 2).roundToDouble();
         final top = ((screenFrame.height - height) / 3).roundToDouble();
         final frame = Rect.fromLTWH(left, top, width, height);
@@ -24,8 +24,8 @@ void main() {
         window_size.setWindowTitle('PearDrop');
 
         if (Platform.isMacOS) {
-          window_size.setWindowMinSize(Size(440, 600));
-          window_size.setWindowMaxSize(Size(800, 1200));
+          window_size.setWindowMinSize(Size(420, 780));
+          window_size.setWindowMaxSize(Size(420, 780));
         }
       }
     });
