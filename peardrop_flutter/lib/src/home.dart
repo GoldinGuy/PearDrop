@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   bool pearPanelOpen = false, fileSelected = false;
   int peerIndex = 0;
   FileSelect select;
-  String filePath = '', deviceName = 'Unknown';
+  String filePath = '', deviceName = 'PearDrop Device';
   InternetAddress ip;
   PeardropFile file;
   final PanelController _pc = PanelController();
@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     select = FileSelect();
     fileSelected = false;
+    devices.add(
+        Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
     _getDeviceName();
     DeviceDetails.getDeviceDetails();
     _handleFileAccept();
@@ -95,11 +97,6 @@ class _HomePageState extends State<HomePage> {
     await devices[peerIndex].getReceiver().send();
   }
 
-  void reset() {
-    setFile(false, null);
-    setPearPanel(false);
-  }
-
   void _cancel() {
     file.reject();
   }
@@ -127,7 +124,9 @@ class _HomePageState extends State<HomePage> {
             includeLinkLocal: false, includeLoopback: false))
         .map((interface) => interface.addresses.last)
         .first;
-    deviceName = WordList().ipToWords(ip);
+    setState(() {
+      deviceName = WordList().ipToWords(ip);
+    });
   }
 
   @override
@@ -150,20 +149,16 @@ class _HomePageState extends State<HomePage> {
               isDraggable: false,
               body: DeviceSelectBody(
                 devices: devices,
-                reset: reset,
                 fileSelect: _handleFileSelect,
                 version: '1.0.0+0',
                 fileName: select.nameFromPath(filePath),
                 fileShare: _handleFileShare,
                 deviceName: deviceName,
-                // setPanel: setPearPanel
               ),
               panelBuilder: (sc) => SlidingPanel(
                 peerDevice:
                     peerIndex < devices.length ? devices[peerIndex] : null,
                 sc: sc,
-                // pearPanel: pearPanel,
-                reset: reset,
                 setPearPanel: setPearPanel,
                 filePath: filePath,
                 cancel: _cancel,
@@ -187,7 +182,6 @@ class _HomePageState extends State<HomePage> {
     if (fileSelected) {
       return DeviceSelectBody(
         devices: devices,
-        reset: reset,
         version: '1.0.0+0',
         fileName: select.nameFromPath(filePath),
         fileShare: _handleFileShare,

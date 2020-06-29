@@ -8,53 +8,40 @@ import 'package:peardrop/src/home.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
 class DeviceProgressIndicator extends StatefulWidget {
-  DeviceProgressIndicator(
-      {this.centerIcon, this.fileShare, this.devices, this.i});
-  final IconData centerIcon;
+  DeviceProgressIndicator({this.fileShare, this.devices, this.i});
   final DeviceSelectCallback fileShare;
-  // final SetPanelCallback setPanel;
   final List<Device> devices;
   final int i;
 
   @override
   _DeviceProgressIndicatorState createState() => _DeviceProgressIndicatorState(
-      centerIcon: centerIcon,
-      fileShare: fileShare,
-      // setPanel: setPanel,
-      devices: devices,
-      i: i);
+      fileShare: fileShare, devices: devices, i: i);
 }
 
 typedef void DeviceSelectCallback(int index);
-// typedef void SetPanelCallback(bool panelOpen, PearPanel panel);
 
 class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
     with TickerProviderStateMixin {
   double percentage = 0.0, newPercentage = 0.0;
   AnimationController DeviceAnimationController;
-  _DeviceProgressIndicatorState(
-      {this.centerIcon, this.fileShare, this.devices, this.i});
-  IconData centerIcon;
+  _DeviceProgressIndicatorState({this.fileShare, this.devices, this.i});
   final DeviceSelectCallback fileShare;
-  // final SetPanelCallback setPanel;
   final List<Device> devices;
   final int i;
   int _state = 0;
 
   @override
   Widget build(BuildContext context) {
-    centerIcon = widget.centerIcon;
     return RawMaterialButton(
       child: setUpButtonChild(),
       onPressed: () {
-        setState(() {
-          if (_state == 0) {
+        if (_state == 0) {
+          setState(() {
             animateButton();
-          }
-        });
-        print("attempting to send");
-        // setPanel(true, PearPanel.sharing);
-        fileShare(i);
+          });
+          print("attempting to send");
+          fileShare(i);
+        }
       },
       elevation: 0.0,
       fillColor: Color(0xff91c27d),
@@ -64,21 +51,21 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
   }
 
   Widget setUpButtonChild() {
-    if (_state == 0) {
-      return Icon(
-        devices[i].getIcon(),
-        size: 35.0,
-        color: Colors.white,
-      );
-    } else if (_state == 1) {
+    if (_state == 1) {
       return CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       );
-    } else {
+    } else if (_state == 2) {
       return Icon(
         Icons.check,
         color: Colors.white,
         size: 35.0,
+      );
+    } else {
+      return Icon(
+        devices[i].getIcon(),
+        size: 35.0,
+        color: Colors.white,
       );
     }
   }
@@ -91,6 +78,14 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
       Duration(milliseconds: 5300),
       (Timer timer) => setState(() {
         _state = 2;
+        timer.cancel();
+      }),
+    );
+    Timer.periodic(
+      Duration(milliseconds: 7300),
+      (Timer timer2) => setState(() {
+        _state = 0;
+        timer2.cancel();
       }),
     );
   }

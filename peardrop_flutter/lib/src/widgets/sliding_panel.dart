@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
-import '../home.dart';
-
 typedef void FileReceiveCallBack();
 typedef void ResetCallBack();
 typedef void CancelCallBack();
@@ -43,7 +41,7 @@ class SlidingPanel extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    (peerDevice.getName() ?? 'An Unknown Device') +
+                    ('An Unknown Device' ?? peerDevice.getName()) +
                         ' would like to share',
                     style: TextStyle(
                       fontWeight: FontWeight.normal,

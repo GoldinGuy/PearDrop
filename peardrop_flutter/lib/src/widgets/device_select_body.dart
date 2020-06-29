@@ -7,22 +7,20 @@ import 'package:peardrop/src/widgets/progress_device.dart';
 import 'package:peardrop/src/widgets/radar.dart';
 
 typedef void DeviceSelectCallback(int index);
-typedef void ResetCallBack();
 typedef void FileSelectCallback();
 
 class DeviceSelectBody extends StatelessWidget {
-  DeviceSelectBody(
-      {this.devices,
-      this.fileShare,
-      this.fileSelect,
-      this.fileName,
-      this.version,
-      this.deviceName,
-      this.reset});
+  DeviceSelectBody({
+    this.devices,
+    this.fileShare,
+    this.fileSelect,
+    this.fileName,
+    this.version,
+    this.deviceName,
+  });
 
   final List<Device> devices;
   final DeviceSelectCallback fileShare;
-  final ResetCallBack reset;
   final String deviceName, fileName, version;
   final FileSelectCallback fileSelect;
 
