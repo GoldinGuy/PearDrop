@@ -12,10 +12,27 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff6b9080),
+      backgroundColor: Color(0xff91c27d),
       appBar: AppBar(
         elevation: 0.0,
-        title: Text('Settings'),
+        title: Center(
+          child:
+              Text('Settings', style: TextStyle(fontWeight: FontWeight.w500)),
+        ),
+        leading: IconButton(
+          tooltip: 'Profile',
+          icon: Icon(
+            Icons.arrow_back_ios,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: <Widget>[
+          IconButton(
+            tooltip: 'Settings',
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
+          ),
+        ],
       ),
       body: ListView(
         children: [

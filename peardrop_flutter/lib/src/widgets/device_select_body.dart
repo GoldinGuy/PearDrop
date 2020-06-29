@@ -48,34 +48,48 @@ class DeviceSelectBody extends StatelessWidget {
         SizedBox(
           height: deviceHeight,
         ),
-        Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () => reset(),
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Icon(
-                    // Icons.arrow_back_ios,
-                    Icons.info,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
+        Align(
+          child: InkWell(
+            onTap: () => Navigator.pushNamed(context, '/tos'),
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Icon(
+                Icons.info,
+                color: Colors.white,
+                size: 24,
               ),
-              InkWell(
-                onTap: () => Navigator.pushNamed(context, '/tos'),
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Icon(
-                    Icons.library_books,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              )
-            ]),
+            ),
+          ),
+          alignment: Alignment.topRight,
+        ),
+        // Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     crossAxisAlignment: CrossAxisAlignment.center,
+        //     children: [
+        //       InkWell(
+        //         onTap: () => reset(),
+        //         child: Padding(
+        //           padding: EdgeInsets.all(15),
+        //           child: Icon(
+        //             // Icons.arrow_back_ios,
+        //             Icons.library_books,
+        //             color: Colors.white,
+        //             size: 24,
+        //           ),
+        //         ),
+        //       ),
+        //       InkWell(
+        //         onTap: () => Navigator.pushNamed(context, '/tos'),
+        //         child: Padding(
+        //           padding: EdgeInsets.all(15),
+        //           child: Icon(
+        //             Icons.info,
+        //             color: Colors.white,
+        //             size: 24,
+        //           ),
+        //         ),
+        //       )
+        //     ]),
         Expanded(
           child: Radar(
             children: List.generate(devices.length, (i) {
@@ -209,6 +223,7 @@ class DeviceSelectBody extends StatelessWidget {
           Expanded(
             child: Text(fileName,
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
@@ -232,6 +247,7 @@ class DeviceSelectBody extends StatelessWidget {
           Center(
             child: Text('Select a file to start sharing',
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14,

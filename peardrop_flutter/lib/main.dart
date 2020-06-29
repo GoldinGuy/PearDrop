@@ -14,7 +14,7 @@ void main() {
     window_size.getWindowInfo().then((window) {
       if (window.screen != null) {
         final screenFrame = window.screen.visibleFrame;
-        double width = (screenFrame.width / 3.9).roundToDouble(),
+        double width = (screenFrame.width / 4.2).roundToDouble(),
             height = (screenFrame.height / 1.8).roundToDouble();
         // double width = 460, height = 650;
         final left = ((screenFrame.width - width) / 2).roundToDouble();
@@ -30,7 +30,7 @@ void main() {
       }
     });
   }
-  runApp(new PearDrop());
+  runApp(PearDrop());
 }
 
 class PearDrop extends StatelessWidget {

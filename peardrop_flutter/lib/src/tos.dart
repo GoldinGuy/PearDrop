@@ -10,11 +10,11 @@ class _TermsDisplayScreenState extends State<TermsDisplayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff559364),
+      backgroundColor: Color(0xff91c27d),
       appBar: AppBar(
         title: const Text('Terms of Service'),
         elevation: 0.0,
-        backgroundColor: Color(0xff559364),
+        backgroundColor: Color(0xff91c27d),
         centerTitle: true,
         leading: IconButton(
           tooltip: 'Back',

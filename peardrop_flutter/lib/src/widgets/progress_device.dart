@@ -75,7 +75,11 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       );
     } else {
-      return Icon(Icons.check, color: Colors.white);
+      return Icon(
+        Icons.check,
+        color: Colors.white,
+        size: 35.0,
+      );
     }
   }
 
