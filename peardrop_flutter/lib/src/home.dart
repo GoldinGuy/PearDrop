@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -78,6 +79,7 @@ class _HomePageState extends State<HomePage> {
               duplicate = true;
             }
           }
+
           if (!(await isSelfIP(receiver.ip)) && !duplicate) {
             setState(() {
               devices.add(Device(Icons.phone_iphone, receiver));
@@ -94,6 +96,22 @@ class _HomePageState extends State<HomePage> {
   void _handleFileShare(int index) async {
     peerIndex = index;
     await devices[peerIndex].getReceiver().send();
+    Timer.periodic(
+      Duration(milliseconds: 5300),
+      (Timer timer) => setState(() {
+        devices[peerIndex].setSharingState(SharingState.done);
+
+        timer.cancel();
+      }),
+    );
+    Timer.periodic(
+      Duration(milliseconds: 7300),
+      (Timer timer2) => setState(() {
+        devices[peerIndex].setSharingState(SharingState.neutral);
+
+        timer2.cancel();
+      }),
+    );
   }
 
   void _cancel() {

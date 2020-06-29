@@ -73,21 +73,5 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
     setState(() {
       devices[i].setSharingState(SharingState.sharing);
     });
-    Timer.periodic(
-      Duration(milliseconds: 5300),
-      (Timer timer) => setState(() {
-        devices[i].setSharingState(SharingState.done);
-
-        timer.cancel();
-      }),
-    );
-    Timer.periodic(
-      Duration(milliseconds: 7300),
-      (Timer timer2) => setState(() {
-        devices[i].setSharingState(SharingState.neutral);
-
-        timer2.cancel();
-      }),
-    );
   }
 }
