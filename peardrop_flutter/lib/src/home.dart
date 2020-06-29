@@ -56,8 +56,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _handleFileReceive() {
-    file.accept();
+  void _handleFileReceive() async {
+    var temp = await file.accept();
+    var fileSave = File(file.filename);
+    await fileSave.writeAsBytes(temp);
   }
 
   Future<void> _handleFileSelect() async {
