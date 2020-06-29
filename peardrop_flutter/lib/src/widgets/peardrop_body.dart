@@ -251,7 +251,8 @@ class PearDropBody extends StatelessWidget {
       );
     } else {
       return Expanded(
-        child: Radar(
+        child: GridView.count(
+          crossAxisCount: 3,
           children: List.generate(devices.length, (i) {
             return Column(
               mainAxisSize: MainAxisSize.min,
