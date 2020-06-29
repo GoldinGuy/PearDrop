@@ -28,14 +28,13 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
   final DeviceSelectCallback fileShare;
   final List<Device> devices;
   final int i;
-  int _state = 0;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
       child: setUpButtonChild(),
       onPressed: () {
-        if (_state == 0) {
+        if (devices[i].getSharingState() == SharingState.neutral) {
           setState(() {
             animateButton();
           });
@@ -51,11 +50,11 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
   }
 
   Widget setUpButtonChild() {
-    if (_state == 1) {
+    if (devices[i].getSharingState() == SharingState.sharing) {
       return CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       );
-    } else if (_state == 2) {
+    } else if (devices[i].getSharingState() == SharingState.done) {
       return Icon(
         Icons.check,
         color: Colors.white,
@@ -72,19 +71,21 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
 
   void animateButton() {
     setState(() {
-      _state = 1;
+      devices[i].setSharingState(SharingState.sharing);
     });
     Timer.periodic(
       Duration(milliseconds: 5300),
       (Timer timer) => setState(() {
-        _state = 2;
+        devices[i].setSharingState(SharingState.done);
+
         timer.cancel();
       }),
     );
     Timer.periodic(
       Duration(milliseconds: 7300),
       (Timer timer2) => setState(() {
-        _state = 0;
+        devices[i].setSharingState(SharingState.neutral);
+
         timer2.cancel();
       }),
     );
