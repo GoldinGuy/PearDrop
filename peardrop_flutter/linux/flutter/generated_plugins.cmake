@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  color_panel
   file_chooser
   url_launcher_fde
   menubar
