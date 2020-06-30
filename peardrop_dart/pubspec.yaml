@@ -13,6 +13,8 @@ dependencies:
   ffi: ^0.1.3
   udp:
     path: ../packages/udp/
+  multicast_lock:
+    path: ../packages/multicast_lock/
   flutter:
     sdk: flutter
 

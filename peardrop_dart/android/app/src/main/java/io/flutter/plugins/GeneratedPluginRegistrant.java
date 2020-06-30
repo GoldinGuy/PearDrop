@@ -1,6 +1,7 @@
 package io.flutter.plugins;
 
 import io.flutter.plugin.common.PluginRegistry;
+import cz.analogic.multicastlock.MulticastLockPlugin;
 import io.anire.peardrop.PeardropPlugin;
 
 /**
@@ -11,6 +12,7 @@ public final class GeneratedPluginRegistrant {
     if (alreadyRegisteredWith(registry)) {
       return;
     }
+    MulticastLockPlugin.registerWith(registry.registrarFor("cz.analogic.multicastlock.MulticastLockPlugin"));
     PeardropPlugin.registerWith(registry.registrarFor("io.anire.peardrop.PeardropPlugin"));
   }
 

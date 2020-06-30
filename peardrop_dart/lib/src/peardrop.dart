@@ -3,10 +3,11 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:async/async.dart';
+import 'package:multicast_lock/multicast_lock.dart';
 import 'package:udp/udp.dart';
 
-import 'acktype.dart';
 import 'ackpacket.dart';
+import 'acktype.dart';
 import 'adpacket.dart';
 import 'senderpacket.dart';
 
@@ -19,6 +20,11 @@ abstract class Peardrop {
   static Future<PeardropFile> receive() async {
     var selfPort = Random().nextInt(65535);
     if (selfPort <= 1024) selfPort += 1024;
+    MulticastLock lock;
+    if (Platform.isAndroid) {
+      lock = MulticastLock();
+      await lock.acquire();
+    }
     var udpSocket = await UDP.bind(_multicastEndpoint);
     Datagram data;
     await for (var event in udpSocket.socket) {
@@ -28,6 +34,9 @@ abstract class Peardrop {
       }
     }
     udpSocket.close();
+    if (Platform.isAndroid) {
+      await lock.release();
+    }
     var packet = AdPacket.read(data.data);
     if (packet.tcpPort == null) {
       throw PeardropException._("AdPacket doesn't contain TCP extension");
