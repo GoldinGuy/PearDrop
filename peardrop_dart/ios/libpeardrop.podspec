@@ -5,13 +5,12 @@
 Pod::Spec.new do |s|
   s.name             = 'libpeardrop'
   s.version          = '0.0.1'
-  s.summary          = 'Dart bindings for Peardrop protocol.'
+  s.summary          = 'Dart bindings for PearDrop protocol.'
   s.description      = <<-DESC
-Dart bindings for Peardrop protocol.
+Dart bindings for PearDrop protocol.
                        DESC
-  s.homepage         = 'http://example.com'
-  s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.homepage         = 'https://peardrop.app'
+  s.author           = { 'anirudhb' => 'anirudhb@users.noreply.github.com' }
   s.source           = { :path => '.' }
   s.public_header_files = 'Classes/**/*.h'
   s.source_files = 'Classes/**/*'

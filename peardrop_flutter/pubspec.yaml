@@ -1,6 +1,7 @@
 name: peardrop
-description: A cross-platform airdrop alternative
-version: 1.0.0+3
+description: A cross-platform AirDrop alternative
+version: 0.0.1+3
+author: anirudhb, GoldinGuy
 
 dependencies:
   flutter:

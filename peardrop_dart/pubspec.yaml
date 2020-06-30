@@ -1,8 +1,8 @@
 name: libpeardrop
-description: Dart bindings for Peardrop protocol.
+description: Dart bindings for PearDrop protocol.
 version: 0.0.1
-author:
-homepage:
+author: anirudhb
+homepage: https://peardrop.app
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
