@@ -145,7 +145,7 @@ packages:
   udp:
     dependency: "direct main"
     description:
-      path: "../udp"
+      path: "../packages/udp"
       relative: true
     source: path
     version: "3.0.3"

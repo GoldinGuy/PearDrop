@@ -1,17 +1,16 @@
 // ignore_for_file: non_constant_identifier_names
-import 'dart:io' show Platform;
 import 'dart:ffi';
+import 'dart:io' show Platform;
 
 import 'package:ffi/ffi.dart';
 
 final String _libraryPath =
     Platform.isAndroid ? "libpeardrop_capi.so" :
     Platform.isMacOS ? "libpeardrop_capi.dylib" :
+    Platform.isIOS ? "libpeardrop_capi.dylib" :
     Platform.isLinux ? "libpeardrop_capi.so" :
     Platform.isWindows ? "libpeardrop_capi.dll" : null;
-final DynamicLibrary _peardropNative = Platform.isIOS
-    ? DynamicLibrary.process()
-    : DynamicLibrary.open(_libraryPath);
+final DynamicLibrary _peardropNative = DynamicLibrary.open(_libraryPath);
 
 // For all the platforms we use, (u)intptr_t is equivalent to uint64_t since
 // we are only using 64-bit platforms (save android i686, but idk about that).
@@ -21,92 +20,92 @@ final DynamicLibrary _peardropNative = Platform.isIOS
 
 typedef _native_ackpacket_create_type = Pointer<Void> Function(Pointer<Void>);
 typedef _native_ackpacket_create_type_ffi = Pointer<Void> Function(Pointer<Void>);
-final _native_ackpacket_create_type native_ackpacket_create = _peardropNative.lookup<NativeFunction<_native_ackpacket_create_type_ffi>>("ackpacket_create").asFunction();
+final native_ackpacket_create = _peardropNative.lookupFunction<_native_ackpacket_create_type_ffi, _native_ackpacket_create_type>("ackpacket_create");
 typedef _native_ackpacket_get_type_type = Pointer<Void> Function(Pointer<Void>);
 typedef _native_ackpacket_get_type_type_ffi = Pointer<Void> Function(Pointer<Void>);
-final _native_ackpacket_get_type_type native_ackpacket_get_type = _peardropNative.lookup<NativeFunction<_native_ackpacket_get_type_type_ffi>>("ackpacket_get_type").asFunction();
+final native_ackpacket_get_type = _peardropNative.lookupFunction<_native_ackpacket_get_type_type_ffi, _native_ackpacket_get_type_type>("ackpacket_get_type");
 typedef _native_ackpacket_ext_tcp_get_type = int Function(Pointer<Void>, Pointer<Uint16>);
 typedef _native_ackpacket_ext_tcp_get_type_ffi = Int32 Function(Pointer<Void>, Pointer<Uint16>);
-final _native_ackpacket_ext_tcp_get_type native_ackpacket_ext_tcp_get = _peardropNative.lookup<NativeFunction<_native_ackpacket_ext_tcp_get_type_ffi>>("ackpacket_ext_tcp_get").asFunction();
+final native_ackpacket_ext_tcp_get = _peardropNative.lookupFunction<_native_ackpacket_ext_tcp_get_type_ffi, _native_ackpacket_ext_tcp_get_type>("ackpacket_ext_tcp_get");
 typedef _native_ackpacket_ext_tcp_update_type = int Function(Pointer<Void>, int);
 typedef _native_ackpacket_ext_tcp_update_type_ffi = Int32 Function(Pointer<Void>, Uint16);
-final _native_ackpacket_ext_tcp_update_type native_ackpacket_ext_tcp_update = _peardropNative.lookup<NativeFunction<_native_ackpacket_ext_tcp_update_type_ffi>>("ackpacket_ext_tcp_update").asFunction();
+final native_ackpacket_ext_tcp_update = _peardropNative.lookupFunction<_native_ackpacket_ext_tcp_update_type_ffi, _native_ackpacket_ext_tcp_update_type>("ackpacket_ext_tcp_update");
 typedef _native_ackpacket_free_type = void Function(Pointer<Void>);
 typedef _native_ackpacket_free_type_ffi = Void Function(Pointer<Void>);
-final _native_ackpacket_free_type native_ackpacket_free = _peardropNative.lookup<NativeFunction<_native_ackpacket_free_type_ffi>>("ackpacket_free").asFunction();
+final native_ackpacket_free = _peardropNative.lookupFunction<_native_ackpacket_free_type_ffi, _native_ackpacket_free_type>("ackpacket_free");
 typedef _native_ackpacket_read_type = Pointer<Void> Function(Pointer<Uint8>, int);
 typedef _native_ackpacket_read_type_ffi = Pointer<Void> Function(Pointer<Uint8>, Uint64);
-final _native_ackpacket_read_type native_ackpacket_read = _peardropNative.lookup<NativeFunction<_native_ackpacket_read_type_ffi>>("ackpacket_read").asFunction();
+final native_ackpacket_read = _peardropNative.lookupFunction<_native_ackpacket_read_type_ffi, _native_ackpacket_read_type>("ackpacket_read");
 typedef _native_ackpacket_write_type = int Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>);
 typedef _native_ackpacket_write_type_ffi = Int32 Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>);
-final _native_ackpacket_write_type native_ackpacket_write = _peardropNative.lookup<NativeFunction<_native_ackpacket_write_type_ffi>>("ackpacket_write").asFunction();
+final native_ackpacket_write = _peardropNative.lookupFunction<_native_ackpacket_write_type_ffi, _native_ackpacket_write_type>("ackpacket_write");
 
 typedef _native_acktype_create_accept_type = Pointer<Void> Function(int);
 typedef _native_acktype_create_accept_type_ffi = Pointer<Void> Function(Uint8);
-final _native_acktype_create_accept_type native_acktype_create_accept = _peardropNative.lookup<NativeFunction<_native_acktype_create_accept_type_ffi>>("acktype_create_accept").asFunction();
+final native_acktype_create_accept = _peardropNative.lookupFunction<_native_acktype_create_accept_type_ffi, _native_acktype_create_accept_type>("acktype_create_accept");
 typedef _native_acktype_create_normal_type = Pointer<Void> Function(int);
 typedef _native_acktype_create_normal_type_ffi = Pointer<Void> Function(Uint8);
-final _native_acktype_create_normal_type native_acktype_create_normal = _peardropNative.lookup<NativeFunction<_native_acktype_create_normal_type_ffi>>("acktype_create_normal").asFunction();
+final native_acktype_create_normal = _peardropNative.lookupFunction<_native_acktype_create_normal_type_ffi, _native_acktype_create_normal_type>("acktype_create_normal");
 typedef _native_acktype_create_reject_type = Pointer<Void> Function(int);
 typedef _native_acktype_create_reject_type_ffi = Pointer<Void> Function(Uint8);
-final _native_acktype_create_reject_type native_acktype_create_reject = _peardropNative.lookup<NativeFunction<_native_acktype_create_reject_type_ffi>>("acktype_create_reject").asFunction();
+final native_acktype_create_reject = _peardropNative.lookupFunction<_native_acktype_create_reject_type_ffi, _native_acktype_create_reject_type>("acktype_create_reject");
 typedef _native_acktype_free_type = void Function(Pointer<Void>);
 typedef _native_acktype_free_type_ffi = Void Function(Pointer<Void>);
-final _native_acktype_free_type native_acktype_free = _peardropNative.lookup<NativeFunction<_native_acktype_free_type_ffi>>("acktype_free").asFunction();
+final native_acktype_free = _peardropNative.lookupFunction<_native_acktype_free_type_ffi, _native_acktype_free_type>("acktype_free");
 typedef _native_acktype_from_raw_type = Pointer<Void> Function(int);
 typedef _native_acktype_from_raw_type_ffi = Pointer<Void> Function(Uint8);
-final _native_acktype_from_raw_type native_acktype_from_raw = _peardropNative.lookup<NativeFunction<_native_acktype_from_raw_type_ffi>>("acktype_from_raw").asFunction();
+final native_acktype_from_raw = _peardropNative.lookupFunction<_native_acktype_from_raw_type_ffi, _native_acktype_from_raw_type>("acktype_from_raw");
 typedef _native_acktype_get_type_type = int Function(Pointer<Void>, Pointer<Uint8>);
 typedef _native_acktype_get_type_type_ffi = Int32 Function(Pointer<Void>, Pointer<Uint8>);
-final _native_acktype_get_type_type native_acktype_get_type = _peardropNative.lookup<NativeFunction<_native_acktype_get_type_type_ffi>>("acktype_get_type").asFunction();
+final native_acktype_get_type = _peardropNative.lookupFunction<_native_acktype_get_type_type_ffi, _native_acktype_get_type_type>("acktype_get_type");
 typedef _native_acktype_is_accepted_type = int Function(Pointer<Void>, Pointer<Uint8>);
 typedef _native_acktype_is_accepted_type_ffi = Int32 Function(Pointer<Void>, Pointer<Uint8>);
-final _native_acktype_is_accepted_type native_acktype_is_accepted = _peardropNative.lookup<NativeFunction<_native_acktype_is_accepted_type_ffi>>("acktype_is_accepted").asFunction();
+final native_acktype_is_accepted = _peardropNative.lookupFunction<_native_acktype_is_accepted_type_ffi, _native_acktype_is_accepted_type>("acktype_is_accepted");
 typedef _native_acktype_to_raw_type = int Function(Pointer<Void>, Pointer<Uint8>);
 typedef _native_acktype_to_raw_type_ffi = Int32 Function(Pointer<Void>, Pointer<Uint8>);
-final _native_acktype_to_raw_type native_acktype_to_raw = _peardropNative.lookup<NativeFunction<_native_acktype_to_raw_type_ffi>>("acktype_to_raw").asFunction();
+final native_acktype_to_raw = _peardropNative.lookupFunction<_native_acktype_to_raw_type_ffi, _native_acktype_to_raw_type>("acktype_to_raw");
 
 typedef _native_adpacket_create_type = Pointer<Void> Function();
 typedef _native_adpacket_create_type_ffi = Pointer<Void> Function();
-final _native_adpacket_create_type native_adpacket_create = _peardropNative.lookup<NativeFunction<_native_adpacket_create_type_ffi>>("adpacket_create").asFunction();
+final native_adpacket_create = _peardropNative.lookupFunction<_native_adpacket_create_type_ffi, _native_adpacket_create_type>("adpacket_create");
 typedef _native_adpacket_ext_tcp_get_type = int Function(Pointer<Void>, Pointer<Uint16>);
 typedef _native_adpacket_ext_tcp_get_type_ffi = Int32 Function(Pointer<Void>, Pointer<Uint16>);
-final _native_adpacket_ext_tcp_get_type native_adpacket_ext_tcp_get = _peardropNative.lookup<NativeFunction<_native_adpacket_ext_tcp_get_type_ffi>>("adpacket_ext_tcp_get").asFunction();
+final native_adpacket_ext_tcp_get = _peardropNative.lookupFunction<_native_adpacket_ext_tcp_get_type_ffi, _native_adpacket_ext_tcp_get_type>("adpacket_ext_tcp_get");
 typedef _native_adpacket_ext_tcp_update_type = int Function(Pointer<Void>, int);
 typedef _native_adpacket_ext_tcp_update_type_ffi = Int32 Function(Pointer<Void>, Uint16);
-final _native_adpacket_ext_tcp_update_type native_adpacket_ext_tcp_update = _peardropNative.lookup<NativeFunction<_native_adpacket_ext_tcp_update_type_ffi>>("adpacket_ext_tcp_update").asFunction();
+final native_adpacket_ext_tcp_update = _peardropNative.lookupFunction<_native_adpacket_ext_tcp_update_type_ffi, _native_adpacket_ext_tcp_update_type>("adpacket_ext_tcp_update");
 typedef _native_adpacket_free_type = void Function(Pointer<Void>);
 typedef _native_adpacket_free_type_ffi = Void Function(Pointer<Void>);
-final _native_adpacket_free_type native_adpacket_free = _peardropNative.lookup<NativeFunction<_native_adpacket_free_type_ffi>>("adpacket_free").asFunction();
+final native_adpacket_free = _peardropNative.lookupFunction<_native_adpacket_free_type_ffi, _native_adpacket_free_type>("adpacket_free");
 typedef _native_adpacket_read_type = Pointer<Void> Function(Pointer<Uint8>, int);
 typedef _native_adpacket_read_type_ffi = Pointer<Void> Function(Pointer<Uint8>, Uint64);
-final _native_adpacket_read_type native_adpacket_read = _peardropNative.lookup<NativeFunction<_native_adpacket_read_type_ffi>>("adpacket_read").asFunction();
+final native_adpacket_read = _peardropNative.lookupFunction<_native_adpacket_read_type_ffi, _native_adpacket_read_type>("adpacket_read");
 typedef _native_adpacket_write_type = int Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>);
 typedef _native_adpacket_write_type_ffi = Int32 Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>);
-final _native_adpacket_write_type native_adpacket_write = _peardropNative.lookup<NativeFunction<_native_adpacket_write_type_ffi>>("adpacket_write").asFunction();
+final native_adpacket_write = _peardropNative.lookupFunction<_native_adpacket_write_type_ffi, _native_adpacket_write_type>("adpacket_write");
 
 typedef _native_senderpacket_create_type = Pointer<Void> Function(Pointer<Utf8>, Pointer<Utf8>, int);
 typedef _native_senderpacket_create_type_ffi = Pointer<Void> Function(Pointer<Utf8>, Pointer<Utf8>, Uint64);
-final _native_senderpacket_create_type native_senderpacket_create = _peardropNative.lookup<NativeFunction<_native_senderpacket_create_type_ffi>>("senderpacket_create").asFunction();
+final native_senderpacket_create = _peardropNative.lookupFunction<_native_senderpacket_create_type_ffi, _native_senderpacket_create_type>("senderpacket_create");
 typedef _native_senderpacket_free_type = void Function(Pointer<Void>);
 typedef _native_senderpacket_free_type_ffi = Void Function(Pointer<Void>);
-final _native_senderpacket_free_type native_senderpacket_free = _peardropNative.lookup<NativeFunction<_native_senderpacket_free_type_ffi>>("senderpacket_free").asFunction();
+final native_senderpacket_free = _peardropNative.lookupFunction<_native_senderpacket_free_type_ffi, _native_senderpacket_free_type>("senderpacket_free");
 typedef _native_senderpacket_get_data_length_type = int Function(Pointer<Void>, Pointer<Uint64>);
 typedef _native_senderpacket_get_data_length_type_ffi = Int32 Function(Pointer<Void>, Pointer<Uint64>);
-final _native_senderpacket_get_data_length_type native_senderpacket_get_data_length = _peardropNative.lookup<NativeFunction<_native_senderpacket_get_data_length_type_ffi>>("senderpacket_get_data_length").asFunction();
+final native_senderpacket_get_data_length = _peardropNative.lookupFunction<_native_senderpacket_get_data_length_type_ffi, _native_senderpacket_get_data_length_type>("senderpacket_get_data_length");
 typedef _native_senderpacket_get_filename_type = Pointer<Utf8> Function(Pointer<Void>);
 typedef _native_senderpacket_get_filename_type_ffi = Pointer<Utf8> Function(Pointer<Void>);
-final _native_senderpacket_get_filename_type native_senderpacket_get_filename = _peardropNative.lookup<NativeFunction<_native_senderpacket_get_filename_type_ffi>>("senderpacket_get_filename").asFunction();
+final native_senderpacket_get_filename = _peardropNative.lookupFunction<_native_senderpacket_get_filename_type_ffi, _native_senderpacket_get_filename_type>("senderpacket_get_filename");
 typedef _native_senderpacket_get_mimetype_type = Pointer<Utf8> Function(Pointer<Void>);
 typedef _native_senderpacket_get_mimetype_type_ffi = Pointer<Utf8> Function(Pointer<Void>);
-final _native_senderpacket_get_mimetype_type native_senderpacket_get_mimetype = _peardropNative.lookup<NativeFunction<_native_senderpacket_get_mimetype_type_ffi>>("senderpacket_get_mimetype").asFunction();
+final native_senderpacket_get_mimetype = _peardropNative.lookupFunction<_native_senderpacket_get_mimetype_type_ffi, _native_senderpacket_get_mimetype_type>("senderpacket_get_mimetype");
 typedef _native_senderpacket_read_type = Pointer<Void> Function(Pointer<Uint8>, int);
 typedef _native_senderpacket_read_type_ffi = Pointer<Void> Function(Pointer<Uint8>, Uint64);
-final _native_senderpacket_read_type native_senderpacket_read = _peardropNative.lookup<NativeFunction<_native_senderpacket_read_type_ffi>>("senderpacket_read").asFunction();
+final native_senderpacket_read = _peardropNative.lookupFunction<_native_senderpacket_read_type_ffi, _native_senderpacket_read_type>("senderpacket_read");
 typedef _native_senderpacket_write_type = int Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>);
 typedef _native_senderpacket_write_type_ffi = Int32 Function(Pointer<Void>, Pointer<Pointer<Uint8>>, Pointer<Uint64>);
-final _native_senderpacket_write_type native_senderpacket_write = _peardropNative.lookup<NativeFunction<_native_senderpacket_write_type_ffi>>("senderpacket_write").asFunction();
+final native_senderpacket_write = _peardropNative.lookupFunction<_native_senderpacket_write_type_ffi, _native_senderpacket_write_type>("senderpacket_write");
 
 typedef _native_string_free_type = void Function(Pointer<Utf8>);
 typedef _native_string_free_type_ffi = Void Function(Pointer<Utf8>);
-final _native_string_free_type native_string_free = _peardropNative.lookup<NativeFunction<_native_string_free_type_ffi>>("string_free").asFunction();
+final native_string_free = _peardropNative.lookupFunction<_native_string_free_type_ffi, _native_string_free_type>("string_free");

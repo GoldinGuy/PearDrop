@@ -5,13 +5,12 @@
 Pod::Spec.new do |s|
   s.name             = 'libpeardrop'
   s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.summary          = 'Dart bindings for PearDrop protocol.'
   s.description      = <<-DESC
 A new flutter plugin project.
                        DESC
-  s.homepage         = 'http://example.com'
-  s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.homepage         = 'https://peardrop.app'
+  s.author           = { 'anirudhb' => 'anirudhb@users.noreply.github.com' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.vendored_libraries = '**/*.dylib'

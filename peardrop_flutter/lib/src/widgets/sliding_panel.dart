@@ -1,6 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
@@ -41,7 +41,7 @@ class SlidingPanel extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    ('An Unknown Device' ?? peerDevice.getName()) +
+                    (peerDevice.getName() ?? 'An Unknown Device') +
                         ' would like to share',
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
