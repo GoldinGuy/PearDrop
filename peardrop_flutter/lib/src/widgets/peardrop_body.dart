@@ -79,7 +79,7 @@ class PearDropBody extends StatelessWidget {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 150.0,
+                    height: 160.0,
                     decoration: BoxDecoration(
                       color: Colors.grey[50],
                       borderRadius: const BorderRadius.only(
@@ -94,13 +94,16 @@ class PearDropBody extends StatelessWidget {
                       ],
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(deviceName,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 19,
-                                color: Colors.black)),
+                        Padding(
+                          padding: EdgeInsets.only(top: 18),
+                          child: Text(deviceName,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 19,
+                                  color: Colors.black)),
+                        ),
                         Padding(
                           padding: EdgeInsets.only(top: 3),
                           child: InkWell(
