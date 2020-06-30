@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
+import 'package:peardrop/src/utilities/word_list.dart';
 
 typedef void FileReceiveCallBack();
 typedef void ResetCallBack();
@@ -12,6 +15,7 @@ typedef void SetPearPanelCallback(bool isOpen);
 class SlidingPanel extends StatelessWidget {
   SlidingPanel(
       {this.peerDevice,
+      this.senderIP,
       this.sc,
       this.filePath,
       this.setPearPanel,
@@ -21,6 +25,7 @@ class SlidingPanel extends StatelessWidget {
 
   final String filePath;
   final Device peerDevice;
+  final InternetAddress senderIP;
   final ScrollController sc;
   final FileReceiveCallBack accept;
   final ResetCallBack reset;
@@ -41,7 +46,10 @@ class SlidingPanel extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    (peerDevice.getName() ?? 'An Unknown Device') +
+                    ((senderIP != null
+                                ? WordList().ipToWords(senderIP)
+                                : null) ??
+                            'An Unknown Device') +
                         ' would like to share',
                     style: TextStyle(
                       fontWeight: FontWeight.normal,

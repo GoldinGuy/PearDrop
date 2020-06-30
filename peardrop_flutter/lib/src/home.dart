@@ -12,6 +12,7 @@ import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
+
 import 'utilities/nearby_device.dart';
 import 'widgets/peardrop_body.dart';
 
@@ -187,6 +188,7 @@ class _HomePageState extends State<HomePage> {
               panelBuilder: (sc) => SlidingPanel(
                 peerDevice:
                     peerIndex < devices.length ? devices[peerIndex] : null,
+                senderIP: file != null ? file.ip : null,
                 sc: sc,
                 setPearPanel: setPearPanel,
                 filePath: filePath,
