@@ -114,9 +114,7 @@ class PearDropBody extends StatelessWidget {
                                 ),
                                 padding: EdgeInsets.all(10),
                                 margin: EdgeInsets.fromLTRB(15, 5, 15, 11),
-                                child: Expanded(
-                                  child: _getFileContainer(),
-                                )),
+                                child: _getFileContainer()),
                           ),
                         ),
                         Padding(
@@ -152,15 +150,14 @@ class PearDropBody extends StatelessWidget {
               size: 20,
             ),
           ),
-          Expanded(
-            child: Text(fileName,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  color: Color(0xff559364),
-                )),
+          Text(fileName,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              color: Color(0xff559364),
+            ),
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 0, 0, 0),

@@ -64,31 +64,27 @@ class SlidingPanel extends StatelessWidget {
                           ),
                           padding: EdgeInsets.all(10),
                           margin: EdgeInsets.fromLTRB(15, 5, 15, 16),
-                          child: Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                  child: Icon(
-                                    Icons.description,
-                                    size: 20,
-                                  ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                child: Icon(
+                                  Icons.description,
+                                  size: 20,
                                 ),
-                                Expanded(
-                                  child:
-                                      Text(FileSelect().nameFromPath(filePath),
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                            color: Color(0xff559364),
-                                          )),
-                                ),
-                              ],
-                            ),
-                          )),
+                              ),
+                              Text(FileSelect().nameFromPath(filePath),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      color: Color(0xff559364),
+                                    )),
+                            ],
+                          ),
+                        ),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.fromLTRB(40, 17, 40, 5),
