@@ -58,33 +58,33 @@ class SlidingPanel extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey[200],
-                          ),
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.fromLTRB(15, 5, 15, 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                child: Icon(
-                                  Icons.description,
-                                  size: 20,
-                                ),
-                              ),
-                              Text(FileSelect().nameFromPath(filePath),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      color: Color(0xff559364),
-                                    )),
-                            ],
-                          ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.grey[200],
                         ),
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.fromLTRB(15, 5, 15, 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              child: Icon(
+                                Icons.description,
+                                size: 20,
+                              ),
+                            ),
+                            Text(FileSelect().nameFromPath(filePath),
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Color(0xff559364),
+                                )),
+                          ],
+                        ),
+                      ),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.fromLTRB(40, 17, 40, 5),

@@ -150,7 +150,8 @@ class PearDropBody extends StatelessWidget {
               size: 20,
             ),
           ),
-          Text(fileName,
+          Text(
+            fileName,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: TextStyle(

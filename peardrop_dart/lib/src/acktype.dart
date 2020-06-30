@@ -18,21 +18,25 @@ class AckType {
 
   /// Creates an [AckType] from its underlying pointer.
   AckType.ptr(this.ptr);
+
   /// Create a normal [AckType].
   AckType.normal(int type2) {
     ptr = native_acktype_create_normal(type2);
     assert(ptr != nullptr, 'Failed to create normal AckType');
   }
+
   /// Create an [AckType] that accepts.
   AckType.accept(int type2) {
     ptr = native_acktype_create_accept(type2);
     assert(ptr != nullptr, 'Failed to create accept AckType');
   }
+
   /// Create an [AckType] that rejects.
   AckType.reject(int type2) {
     ptr = native_acktype_create_reject(type2);
     assert(ptr != nullptr, 'Failed to create reject AckType');
   }
+
   /// Creates an [AckType] from a raw value.
   AckType.raw(int raw) {
     ptr = native_acktype_from_raw(raw);

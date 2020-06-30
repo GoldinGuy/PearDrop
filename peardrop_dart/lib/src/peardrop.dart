@@ -10,7 +10,8 @@ import 'ackpacket.dart';
 import 'adpacket.dart';
 import 'senderpacket.dart';
 
-Endpoint _multicastEndpoint = Endpoint.multicast(InternetAddress('224.0.0.3'), port: Port(65535));
+Endpoint _multicastEndpoint =
+    Endpoint.multicast(InternetAddress('224.0.0.3'), port: Port(65535));
 
 /// The main class for sending and receiving files.
 abstract class Peardrop {
@@ -47,16 +48,18 @@ abstract class Peardrop {
     await server.close();
     var data2 = await squeue.next;
     var spacket = SenderPacket.read(data2);
-    return PeardropFile._(squeue, socket, data.address, spacket.filename, spacket.mimetype, spacket.data_len);
+    return PeardropFile._(squeue, socket, data.address, spacket.filename,
+        spacket.mimetype, spacket.data_len);
   }
+
   /// Sends a file using the Peardrop protocol.
-  static Future<Stream<PeardropReceiver>> send(List<int> file, String filename, String mimetype) async {
+  static Future<Stream<PeardropReceiver>> send(
+      List<int> file, String filename, String mimetype) async {
     var selfPort = Random().nextInt(65535);
     if (selfPort <= 1024) selfPort += 1024;
     var udpSocket = await UDP.bind(Endpoint.any());
-    udpSocket.send((AdPacket()
-        ..tcpPort = selfPort)
-        .write(), _multicastEndpoint);
+    udpSocket.send(
+        (AdPacket()..tcpPort = selfPort).write(), _multicastEndpoint);
     // ignore: close_sinks
     var sc = StreamController<PeardropReceiver>();
     var tcpSocket = await ServerSocket.bind(InternetAddress.anyIPv4, selfPort);
@@ -65,7 +68,8 @@ abstract class Peardrop {
       var data = await queue.next;
       var packet = AckPacket.read(data);
       if (!packet.type.isAccepted) return;
-      sc.add(PeardropReceiver._(socket.remoteAddress, packet.tcpPort, file, filename, mimetype));
+      sc.add(PeardropReceiver._(
+          socket.remoteAddress, packet.tcpPort, file, filename, mimetype));
     });
     return sc.stream;
   }
@@ -77,14 +81,18 @@ class PeardropFile {
   final InternetAddress ip;
   final StreamQueue _queue;
   final Socket _socket;
+
   /// Filename of the file being received.
   final String filename;
+
   /// MIME type of the file being received.
   final String mimetype;
+
   /// Size of the file being received, in bytes.
   final int data_len;
 
-  PeardropFile._(this._queue, this._socket, this.ip, this.filename, this.mimetype, this.data_len);
+  PeardropFile._(this._queue, this._socket, this.ip, this.filename,
+      this.mimetype, this.data_len);
 
   /// Accept the file and receive it.
   Future<List<int>> accept() async {
@@ -99,7 +107,7 @@ class PeardropFile {
         bb.add(chunk);
         remaining -= chunk.length;
       } else {
-        bb.add(chunk.sublist(0, chunk.length-remaining));
+        bb.add(chunk.sublist(0, chunk.length - remaining));
         remaining = 0;
       }
       if (remaining <= 0) break;
@@ -111,6 +119,7 @@ class PeardropFile {
     await _socket.close();
     return out;
   }
+
   /// Reject the transfer of this file.
   Future<void> reject() async {
     var packet = AckPacket(AckType.reject(AckTypeType.SENDER_PACKET));
@@ -135,7 +144,8 @@ class PeardropReceiver {
   final String _filename;
   final String _mimetype;
 
-  PeardropReceiver._(this.ip, this._port, this._file, this._filename, this._mimetype);
+  PeardropReceiver._(
+      this.ip, this._port, this._file, this._filename, this._mimetype);
 
   /// Send to this receiver.
   Future<void> send() async {

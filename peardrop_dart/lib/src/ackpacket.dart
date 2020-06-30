@@ -16,6 +16,7 @@ class AckPacket {
     ptr = native_ackpacket_create(type.ptr);
     assert(ptr != nullptr, 'Failed to create AckPacket');
   }
+
   /// Read an [AckPacket] from the given buffer.
   AckPacket.read(List<int> buffer) {
     // Copy into C buffer
@@ -41,6 +42,7 @@ class AckPacket {
     free(out);
     return value == 0 ? null : value;
   }
+
   /// Sets the TCP extension's port of this AckPacket.
   set tcpPort(int newValue) {
     var res = native_ackpacket_ext_tcp_update(ptr, newValue);

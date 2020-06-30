@@ -15,6 +15,7 @@ class AdPacket {
     ptr = native_adpacket_create();
     assert(ptr != nullptr, 'Failed to create AdPacket');
   }
+
   /// Reads an [AdPacket] from the given buffer.
   AdPacket.read(List<int> buffer) {
     var cbuffer = cbcopy(buffer);
@@ -32,6 +33,7 @@ class AdPacket {
     free(out);
     return value == 0 ? null : value;
   }
+
   /// Sets the TCP extension's port of this AckPacket.
   set tcpPort(int newValue) {
     var res = native_adpacket_ext_tcp_update(ptr, newValue);

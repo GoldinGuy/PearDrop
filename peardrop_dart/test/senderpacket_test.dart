@@ -18,7 +18,8 @@ void main() {
       triple_byte & 0xff,
       ...utf8.encode(filename),
       ...utf8.encode(mimetype),
-      0, /*exts_len*/
+      0,
+      /*exts_len*/
       (data_len >> 56) & 0xff,
       (data_len >> 48) & 0xff,
       (data_len >> 40) & 0xff,
@@ -44,7 +45,8 @@ void main() {
       triple_byte & 0xff,
       ...utf8.encode(filename),
       ...utf8.encode(mimetype),
-      0, /*exts_len*/
+      0,
+      /*exts_len*/
       (data_len >> 56) & 0xff,
       (data_len >> 48) & 0xff,
       (data_len >> 40) & 0xff,
