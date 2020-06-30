@@ -150,14 +150,16 @@ class PearDropBody extends StatelessWidget {
               size: 20,
             ),
           ),
-          Text(
-            fileName,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: Color(0xff559364),
+          Expanded(
+            child: Text(
+              fileName,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                color: Color(0xff559364),
+              ),
             ),
           ),
           Padding(
@@ -222,8 +224,11 @@ class PearDropBody extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding:
-                    EdgeInsets.only(top: deviceHeight, left: 15, right: 15),
+                padding: EdgeInsets.only(
+                    top: deviceHeight,
+                    left: 15,
+                    right: 15,
+                    bottom: deviceHeight),
                 child: RichText(
                   text: TextSpan(
                     text:
