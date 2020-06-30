@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/widgets/progress_device.dart';
-import 'package:peardrop/src/widgets/radar.dart';
 
 typedef void DeviceSelectCallback(int index);
 typedef void FileSelectCallback();
@@ -79,7 +78,7 @@ class PearDropBody extends StatelessWidget {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 160.0,
+                    height: 150.0,
                     decoration: BoxDecoration(
                       color: Colors.grey[50],
                       borderRadius: const BorderRadius.only(
@@ -94,15 +93,15 @@ class PearDropBody extends StatelessWidget {
                       ],
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 18),
-                          child: Text(deviceName,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 19,
-                                  color: Colors.black)),
+                        Text(
+                          deviceName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 19,
+                            color: Colors.black,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 3),
@@ -111,22 +110,29 @@ class PearDropBody extends StatelessWidget {
                               fileSelect();
                             },
                             child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.grey[200],
-                                ),
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.fromLTRB(15, 5, 15, 11),
-                                child: _getFileContainer()),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
+                              ),
+                              padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.fromLTRB(15, 5, 15, 11),
+                              child: _getFileContainer(),
+                            ),
                           ),
                         ),
-                        Padding(
+                        SafeArea(
+                          child: Padding(
                             padding: EdgeInsets.only(bottom: 4),
-                            child: Text(version,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                    color: Colors.grey)))
+                            child: Text(
+                              version,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
