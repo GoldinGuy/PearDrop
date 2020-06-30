@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
@@ -10,6 +11,7 @@ import 'package:peardrop/src/utilities/ip.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
 import 'utilities/nearby_device.dart';
 import 'widgets/peardrop_body.dart';
 
@@ -59,8 +61,21 @@ class _HomePageState extends State<HomePage> {
 
   void _handleFileReceive() async {
     var temp = await file.accept();
-    var fileSave = File(file.filename);
-    await fileSave.writeAsBytes(temp);
+    if (Platform.isAndroid || Platform.isIOS) {
+      // share
+      await WcFlutterShare.share(
+        sharePopupTitle: 'PearDrop',
+        mimeType: file.mimetype,
+        fileName: file.filename,
+        bytesOfFile: temp,
+      );
+    } else {
+      // file chooser + save
+      var result = await showSavePanel(suggestedFileName: file.filename);
+      if (result.canceled || result.paths.isEmpty) return;
+      var path = result.paths.first;
+      await File(path).writeAsBytes(temp, flush: true);
+    }
   }
 
   Future<void> _handleFileSelect() async {

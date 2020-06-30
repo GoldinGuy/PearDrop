@@ -18,6 +18,8 @@ dependencies:
 
   file_picker: ^1.9.0+1
 
+  wc_flutter_share: ^0.2.2
+
   device_info: ^0.4.2+4
 
   get_ip:
