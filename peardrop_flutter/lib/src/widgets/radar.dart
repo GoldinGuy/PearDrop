@@ -72,8 +72,9 @@ class RenderRadar extends RenderBox
 
   @override
   void setupParentData(RenderObject child) {
-    if (child.parentData is! RadarParentData)
+    if (child.parentData is! RadarParentData) {
       child.parentData = RadarParentData();
+    }
   }
 
   @override
@@ -95,7 +96,7 @@ class RenderRadar extends RenderBox
         clsi(center, wave5radius, Offset.zero, Offset(0, size.height)), 1, -1);
 
     // find position of first child, distance + half width, higher x coord
-    RenderBox child = firstChild;
+    var child = firstChild;
     Offset nextPosition(Offset oldPosition, RenderBox newChild) {
       newChild.layout(constraints.loosen(), parentUsesSize: true);
       var b = smm(cci(oldPosition, childGap, center, wave5radius), -1, 1);
@@ -207,7 +208,7 @@ List<Offset> cci(Offset c, double r, Offset C, double R) {
   C = cg2m(C);
   // https://stackoverflow.com/a/44956948
   double distance(Offset p1, Offset p2) {
-    Offset d = p1 - p2;
+    var d = p1 - p2;
     return sqrt(d.dx * d.dx + d.dy * d.dy);
   }
 

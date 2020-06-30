@@ -16,8 +16,10 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         title: Center(
-          child:
-              Text('Settings', style: TextStyle(fontWeight: FontWeight.w500)),
+          child: Text(
+            'Settings',
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
         ),
         leading: IconButton(
           tooltip: 'Profile',
@@ -93,7 +95,11 @@ class SettingsScreen extends StatelessWidget {
           ),
           onPressed: onPressed,
           child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, top: 26, bottom: 26),
+            padding: const EdgeInsets.only(
+              left: 8.0,
+              top: 26,
+              bottom: 26,
+            ),
             child: SizedBox(
               width: double.infinity,
               child: child,

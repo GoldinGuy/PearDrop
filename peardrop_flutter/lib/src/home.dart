@@ -5,6 +5,7 @@ import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
+import 'package:package_info/package_info.dart';
 import 'package:peardrop/src/utilities/device_details.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/ip.dart';
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   int peerIndex = 0;
   FileSelect select;
   String filePath = '', deviceName = 'PearDrop Device';
+  String version = '';
   InternetAddress ip;
   PeardropFile file;
   final PanelController _pc = PanelController();
@@ -41,6 +43,11 @@ class _HomePageState extends State<HomePage> {
     _getDeviceName();
     DeviceDetails.getDeviceDetails();
     _handleFileAccept();
+    PackageInfo.fromPlatform().then((info) {
+      setState(() {
+        version = '${info.version}+${info.buildNumber}';
+      });
+    });
   }
 
   void _handleFileAccept() async {
@@ -178,13 +185,14 @@ class _HomePageState extends State<HomePage> {
               backdropOpacity: 0.2,
               isDraggable: false,
               body: PearDropBody(
-                  devices: devices,
-                  fileSelect: _handleFileSelect,
-                  version: '1.0.0+0',
-                  fileName: select.nameFromPath(filePath),
-                  fileShare: _handleFileShare,
-                  deviceName: deviceName,
-                  fileSelected: fileSelected),
+                devices: devices,
+                fileSelect: _handleFileSelect,
+                version: version,
+                fileName: select.nameFromPath(filePath),
+                fileShare: _handleFileShare,
+                deviceName: deviceName,
+                fileSelected: fileSelected,
+              ),
               panelBuilder: (sc) => SlidingPanel(
                 peerDevice:
                     peerIndex < devices.length ? devices[peerIndex] : null,
@@ -196,8 +204,9 @@ class _HomePageState extends State<HomePage> {
                 accept: _handleFileReceive,
               ),
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(18.0),
-                  topRight: Radius.circular(18.0)),
+                topLeft: Radius.circular(18.0),
+                topRight: Radius.circular(18.0),
+              ),
             ),
           ],
         ),

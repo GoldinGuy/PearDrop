@@ -23,6 +23,8 @@ dependencies:
 
   device_info: ^0.4.2+4
 
+  package_info: ^0.4.1
+
   get_ip:
     path: ../packages/get_ip/
 
