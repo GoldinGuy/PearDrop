@@ -35,9 +35,10 @@ class PearDropBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var deviceHeight = 25.0;
+    var deviceHeight = 25.0, containerHeight = 22.0;
     if (Platform.isWindows || Platform.isMacOS) {
       deviceHeight = 2.5;
+      containerHeight = 40.0;
     }
 
     return Container(
@@ -96,14 +97,17 @@ class PearDropBody extends StatelessWidget {
                       ),
                       child: SafeArea(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              deviceName,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 19,
-                                color: Colors.black,
+                            Padding(
+                              padding: EdgeInsets.only(top: containerHeight),
+                              child: Text(
+                                deviceName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 19,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                             Padding(
@@ -218,7 +222,7 @@ class PearDropBody extends StatelessWidget {
     if (!fileSelected) {
       var deviceHeight = 25.0;
       if (Platform.isWindows || Platform.isMacOS) {
-        deviceHeight = 2.5;
+        deviceHeight = 5;
       }
 
       return Expanded(
@@ -243,10 +247,10 @@ class PearDropBody extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  top: deviceHeight,
+                  top: 15,
                   left: 15,
                   right: 15,
-                  bottom: deviceHeight,
+                  bottom: 20,
                 ),
                 child: RichText(
                   text: TextSpan(

@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             file = file;
           });
           setPearPanel(true);
-          setFile(true, file.filename);
+          setFile(false, file.filename);
         }
       } catch (e) {
         print('error caught: $e');

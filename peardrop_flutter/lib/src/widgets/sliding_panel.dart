@@ -81,13 +81,15 @@ class SlidingPanel extends StatelessWidget {
                             size: 20,
                           ),
                         ),
-                        Text(
-                          FileSelect().nameFromPath(filePath),
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Color(0xff559364),
+                        Expanded(
+                          child: Text(
+                            FileSelect().nameFromPath(filePath),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Color(0xff559364),
+                            ),
                           ),
                         ),
                       ],
