@@ -38,8 +38,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     select = FileSelect();
     fileSelected = false;
-    // devices.add(
-    //     Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
+    //devices.add(
+    //    Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
+    //devices.add(Device.dummy(Icons.computer, InternetAddress('3.45.253.192')));
     _getDeviceName();
     DeviceDetails.getDeviceDetails();
     _handleFileAccept();

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/widgets/progress_device.dart';
+import 'package:peardrop/src/widgets/radar.dart';
 
 typedef void DeviceSelectCallback(int index);
 typedef void FileSelectCallback();
@@ -272,30 +273,35 @@ class PearDropBody extends StatelessWidget {
       );
     } else {
       return Expanded(
-        child: GridView.count(
-          crossAxisCount: 3,
+        child: Radar(
           children: List.generate(devices.length, (i) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.grey[200],
+            return Container(
+              decoration: BoxDecoration(
+                  //border: Border.all(),
                   ),
-                  padding: EdgeInsets.all(8),
-                  margin: EdgeInsets.only(bottom: 6),
-                  child: Text(
-                    devices[i].getName(),
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.grey[200],
+                    ),
+                    padding: EdgeInsets.all(8),
+                    margin: EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      devices[i].getName(),
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
                   ),
-                ),
-                DeviceProgressIndicator(
-                  fileShare: fileShare,
-                  i: i,
-                  devices: devices,
-                )
-              ],
+                  DeviceProgressIndicator(
+                    fileShare: fileShare,
+                    i: i,
+                    devices: devices,
+                  )
+                ],
+              ),
             );
           }),
         ),
