@@ -220,9 +220,9 @@ class PearDropBody extends StatelessWidget {
 
   Widget _getBody() {
     if (!fileSelected) {
-      var deviceHeight = 25.0;
+      var deviceHeight = 23.0;
       if (Platform.isWindows || Platform.isMacOS) {
-        deviceHeight = 5;
+        deviceHeight = 15;
       }
 
       return Expanded(
@@ -250,7 +250,7 @@ class PearDropBody extends StatelessWidget {
                   top: 15,
                   left: 15,
                   right: 15,
-                  bottom: 20,
+                  bottom: deviceHeight,
                 ),
                 child: RichText(
                   text: TextSpan(
@@ -265,7 +265,7 @@ class PearDropBody extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                padding: EdgeInsets.fromLTRB(0, 8, 0, 3),
                 child: Container(
                   child: getHeaderImage(),
                   height: 288,

@@ -90,6 +90,7 @@ class SlidingPanel extends StatelessWidget {
                               fontSize: 14,
                               color: Color(0xff559364),
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ],
