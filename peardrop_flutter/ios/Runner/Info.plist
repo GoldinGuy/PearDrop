@@ -29,7 +29,9 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Send and receive files</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Send and receive files</string>
+	<string>Allows the user to accurately send and recieve files with nearby devices</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allows the user to accurately send and recieve files with nearby devices</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Send and receive files</string>
 	<key>NSPhotoLibraryUsageDescription</key>
