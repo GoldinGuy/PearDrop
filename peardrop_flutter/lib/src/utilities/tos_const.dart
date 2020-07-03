@@ -3,6 +3,8 @@ We are doing this as an accommodation, we are not collecting your information, a
 
 PearDrop is not affiliated in any way with any other file-sharing service (i.e. AirDrop, ShareDrop, SnapDrop, etc)
 
+Created by students GoldinGuy & Uanirudhx
+
 Terms of Use
 
 PLEASE READ THIS TERMS OF USE CAREFULLY. These terms of use (“Agreement”) govern your use of our PearDrop software, products, and/or services (collectively, “Products”) and any information, content or appearing on or through the Products (collectively referred to as “Content”). By accessing or using the Products, you agree to the terms of this Agreement. If you have entered into another agreement with PearDrop concerning specific Products, then the terms of that agreement controls where it conflicts with these terms. PearDrop reserves the right, at any time, to modify, alter, update or remove portions of this Agreement. Please check this Agreement (as well as our privacy policy) from time to time as your continued use of the Product signifies your acceptance of any changed items.
