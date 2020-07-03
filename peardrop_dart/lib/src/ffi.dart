@@ -7,7 +7,7 @@ import 'package:ffi/ffi.dart';
 final String _libraryPath =
     Platform.isAndroid ? "libpeardrop_capi.so" :
     Platform.isMacOS ? "libpeardrop_capi.dylib" :
-    Platform.isIOS ? "libpeardrop_capi.dylib" :
+    Platform.isIOS ? "libpeardrop.framework/libpeardrop" :
     Platform.isLinux ? "libpeardrop_capi.so" :
     Platform.isWindows ? "libpeardrop_capi.dll" : null;
 final DynamicLibrary _peardropNative = DynamicLibrary.open(_libraryPath);

@@ -14,7 +14,7 @@ Dart bindings for PearDrop protocol.
   s.source           = { :path => '.' }
   s.public_header_files = 'Classes/**/*.h'
   s.source_files = 'Classes/**/*'
-  s.vendored_libraries = '**/*.dylib'
+  s.vendored_libraries = '**/*.a'
   s.dependency 'Flutter'
   s.platform = :ios, '8.0'
 
