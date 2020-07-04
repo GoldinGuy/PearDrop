@@ -93,6 +93,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _handleFileSelect() async {
     var temp = await selectFile();
     setState(() {
+      devices = [];
       filePath = temp;
     });
     if (filePath != null) {
