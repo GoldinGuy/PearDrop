@@ -130,6 +130,7 @@ class PeardropFile {
     _socket.add(packet.write());
     await _socket.flush();
     await _socket.close();
+    _didAction = true;
     return out;
   }
 
@@ -140,6 +141,7 @@ class PeardropFile {
     _socket.add(packet.write());
     await _socket.flush();
     await _socket.close();
+    _didAction = true;
   }
 }
 

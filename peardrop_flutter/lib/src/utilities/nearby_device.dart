@@ -13,44 +13,36 @@ class Device {
   IconData _iconName;
   InternetAddress _ipAddress;
   PeardropReceiver _receiver;
-  SharingState _state;
+  SharingState state;
 
   Device(IconData icon, PeardropReceiver receive) {
     _receiver = receive;
     _deviceName = WordList.ipToWords(receive.ip);
     _ipAddress = receive.ip;
     _iconName = icon;
-    _state = SharingState.neutral;
+    state = SharingState.neutral;
   }
 
   Device.dummy(IconData icon, InternetAddress address) {
     _deviceName = WordList.ipToWords(address);
     _ipAddress = address;
     _iconName = icon;
-    _state = SharingState.neutral;
+    state = SharingState.neutral;
   }
 
-  String getName() {
+  String get name {
     return _deviceName;
   }
 
-  InternetAddress getIP() {
+  InternetAddress get ip {
     return _ipAddress;
   }
 
-  IconData getIcon() {
+  IconData get icon {
     return _iconName;
   }
 
-  PeardropReceiver getReceiver() {
+  PeardropReceiver get receiver {
     return _receiver;
-  }
-
-  SharingState getSharingState() {
-    return _state;
-  }
-
-  void setSharingState(SharingState share) {
-    _state = share;
   }
 }

@@ -1,8 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
-import 'package:peardrop/src/utilities/sharing_service.dart';
 
 typedef FileReceiveCallback();
 
@@ -38,7 +37,7 @@ class SlidingPanelAccept extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  peerDevice.getName(),
+                  peerDevice.name,
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 20.0,
@@ -52,7 +51,7 @@ class SlidingPanelAccept extends StatelessWidget {
                   elevation: 0.0,
                   fillColor: Color(0xff91c27d),
                   child: Icon(
-                    peerDevice.getIcon(),
+                    peerDevice.icon,
                     size: 35.0,
                     color: Colors.white,
                   ),

@@ -3,17 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path/path.dart' as p;
 import 'package:peardrop/src/utilities/nearby_device.dart';
 import 'package:peardrop/src/widgets/progress_device.dart';
 import 'package:peardrop/src/widgets/radar.dart';
 
-typedef void DeviceSelectCallback(int index);
-typedef void FileSelectCallback();
-
 class PearDropBody extends StatelessWidget {
   PearDropBody({
     this.devices,
-    this.fileShare,
     this.fileSelect,
     this.fileSelected,
     this.fileName,
@@ -22,9 +19,8 @@ class PearDropBody extends StatelessWidget {
   });
 
   final List<Device> devices;
-  final DeviceSelectCallback fileShare;
   final String deviceName, fileName, version;
-  final FileSelectCallback fileSelect;
+  final Function() fileSelect;
   final bool fileSelected;
 
   final List<Image> headers = [
@@ -113,9 +109,7 @@ class PearDropBody extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(top: 3),
                               child: InkWell(
-                                onTap: () {
-                                  fileSelect();
-                                },
+                                onTap: fileSelect,
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
@@ -154,7 +148,7 @@ class PearDropBody extends StatelessWidget {
   }
 
   Widget _getFileContainer() {
-    if (fileName != null && fileName != '') {
+    if (fileName != null && fileName.isNotEmpty) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -168,7 +162,7 @@ class PearDropBody extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              fileName,
+              p.basename(fileName),
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -193,14 +187,17 @@ class PearDropBody extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Center(
-            child: Text(
-              'Select a file to start sharing',
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                color: Color(0xff559364),
+            child: Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Text(
+                'Select a file to start sharing',
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Color(0xff559364),
+                ),
               ),
             ),
           ),
@@ -251,14 +248,11 @@ class PearDropBody extends StatelessWidget {
                 right: 15,
                 bottom: deviceHeight,
               ),
-              child: RichText(
-                text: TextSpan(
-                  text:
-                      'Click below to start sharing, or begin from another nearby device',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+              child: Text(
+                'Click below to start sharing, or begin from another nearby device',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -281,29 +275,7 @@ class PearDropBody extends StatelessWidget {
               decoration: BoxDecoration(
                   //border: Border.all(),
                   ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey[200],
-                    ),
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(bottom: 6),
-                    child: Text(
-                      devices[i].getName(),
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  DeviceProgressIndicator(
-                    fileShare: fileShare,
-                    i: i,
-                    devices: devices,
-                  )
-                ],
-              ),
+              child: DeviceWidget(device: devices[i]),
             );
           }),
         ),

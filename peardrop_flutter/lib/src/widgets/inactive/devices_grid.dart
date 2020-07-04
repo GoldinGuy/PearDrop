@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
 typedef FileShareCallback(int index);
@@ -48,7 +48,7 @@ class DevicesGrid extends StatelessWidget {
                           elevation: 0.0,
                           fillColor: Color(0xff91c27d),
                           child: Icon(
-                            devices[index].getIcon(),
+                            devices[index].icon,
                             size: 35.0,
                             color: Colors.white,
                           ),
@@ -58,7 +58,7 @@ class DevicesGrid extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                           child: Text(
-                            devices[index].getName(),
+                            devices[index].name,
                             style: TextStyle(
                               fontSize: 15,
                             ),
@@ -67,7 +67,7 @@ class DevicesGrid extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 6, 0, 0),
                           child: Text(
-                            devices[index].getIP().address.toString(),
+                            devices[index].ip.address.toString(),
                             style: TextStyle(fontSize: 13, color: Colors.grey),
                           ),
                         ),
