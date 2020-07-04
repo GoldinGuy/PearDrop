@@ -43,8 +43,13 @@ class _HomePageState extends State<HomePage> {
     }();
     receiverFuture = _startReceive();
     () async {
-      final info = await PackageInfo.fromPlatform();
-      setState(() => version = '${info.version}+${info.buildNumber}');
+      if (Platform.isIOS || Platform.isAndroid) {
+        final info = await PackageInfo.fromPlatform();
+        setState(() => version = '${info.version}+${info.buildNumber}');
+      } else {
+        // TODO: fix so it actually displays version for desktop
+        setState(() => version = '1.0.0+11');
+      }
     }();
   }
 

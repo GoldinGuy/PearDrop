@@ -12,11 +12,14 @@ Future<String> selectFile(
       allowedExtensions: allowedExtensions,
     );
   } else {
-    //String initialDirectory = (await getApplicationDocumentsDirectory()).path;
+    // final initialDirectory = (await getApplicationDocumentsDirectory()).path;
+    // final result = await showOpenPanel(
+    //     allowsMultipleSelection: false, initialDirectory: initialDirectory);
+    // path = '${result.paths.join('\n')}';
     final result = await showOpenPanel(); //initialDirectory: initialDirectory);
     path = result.paths.isEmpty ? null : result.paths.first;
+    print(path);
   }
-  // XXX: Not sure about the ...
   if (path == null || path.isEmpty || path == '...') {
     return null;
   } else {

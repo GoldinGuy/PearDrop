@@ -226,53 +226,51 @@ class PearDropBody extends StatelessWidget {
       }
 
       return Expanded(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: deviceHeight,
-                  left: 15,
-                  right: 15,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                top: deviceHeight,
+                left: 15,
+                right: 15,
+              ),
+              child: Text(
+                'Share With PearDrop',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 23,
                 ),
-                child: Text(
-                  'Share With PearDrop',
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: 15,
+                left: 15,
+                right: 15,
+                bottom: deviceHeight,
+              ),
+              child: RichText(
+                text: TextSpan(
+                  text:
+                      'Click below to start sharing, or begin from another nearby device',
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                     color: Colors.white,
-                    fontSize: 23,
                   ),
                 ),
+                textAlign: TextAlign.center,
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 15,
-                  left: 15,
-                  right: 15,
-                  bottom: deviceHeight,
-                ),
-                child: RichText(
-                  text: TextSpan(
-                    text:
-                        'Click below to start sharing, or begin from another nearby device',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 8, 0, 3),
+              child: Container(
+                child: getHeaderImage(),
+                height: 288,
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 8, 0, 3),
-                child: Container(
-                  child: getHeaderImage(),
-                  height: 288,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     } else {
