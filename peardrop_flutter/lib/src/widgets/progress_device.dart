@@ -5,47 +5,51 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
-class DeviceProgressIndicator extends StatefulWidget {
-  DeviceProgressIndicator({this.device});
+class DeviceWidget extends StatefulWidget {
+  DeviceWidget({@required this.device});
   final Device device;
 
   @override
-  _DeviceProgressIndicatorState createState() =>
-      _DeviceProgressIndicatorState(device: device);
+  _DeviceWidgetState createState() => _DeviceWidgetState(device: device);
 }
 
-typedef void DeviceSelectCallback(int index);
-
-class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
-    with TickerProviderStateMixin {
-  double percentage = 0.0, newPercentage = 0.0;
-  AnimationController animationController;
-  _DeviceProgressIndicatorState({this.device});
-  final Device device;
+class _DeviceWidgetState extends State<DeviceWidget> {
+  _DeviceWidgetState({@required this.device});
+  Device device;
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      child: getStateWidget(),
-      onPressed: () async {
-        if (device.state == SharingState.neutral) {
-          animateButton();
-          print('attempting to send');
-          await fileShare();
-        }
-      },
-      elevation: 0.0,
-      fillColor: Color(0xff91c27d),
-      padding: EdgeInsets.all(15.0),
-      shape: CircleBorder(),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.grey[200],
+          ),
+          padding: EdgeInsets.all(8),
+          margin: EdgeInsets.only(bottom: 6),
+          child: Text(
+            device.name,
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+          ),
+        ),
+        RawMaterialButton(
+          child: getStateWidget(),
+          onPressed: () async {
+            if (device.state == SharingState.neutral) {
+              setState(() => device.state = SharingState.sharing);
+              print('attempting to send');
+              await fileShare();
+            }
+          },
+          elevation: 0.0,
+          fillColor: Color(0xff91c27d),
+          padding: EdgeInsets.all(15.0),
+          shape: CircleBorder(),
+        )
+      ],
     );
-  }
-
-  Future<void> fileShare() async {
-    await device.receiver.send();
-    setState(() => device.state = SharingState.done);
-    await Future.delayed(Duration(seconds: 2),
-        () => setState(() => device.state = SharingState.neutral));
   }
 
   Widget getStateWidget() {
@@ -68,9 +72,12 @@ class _DeviceProgressIndicatorState extends State<DeviceProgressIndicator>
     }
   }
 
-  void animateButton() {
-    setState(() {
-      device.state = SharingState.sharing;
-    });
+  Future<void> fileShare() async {
+    await device.receiver.send();
+    setState(() => device.state = SharingState.done);
+    await Future.delayed(
+      Duration(seconds: 2),
+      () => setState(() => device.state = SharingState.neutral),
+    );
   }
 }

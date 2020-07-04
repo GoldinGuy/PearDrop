@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
         if (file != null) {
           setState(() {
             file = file;
-            filePath = file.filename;
             pc.open();
           });
         }

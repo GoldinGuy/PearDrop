@@ -270,30 +270,11 @@ class PearDropBody extends StatelessWidget {
       return Expanded(
         child: Radar(
           children: List.generate(devices.length, (i) {
-            final device = devices[i];
             return Container(
               decoration: BoxDecoration(
                   //border: Border.all(),
                   ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey[200],
-                    ),
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(bottom: 6),
-                    child: Text(
-                      device.name,
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  DeviceProgressIndicator(device: device)
-                ],
-              ),
+              child: DeviceWidget(device: devices[i]),
             );
           }),
         ),
