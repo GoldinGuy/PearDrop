@@ -24,9 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
-  String filePath;
-  String deviceName = 'PearDrop Device';
-  String version;
+  String deviceName = 'PearDrop Device', version = "0.0.0+1", filePath;
   PeardropFile file;
   Future<void> receiverFuture;
   final pc = PanelController();

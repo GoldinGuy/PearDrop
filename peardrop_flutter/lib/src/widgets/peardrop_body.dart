@@ -144,7 +144,7 @@ class PearDropBody extends StatelessWidget {
   }
 
   Widget _getInfoContainer(double width) {
-    var containerHeight = 22.0;
+    var containerHeight = 20.0;
     if (Platform.isWindows || Platform.isMacOS) {
       containerHeight = 40.0;
     }
@@ -232,7 +232,6 @@ class PearDropBody extends StatelessWidget {
               children: [
                 Container(
                   width: width,
-                  //height: 150.0,
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
                     borderRadius: const BorderRadius.only(
