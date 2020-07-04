@@ -35,7 +35,6 @@ class PearDropBody extends StatelessWidget {
     if (Platform.isWindows || Platform.isMacOS) {
       deviceHeight = 2.5;
     }
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -77,54 +76,57 @@ class PearDropBody extends StatelessWidget {
 
   Widget _getBody() {
     if (!fileSelected) {
-      var deviceHeight = 23.0;
+      var deviceHeight = 26.0;
       if (Platform.isWindows || Platform.isMacOS) {
-        deviceHeight = 15;
+        deviceHeight = 17;
       }
-
       return Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: deviceHeight,
-                left: 15,
-                right: 15,
-              ),
-              child: Text(
-                'Share With PearDrop',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 23,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: deviceHeight,
+                    left: 15,
+                    right: 15,
+                  ),
+                  child: Text(
+                    'Share With PearDrop',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 23,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 15,
-                left: 15,
-                right: 15,
-                bottom: deviceHeight,
-              ),
-              child: Text(
-                'Click below to start sharing, or begin from another nearby device',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 15,
+                    left: 15,
+                    right: 15,
+                    bottom: deviceHeight,
+                  ),
+                  child: Text(
+                    'Click below to start sharing, or begin from another nearby device',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                textAlign: TextAlign.center,
-              ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 8, 0, 3),
+                  child: Container(
+                    child: headers[Random().nextInt(headers.length)],
+                    height: 288,
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 8, 0, 3),
-              child: Container(
-                child: headers[Random().nextInt(headers.length)],
-                height: 288,
-              ),
-            ),
-          ],
+          ),
         ),
       );
     } else {
@@ -146,7 +148,6 @@ class PearDropBody extends StatelessWidget {
     if (Platform.isWindows || Platform.isMacOS) {
       containerHeight = 40.0;
     }
-
     if (!fileSelected) {
       return Stack(
         alignment: Alignment.topCenter,

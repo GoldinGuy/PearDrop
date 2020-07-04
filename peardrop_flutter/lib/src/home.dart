@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
 
         if (!(await isSelfIP(receiver.ip)) && !duplicate) {
           setState(() {
-            devices.add(Device(Icons.phone_iphone, receiver));
+            devices.add(Device(Icons.description, receiver));
           });
         }
         print('devices: ' + devices.toString());
