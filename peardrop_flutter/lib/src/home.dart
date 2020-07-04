@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:package_info/package_info.dart';
-import 'package:peardrop/src/utilities/device_details.dart';
+import 'package:path/path.dart' as p;
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/ip.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
@@ -24,47 +24,40 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
-  bool pearPanelOpen = false, fileSelected = false;
-  int peerIndex = 0;
-  FileSelect select;
-  String filePath = '', deviceName = 'PearDrop Device';
-  String version = '';
-  InternetAddress ip;
+  String filePath;
+  String deviceName = 'PearDrop Device';
+  String version;
   PeardropFile file;
-  final PanelController _pc = PanelController();
+  Future<void> receiverFuture;
+  final pc = PanelController();
 
   @override
   void initState() {
     super.initState();
-    select = FileSelect();
-    fileSelected = false;
     //devices.add(
     //    Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
     //devices.add(Device.dummy(Icons.computer, InternetAddress('3.45.253.192')));
-    _getDeviceName();
-    DeviceDetails.getDeviceDetails();
-    _handleFileAccept();
-    PackageInfo.fromPlatform().then((info) {
-      setState(() {
-        version = '${info.version}+${info.buildNumber}';
-      });
-    });
+    () async {
+      final ip = await getMainIP();
+      setState(() => deviceName = WordList.ipToWords(ip));
+    }();
+    receiverFuture = _startReceive();
+    () async {
+      final info = await PackageInfo.fromPlatform();
+      setState(() => version = '${info.version}+${info.buildNumber}');
+    }();
   }
 
-  void _handleFileAccept() async {
+  Future<void> _startReceive() async {
     while (true) {
       try {
         file = await Peardrop.receive();
         if (file != null) {
           setState(() {
             file = file;
+            filePath = file.filename;
+            pc.open();
           });
-          setPearPanel(true);
-          if (fileSelected) {
-            setFile(true, file.filename);
-          } else if (!fileSelected) {
-            setFile(false, file.filename);
-          }
         }
       } catch (e) {
         print('error caught: $e');
@@ -73,139 +66,86 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleFileReceive() async {
-    var temp = await file.accept();
+    setState(() => filePath = null);
+    var data = await file.accept();
+    await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
       // share
       await WcFlutterShare.share(
         sharePopupTitle: 'PearDrop',
         mimeType: file.mimetype,
         fileName: file.filename,
-        bytesOfFile: temp,
+        bytesOfFile: data,
       );
     } else {
       // file chooser + save
       var result = await showSavePanel(suggestedFileName: file.filename);
       if (result.canceled || result.paths.isEmpty) return;
       var path = result.paths.first;
-      await File(path).writeAsBytes(temp, flush: true);
+      await File(path).writeAsBytes(data, flush: true);
     }
   }
 
   Future<void> _handleFileSelect() async {
-    await select.openFileExplorer(setFile);
-    if (filePath != '') {
-      String fileName = select.nameFromPath(filePath);
-      var temp = File(filePath);
-      List<int> list = await temp.readAsBytes();
-      Stream<PeardropReceiver> stream =
-          await Peardrop.send(list, fileName ?? '', mime(fileName) ?? '');
-      try {
-        stream.listen((PeardropReceiver receiver) async {
-          bool duplicate = false;
-          for (var device in devices) {
-            if (device.getIP() == receiver.ip) {
-              duplicate = true;
-            }
-          }
+    filePath = await selectFile();
+    if (filePath != null) {
+      final fileName = p.basename(filePath);
+      final data = await File(filePath).readAsBytes();
+      final receivers =
+          await Peardrop.send(data, fileName, mime(fileName) ?? '');
+      receivers.listen((PeardropReceiver receiver) async {
+        final duplicate =
+            devices.any((device) => device.getIP() == receiver.ip);
 
-          if (!(await isSelfIP(receiver.ip)) && !duplicate) {
-            setState(() {
-              devices.add(Device(Icons.phone_iphone, receiver));
-            });
-          }
-          print('devices: ' + devices.toString());
-        });
-      } catch (e) {
-        print('error caught: $e');
-      }
+        if (!(await isSelfIP(receiver.ip)) && !duplicate) {
+          setState(() {
+            devices.add(Device(Icons.phone_iphone, receiver));
+          });
+        }
+        print('devices: ' + devices.toString());
+      });
     }
   }
 
-  void _handleFileShare(int index) async {
-    peerIndex = index;
-    await devices[peerIndex].getReceiver().send();
-    Timer.periodic(
-      Duration(milliseconds: 5300),
-      (Timer timer) => setState(() {
-        devices[peerIndex].setSharingState(SharingState.done);
-
-        timer.cancel();
-      }),
-    );
-    Timer.periodic(
-      Duration(milliseconds: 7300),
-      (Timer timer2) => setState(() {
-        devices[peerIndex].setSharingState(SharingState.neutral);
-
-        timer2.cancel();
-      }),
-    );
-  }
-
-  void _cancel() {
-    file.reject();
-  }
-
-  void setFile(bool selected, String path) {
-    setState(() {
-      fileSelected = selected;
-      filePath = path;
-    });
-  }
-
-  void setPearPanel(bool isOpen) {
-    setState(() {
-      pearPanelOpen = isOpen;
-    });
-    if (pearPanelOpen) {
-      _pc.open();
-    } else if (!pearPanelOpen) {
-      _pc.close();
-    }
-  }
-
-  Future<void> _getDeviceName() async {
-    ip = await getMainIP();
-    setState(() {
-      deviceName = WordList().ipToWords(ip);
-    });
+  Future<void> _handleFileShare(int index) async {
+    await devices[index].getReceiver().send();
+    setState(() => devices[index].setSharingState(SharingState.done));
+    await Future.delayed(
+        Duration(seconds: 2),
+        () => setState(
+            () => devices[index].setSharingState(SharingState.neutral)));
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     return Material(
       child: Scaffold(
         backgroundColor: Color(0xff293851),
-        // appBar: PearDropAppBar().getAppBar('PearDrop'),
         body: Stack(
           alignment: Alignment.topCenter,
           children: <Widget>[
             SlidingUpPanel(
-              controller: _pc,
+              controller: pc,
               maxHeight: MediaQuery.of(context).size.height * 0.35,
               minHeight: 0.0,
               defaultPanelState: PanelState.CLOSED,
               backdropEnabled: true,
               backdropOpacity: 0.2,
               isDraggable: false,
+              onPanelClosed: () async {
+                if (file != null) await file.reject();
+              },
               body: PearDropBody(
                 devices: devices,
                 fileSelect: _handleFileSelect,
                 version: version,
-                fileName: select.nameFromPath(filePath),
+                fileName: filePath,
                 fileShare: _handleFileShare,
                 deviceName: deviceName,
-                fileSelected: fileSelected,
+                fileSelected: filePath != null,
               ),
               panelBuilder: (sc) => SlidingPanel(
-                peerDevice:
-                    peerIndex < devices.length ? devices[peerIndex] : null,
-                senderIP: file != null ? file.ip : null,
-                sc: sc,
-                setPearPanel: setPearPanel,
-                filePath: filePath,
-                cancel: _cancel,
+                file: file,
                 accept: _handleFileReceive,
               ),
               borderRadius: BorderRadius.only(
@@ -215,10 +155,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        // bottomNavigationBar: BottomVersionBar(
-        //   version: '1.0.0+0',
-        //   fileName: fileName,
-        // ),
       ),
     );
   }

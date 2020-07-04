@@ -100,11 +100,15 @@ class PeardropFile {
   /// Size of the file being received, in bytes.
   final int data_len;
 
+  // whether accept/reject was called already
+  bool _didAction = false;
+
   PeardropFile._(this._queue, this._socket, this.ip, this.filename,
       this.mimetype, this.data_len);
 
   /// Accept the file and receive it.
   Future<List<int>> accept() async {
+    if (_didAction) return null;
     var packet = AckPacket(AckType.accept(AckTypeType.SENDER_PACKET));
     _socket.add(packet.write());
     await _socket.flush();
@@ -131,6 +135,7 @@ class PeardropFile {
 
   /// Reject the transfer of this file.
   Future<void> reject() async {
+    if (_didAction) return;
     var packet = AckPacket(AckType.reject(AckTypeType.SENDER_PACKET));
     _socket.add(packet.write());
     await _socket.flush();

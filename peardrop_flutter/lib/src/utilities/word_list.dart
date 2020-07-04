@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'dart:io';
 
 class WordList {
-  var rawWords = {
+  static final rawWords = {
     '00': ['aardvark', 'adroitness'],
     '01': ['absurd', 'adviser'],
     '02': ['accrue', 'aftermath'],
@@ -262,22 +260,23 @@ class WordList {
     'FF': ['Zulu', 'Yucatan'],
   };
 
-  String ipToWords(InternetAddress ip) {
-    List<String> hexs = [];
-    print("ip = $ip");
+  static String ipToWords(InternetAddress ip) {
+    if (ip == null) return null;
+    var hexs = <String>[];
+    print('ip = $ip');
     // print("raw = ${ip.rawAddress}");
-    List<int> rhex = ip.rawAddress;
+    final rhex = ip.rawAddress;
     for (var i = 0; i < rhex.length; i += 1) {
       hexs.add(rhex[i].toRadixString(16).padLeft(2, '0'));
     }
     return hexToWords(hexs).toString();
   }
 
-  String hexToWord(String hex, int position) {
+  static String hexToWord(String hex, int position) {
     return rawWords[hex][position % 2];
   }
 
-  String hexToWords(List<String> hexs) {
+  static String hexToWords(List<String> hexs) {
     print(hexs);
     var words = [];
     var i = 0;

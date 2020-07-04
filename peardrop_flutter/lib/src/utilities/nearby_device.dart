@@ -17,14 +17,14 @@ class Device {
 
   Device(IconData icon, PeardropReceiver receive) {
     _receiver = receive;
-    _deviceName = WordList().ipToWords(receive.ip);
+    _deviceName = WordList.ipToWords(receive.ip);
     _ipAddress = receive.ip;
     _iconName = icon;
     _state = SharingState.neutral;
   }
 
   Device.dummy(IconData icon, InternetAddress address) {
-    _deviceName = WordList().ipToWords(address);
+    _deviceName = WordList.ipToWords(address);
     _ipAddress = address;
     _iconName = icon;
     _state = SharingState.neutral;

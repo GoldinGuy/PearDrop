@@ -1,39 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:peardrop/src/utilities/file_select.dart';
-import 'package:peardrop/src/utilities/nearby_device.dart';
+import 'package:libpeardrop/libpeardrop.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 
-typedef void FileReceiveCallBack();
-typedef void ResetCallBack();
-typedef void CancelCallBack();
-typedef void SetPearPanelCallback(bool isOpen);
-
 class SlidingPanel extends StatelessWidget {
-  SlidingPanel(
-      {this.peerDevice,
-      this.senderIP,
-      this.sc,
-      this.filePath,
-      this.setPearPanel,
-      this.accept,
-      this.cancel,
-      this.reset});
+  SlidingPanel({this.file, this.sc, this.accept});
 
-  final String filePath;
-  final Device peerDevice;
-  final InternetAddress senderIP;
+  final PeardropFile file;
   final ScrollController sc;
-  final FileReceiveCallBack accept;
-  final ResetCallBack reset;
-  final CancelCallBack cancel;
-  final SetPearPanelCallback setPearPanel;
+  final Function() accept;
 
   @override
   Widget build(BuildContext context) {
+    final deviceName = WordList.ipToWords(file?.ip) ?? 'An Unknown Device';
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
@@ -46,9 +26,7 @@ class SlidingPanel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  ((senderIP != null ? WordList().ipToWords(senderIP) : null) ??
-                          'An Unknown Device') +
-                      ' would like to share',
+                  '$deviceName would like to share',
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 16.0,
@@ -83,7 +61,7 @@ class SlidingPanel extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            FileSelect().nameFromPath(filePath),
+                            file?.filename ?? '',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
@@ -100,10 +78,7 @@ class SlidingPanel extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.fromLTRB(40, 17, 40, 5),
                     child: GestureDetector(
-                      onTap: () {
-                        setPearPanel(false);
-                        accept();
-                      },
+                      onTap: accept,
                       child: Container(
                         width: 80,
                         height: 45,
