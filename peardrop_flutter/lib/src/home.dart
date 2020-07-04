@@ -94,8 +94,7 @@ class _HomePageState extends State<HomePage> {
       final receivers =
           await Peardrop.send(data, fileName, mime(fileName) ?? '');
       receivers.listen((PeardropReceiver receiver) async {
-        final duplicate =
-            devices.any((device) => device.getIP() == receiver.ip);
+        final duplicate = devices.any((device) => device.ip == receiver.ip);
 
         if (!(await isSelfIP(receiver.ip)) && !duplicate) {
           setState(() {
@@ -105,15 +104,6 @@ class _HomePageState extends State<HomePage> {
         print('devices: ' + devices.toString());
       });
     }
-  }
-
-  Future<void> _handleFileShare(int index) async {
-    await devices[index].getReceiver().send();
-    setState(() => devices[index].setSharingState(SharingState.done));
-    await Future.delayed(
-        Duration(seconds: 2),
-        () => setState(
-            () => devices[index].setSharingState(SharingState.neutral)));
   }
 
   @override
@@ -140,7 +130,6 @@ class _HomePageState extends State<HomePage> {
                 fileSelect: _handleFileSelect,
                 version: version,
                 fileName: filePath,
-                fileShare: _handleFileShare,
                 deviceName: deviceName,
                 fileSelected: filePath != null,
               ),
