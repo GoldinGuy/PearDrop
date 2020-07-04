@@ -92,7 +92,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleFileSelect() async {
-    filePath = await selectFile();
+    var temp = await selectFile();
+    setState(() {
+      filePath = temp;
+    });
     if (filePath != null) {
       final fileName = p.basename(filePath);
       final data = await File(filePath).readAsBytes();
