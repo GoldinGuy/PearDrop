@@ -75,9 +75,9 @@ class _DeviceWidgetState extends State<DeviceWidget> {
   Future<void> fileShare() async {
     await device.receiver.send();
     setState(() => device.state = SharingState.done);
-    await Future.delayed(
-      Duration(seconds: 2),
-      () => setState(() => device.state = SharingState.neutral),
-    );
+    // await Future.delayed(
+    //   Duration(seconds: 2),
+    //   () => setState(() => device.state = SharingState.neutral),
+    // );
   }
 }
