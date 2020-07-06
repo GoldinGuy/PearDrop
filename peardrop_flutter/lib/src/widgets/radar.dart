@@ -279,8 +279,12 @@ class RenderRadar extends RenderBox
     //defaultPaint(context, offset.translate(0, 42.5));
   }
 
+  // void dispose() {
+  //   _controller.dispose();
+  // }
+  @override
   void dispose() {
-    _controller.dispose();
+    _controller.dispose(); // you need this
   }
 }
 
@@ -313,8 +317,7 @@ Offset smm(List<Offset> offsets, int xy, int lh) {
 }
 
 /// Utility: Circle-circle intersection.
-/// Returns the points where the two circles intersect,
-/// otherwise null if they do not intersect / infinite solutions.
+/// Returns the points where the two circles intersect, otherwise null if they do not intersect / infinite solutions.
 List<Offset> cci(Offset c, double r, Offset C, double R) {
   var EPS = double.minPositive;
   // Invert Y coords of c, C to put it in normal coords
@@ -347,8 +350,7 @@ List<Offset> cci(Offset c, double r, Offset C, double R) {
 }
 
 /// Utility: circle-line-segment intersection.
-/// Returns the points where the circle and line segment intersect,
-/// otherwise null if they do not intersect.
+/// Returns the points where the circle and line segment intersect, otherwise null if they do not intersect.
 List<Offset> clsi(Offset c, double r, Offset p1, Offset p2) {
   var EPS = double.minPositive;
   // Convert points

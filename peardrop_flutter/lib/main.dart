@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:peardrop/src/home.dart';
 import 'package:peardrop/src/settings.dart';
@@ -27,6 +28,12 @@ void main() {
           window_size.setWindowMinSize(Size(420, 780));
           window_size.setWindowMaxSize(Size(420, 780));
         }
+      } else {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+            statusBarColor: Colors.white, // Color for Android
+            statusBarBrightness:
+                Brightness.dark // Dark == white status bar -- for IOS.
+            ));
       }
     });
   }
