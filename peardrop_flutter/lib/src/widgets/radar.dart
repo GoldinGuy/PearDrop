@@ -322,7 +322,6 @@ Offset smm(List<Offset> offsets, int xy, int lh) {
 /// Utility: Circle-circle intersection.
 /// Returns the points where the two circles intersect, otherwise null if they do not intersect / infinite solutions.
 List<Offset> cci(Offset c, double r, Offset C, double R) {
-  var EPS = double.minPositive;
   // Invert Y coords of c, C to put it in normal coords
   c = cg2m(c);
   C = cg2m(C);
@@ -355,7 +354,6 @@ List<Offset> cci(Offset c, double r, Offset C, double R) {
 /// Utility: circle-line-segment intersection.
 /// Returns the points where the circle and line segment intersect, otherwise null if they do not intersect.
 List<Offset> clsi(Offset c, double r, Offset p1, Offset p2) {
-  var EPS = double.minPositive;
   // Convert points
   c = cg2m(c);
   p1 = cg2m(p1);

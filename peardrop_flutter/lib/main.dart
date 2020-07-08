@@ -1,5 +1,5 @@
 import 'dart:io' show Platform;
-import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -17,7 +17,7 @@ void main() {
         final screenFrame = window.screen.visibleFrame;
         // double width = (screenFrame.width / 4.4).roundToDouble(),
         //     height = (screenFrame.height / 1.5).roundToDouble();
-        double width = 420, height = 780;
+        final width = 420.0, height = 780.0;
         final left = ((screenFrame.width - width) / 2).roundToDouble();
         final top = ((screenFrame.height - height) / 3).roundToDouble();
         final frame = Rect.fromLTWH(left, top, width, height);

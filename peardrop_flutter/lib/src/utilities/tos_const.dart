@@ -3,7 +3,7 @@ We are doing this as an accommodation, we are not collecting your information, a
 
 PearDrop is not affiliated in any way with any other file-sharing service (i.e. AirDrop, ShareDrop, SnapDrop, etc)
 
-Created by students GoldinGuy & Anirudhb
+Created by students GoldinGuy & anirudhb
 
 Terms of Use
 
