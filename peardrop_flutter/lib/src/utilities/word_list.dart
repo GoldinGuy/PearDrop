@@ -285,6 +285,6 @@ class WordList {
       i++;
     });
 
-    return (words[0] + '-' + words[3]).toString();
+    return (words[0] + '-' + words[3]).toString().toLowerCase();
   }
 }
