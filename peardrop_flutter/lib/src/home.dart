@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         bytesOfFile: data,
       );
     } else {
-      // file chooser + save
+      // select file and save
       var result = await showSavePanel(suggestedFileName: file.filename);
       if (result.canceled || result.paths.isEmpty) return;
       var path = result.paths.first;

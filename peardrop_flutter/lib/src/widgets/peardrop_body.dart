@@ -220,7 +220,6 @@ class PearDropBody extends StatelessWidget {
               ],
             ),
           ),
-          Container(),
         ],
       );
     } else {
