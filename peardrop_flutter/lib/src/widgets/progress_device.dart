@@ -31,7 +31,10 @@ class _DeviceWidgetState extends State<DeviceWidget> {
           margin: EdgeInsets.only(bottom: 6),
           child: Text(
             device.name,
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         RawMaterialButton(

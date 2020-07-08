@@ -26,12 +26,14 @@ Future<InternetAddress> getMainIP() async {
     print(
         'Interface name = ${interface.name}, addresses = ${interface.addresses}');
     final ipv4Address = interface.addresses.firstWhere(
-        (address) => address.type == InternetAddressType.IPv4,
-        orElse: () => null);
+      (address) => address.type == InternetAddressType.IPv4,
+      orElse: () => null,
+    );
     if (ipv4Address != null) return ipv4Address;
     final ipv6Address = interface.addresses.firstWhere(
-        (address) => address.type == InternetAddressType.IPv6,
-        orElse: () => null);
+      (address) => address.type == InternetAddressType.IPv6,
+      orElse: () => null,
+    );
     if (ipv6Address != null) return ipv6Address;
   }
   return null;

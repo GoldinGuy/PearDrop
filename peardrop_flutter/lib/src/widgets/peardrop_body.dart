@@ -36,41 +36,42 @@ class PearDropBody extends StatelessWidget {
       deviceHeight = 2.5;
     }
     return Material(
-        child: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xff91c27d),
-            Color(0xff559364),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Column(
-        children: [
-          SizedBox(
-            height: deviceHeight,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xff91c27d),
+              Color(0xff559364),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          Align(
-            child: InkWell(
-              onTap: () => Navigator.pushNamed(context, '/tos'),
-              child: Padding(
-                padding: EdgeInsets.all(15),
-                child: Icon(
-                  Icons.info,
-                  color: Colors.white,
-                  size: 24,
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: deviceHeight,
+            ),
+            Align(
+              child: InkWell(
+                onTap: () => Navigator.pushNamed(context, '/tos'),
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Icon(
+                    Icons.info,
+                    color: Colors.white,
+                    size: 24,
+                  ),
                 ),
               ),
+              alignment: Alignment.topRight,
             ),
-            alignment: Alignment.topRight,
-          ),
-          _getBody(),
-          _getInfoContainer(MediaQuery.of(context).size.width),
-        ],
+            _getBody(),
+            _getInfoContainer(MediaQuery.of(context).size.width),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   // all methods below are related to UI based on if a file has been selected or not
@@ -162,8 +163,9 @@ class PearDropBody extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0)),
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
+                    ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Colors.black12,
@@ -220,7 +222,6 @@ class PearDropBody extends StatelessWidget {
               ],
             ),
           ),
-          Container(),
         ],
       );
     } else {
@@ -236,8 +237,9 @@ class PearDropBody extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0)),
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
+                    ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Colors.black12,
@@ -297,8 +299,10 @@ class PearDropBody extends StatelessWidget {
           Container(
             width: 85,
             height: 85,
-            decoration:
-                ShapeDecoration(shape: CircleBorder(), color: Colors.white),
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+              color: Colors.white,
+            ),
             child: DecoratedBox(
               decoration: ShapeDecoration(
                 shape: CircleBorder(),
