@@ -319,6 +319,13 @@ class PearDropBody extends StatelessWidget {
   }
 
   Widget _getFileContainer() {
+    final expand = Padding(
+      padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+      child: Icon(
+        Icons.expand_more,
+        size: 20,
+      ),
+    );
     if (fileName != null && fileName.isNotEmpty) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -343,13 +350,7 @@ class PearDropBody extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-            child: Icon(
-              Icons.expand_more,
-              size: 20,
-            ),
-          ),
+          expand,
         ],
       );
     } else {
@@ -372,13 +373,7 @@ class PearDropBody extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-            child: Icon(
-              Icons.expand_more,
-              size: 20,
-            ),
-          ),
+          expand,
         ],
       );
     }
