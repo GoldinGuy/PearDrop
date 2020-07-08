@@ -62,7 +62,7 @@ class SlidingPanel extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              file?.filename ?? '',
+                              file?.filename ?? 'No filename',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
