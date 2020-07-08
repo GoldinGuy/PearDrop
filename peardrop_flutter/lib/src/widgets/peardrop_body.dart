@@ -35,7 +35,8 @@ class PearDropBody extends StatelessWidget {
     if (Platform.isWindows || Platform.isMacOS) {
       deviceHeight = 2.5;
     }
-    return Container(
+    return Material(
+        child: Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -69,7 +70,7 @@ class PearDropBody extends StatelessWidget {
           _getInfoContainer(MediaQuery.of(context).size.width),
         ],
       ),
-    );
+    ));
   }
 
   // all methods below are related to UI based on if a file has been selected or not
@@ -306,7 +307,6 @@ class PearDropBody extends StatelessWidget {
                   image: Image.asset('assets/images/icon.png').image,
                 ),
               ),
-              // ),
             ),
           )
         ],

@@ -279,12 +279,9 @@ class RenderRadar extends RenderBox
     //defaultPaint(context, offset.translate(0, 42.5));
   }
 
-  // void dispose() {
-  //   _controller.dispose();
-  // }
-  @override
+  // @override
   void dispose() {
-    _controller.dispose(); // you need this
+    _controller.dispose();
   }
 }
 

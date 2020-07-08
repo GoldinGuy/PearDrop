@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
-  String deviceName = 'PearDrop Device', version = "0.0.0+1", filePath;
+  String deviceName = 'PearDrop Device', version = "0.0+1", filePath;
   PeardropFile file;
   Future<void> receiverFuture;
   final pc = PanelController();
@@ -45,8 +45,8 @@ class _HomePageState extends State<HomePage> {
         final info = await PackageInfo.fromPlatform();
         setState(() => version = '${info.version}+${info.buildNumber}');
       } else {
-        // TODO: fix so it actually displays version for desktop
-        setState(() => version = '1.0.0+11');
+        // TODO: actually display version for desktop
+        setState(() => version = '1.0+1');
       }
     }();
   }
