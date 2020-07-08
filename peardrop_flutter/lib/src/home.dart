@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       final ip = await getMainIP();
       setState(() => deviceName = WordList.ipToWords(ip));
     }();
-    receiverFuture = _startReceive();
+    receiverFuture = _beginReceive();
     () async {
       if (Platform.isIOS || Platform.isAndroid) {
         final info = await PackageInfo.fromPlatform();
@@ -49,13 +49,13 @@ class _HomePageState extends State<HomePage> {
     }();
   }
 
-  Future<void> _startReceive() async {
+  Future<void> _beginReceive() async {
     while (true) {
       try {
-        file = await Peardrop.receive();
-        if (file != null) {
+        var temp = await Peardrop.receive();
+        if (temp != null) {
           setState(() {
-            file = file;
+            file = temp;
             pc.open();
           });
         }
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     var data = await file.accept();
     await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
-      // share
+      // open share modal
       await WcFlutterShare.share(
         sharePopupTitle: 'PearDrop',
         mimeType: file.mimetype,
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
       final fileName = p.basename(filePath);
       final data = await File(filePath).readAsBytes();
       final receivers =
-          await Peardrop.send(data, fileName, mime(fileName) ?? '');
+          await Peardrop.send(data, fileName, mime(fileName) ?? 'Unknown File');
       receivers.listen((PeardropReceiver receiver) async {
         final duplicate = devices.any((device) => device.ip == receiver.ip);
 
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
             devices.add(Device(Icons.description, receiver));
           });
         }
-        print('devices: ' + devices.toString());
+        print('devices: ' + devices?.toString());
       });
     }
   }

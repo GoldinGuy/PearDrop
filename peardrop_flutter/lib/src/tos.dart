@@ -4,7 +4,8 @@ import 'package:peardrop/src/utilities/tos_const.dart';
 class TermsDisplayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Material(
+        child: Scaffold(
       backgroundColor: Color(0xff91c27d),
       appBar: AppBar(
         title: const Text('Terms of Service'),
@@ -22,6 +23,6 @@ class TermsDisplayScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 }

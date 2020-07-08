@@ -82,7 +82,6 @@ void main() {
   testWidgets('Given TOS displays properly', (WidgetTester tester) async {
     await tester.pumpWidget(termsPage);
     expect(find.text('Terms of Service'), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_back_ios), findsOneWidget);
     expect(find.text(TOS_STRING), findsOneWidget);
   });
 
@@ -91,7 +90,7 @@ void main() {
       var devices = await MockData().getDevices();
       // ensure devices is functioning properly
       expect(devices.length, 3);
-      expect(devices[0].name, 'beehive-Eskimo');
+      expect(devices[0].name, 'beehive-eskimo');
       expect(devices[1].ip, InternetAddress('3.45.253.192'));
       expect(devices[2].icon, Icons.description);
     });
