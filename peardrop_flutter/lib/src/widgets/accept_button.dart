@@ -6,81 +6,70 @@ import 'package:flutter/material.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
 class AcceptButton extends StatefulWidget {
-  AcceptButton({@required this.device});
-  final Device device;
+  AcceptButton({@required this.accept});
+  final Function() accept;
 
   @override
-  _AcceptButtonState createState() => _AcceptButtonState(device: device);
+  _AcceptButtonState createState() => _AcceptButtonState(accept: accept);
 }
 
 class _AcceptButtonState extends State<AcceptButton> {
-  _AcceptButtonState({@required this.device});
-  Device device;
+  _AcceptButtonState({@required this.accept});
+  final Function() accept;
+  bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.fromLTRB(40, 17, 40, 5),
+      child: GestureDetector(
+        onTap: () async {
+          setState(() => isPressed = true);
+          await accept();
+          setState(() => isPressed = false);
+        },
+        child: Container(
+          width: 80,
+          height: 45,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.grey[200],
-          ),
-          padding: EdgeInsets.all(8),
-          margin: EdgeInsets.only(bottom: 6),
-          child: Text(
-            device.name,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
+            gradient: LinearGradient(
+              colors: [
+                Color(0xff91c27d),
+                Color(0xff559364),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(5, 5),
+                blurRadius: 10,
+              )
+            ],
           ),
+          child: Center(child: getStateWidget()),
         ),
-        RawMaterialButton(
-          child: getStateWidget(),
-          onPressed: () async {
-            if (device.state == SharingState.neutral) {
-              setState(() => device.state = SharingState.sharing);
-              print('attempting to send');
-              await fileShare();
-            }
-          },
-          elevation: 0.0,
-          fillColor: Color(0xff91c27d),
-          padding: EdgeInsets.all(15.0),
-          shape: CircleBorder(),
-        )
-      ],
+      ),
     );
   }
 
   Widget getStateWidget() {
-    if (device.state == SharingState.sharing) {
+    if (isPressed) {
       return CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       );
-    } else if (device.state == SharingState.done) {
-      return Icon(
-        Icons.check,
-        color: Colors.white,
-        size: 35.0,
-      );
     } else {
-      return Icon(
-        device.icon,
-        size: 35.0,
-        color: Colors.white,
+      return Text(
+        'Accept',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
       );
     }
-  }
-
-  Future<void> fileShare() async {
-    await device.receiver.send();
-    setState(() => device.state = SharingState.done);
-    // await Future.delayed(
-    //   Duration(seconds: 2),
-    //   () => setState(() => device.state = SharingState.neutral),
-    // );
   }
 }

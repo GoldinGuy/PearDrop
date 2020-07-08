@@ -110,8 +110,6 @@ class _HomePageState extends State<HomePage> {
         }
         print('devices: ' + devices?.toString());
       });
-    } else {
-      await _beginReceive();
     }
   }
 

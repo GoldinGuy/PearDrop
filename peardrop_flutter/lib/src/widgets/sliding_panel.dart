@@ -3,25 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
+import 'package:peardrop/src/widgets/accept_button.dart';
 
-class SlidingPanel extends StatefulWidget {
+class SlidingPanel extends StatelessWidget {
   SlidingPanel({this.file, this.sc, this.accept});
-  final PeardropFile file;
-  final ScrollController sc;
-  final Function() accept;
-
-  @override
-  _SlidingPanelState createState() =>
-      _SlidingPanelState(file: file, sc: sc, accept: accept);
-}
-
-class _SlidingPanelState extends State<SlidingPanel> {
-  _SlidingPanelState({this.file, this.sc, this.accept});
 
   final PeardropFile file;
   final ScrollController sc;
   final Function() accept;
-  bool buttonAccepted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -87,43 +76,7 @@ class _SlidingPanelState extends State<SlidingPanel> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.fromLTRB(40, 17, 40, 5),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            buttonAccepted = true;
-                          });
-                          accept;
-                        },
-                        child: Container(
-                          width: 80,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xff91c27d),
-                                Color(0xff559364),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(5, 5),
-                                blurRadius: 10,
-                              )
-                            ],
-                          ),
-                          child: Center(
-                            child: getButtonContent(),
-                          ),
-                        ),
-                      ),
-                    ),
+                    AcceptButton(accept: accept)
                   ],
                 ),
               ],
@@ -132,20 +85,5 @@ class _SlidingPanelState extends State<SlidingPanel> {
         ),
       ),
     );
-  }
-
-  Widget getButtonContent() {
-    if (!buttonAccepted) {
-      return Text('Accept',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ));
-    } else {
-      return CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-      );
-    }
   }
 }
