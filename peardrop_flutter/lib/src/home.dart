@@ -9,6 +9,7 @@ import 'package:package_info/package_info.dart';
 import 'package:path/path.dart' as p;
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/ip.dart';
+import 'package:peardrop/src/utilities/version_const.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -24,7 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
-  String deviceName = 'PearDrop Device', version = "0.0+1", filePath;
+  String deviceName = 'PearDrop Device', version = VERSION_STRING, filePath;
   PeardropFile file;
   Future<void> receiverFuture;
   final pc = PanelController();
@@ -44,9 +45,6 @@ class _HomePageState extends State<HomePage> {
       if (Platform.isIOS || Platform.isAndroid) {
         final info = await PackageInfo.fromPlatform();
         setState(() => version = '${info.version}+${info.buildNumber}');
-      } else {
-        // TODO: actually display version for desktop
-        setState(() => version = '1.0+1');
       }
     }();
   }
