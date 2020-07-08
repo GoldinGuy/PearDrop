@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    // dummy data
     //devices.add(
     //    Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
     //devices.add(Device.dummy(Icons.computer, InternetAddress('3.45.253.192')));
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _beginReceive() async {
     while (true) {
       try {
+        print('attempting to receieve');
         var temp = await Peardrop.receive();
         if (temp != null) {
           setState(() {
@@ -95,6 +97,7 @@ class _HomePageState extends State<HomePage> {
     if (filePath != null) {
       final fileName = p.basename(filePath);
       final data = await File(filePath).readAsBytes();
+      print('attempting to send');
       final receivers =
           await Peardrop.send(data, fileName, mime(fileName) ?? 'Unknown File');
       receivers.listen((PeardropReceiver receiver) async {
@@ -107,6 +110,8 @@ class _HomePageState extends State<HomePage> {
         }
         print('devices: ' + devices?.toString());
       });
+    } else {
+      await _beginReceive();
     }
   }
 

@@ -4,12 +4,24 @@ import 'package:flutter/widgets.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 
-class SlidingPanel extends StatelessWidget {
+class SlidingPanel extends StatefulWidget {
   SlidingPanel({this.file, this.sc, this.accept});
+  final PeardropFile file;
+  final ScrollController sc;
+  final Function() accept;
+
+  @override
+  _SlidingPanelState createState() =>
+      _SlidingPanelState(file: file, sc: sc, accept: accept);
+}
+
+class _SlidingPanelState extends State<SlidingPanel> {
+  _SlidingPanelState({this.file, this.sc, this.accept});
 
   final PeardropFile file;
   final ScrollController sc;
   final Function() accept;
+  bool buttonAccepted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +91,12 @@ class SlidingPanel extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.fromLTRB(40, 17, 40, 5),
                       child: GestureDetector(
-                        onTap: accept,
+                        onTap: () {
+                          setState(() {
+                            buttonAccepted = true;
+                          });
+                          accept;
+                        },
                         child: Container(
                           width: 80,
                           height: 45,
@@ -102,14 +119,7 @@ class SlidingPanel extends StatelessWidget {
                             ],
                           ),
                           child: Center(
-                            child: Text(
-                              'Accept',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            child: getButtonContent(),
                           ),
                         ),
                       ),
@@ -122,5 +132,20 @@ class SlidingPanel extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget getButtonContent() {
+    if (!buttonAccepted) {
+      return Text('Accept',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ));
+    } else {
+      return CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      );
+    }
   }
 }
