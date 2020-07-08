@@ -78,6 +78,12 @@ class RenderRadar extends RenderBox
     }
   }
 
+  @override
+  void detach() {
+    _controller.stop();
+    super.detach();
+  }
+
   List<Offset> _points = [];
   List<Offset> _drawPoints = [];
   List<Rect> _children = [];
