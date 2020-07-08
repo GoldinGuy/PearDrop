@@ -8,3 +8,5 @@ build/
 macos/Flutter/ephemeral/
 
 .flutter-plugins
+macos/Flutter/GeneratedPluginRegistrant.swift
+bin/receiver.dart
