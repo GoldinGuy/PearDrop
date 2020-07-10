@@ -28,8 +28,9 @@ class _HomePageState extends State<HomePage> {
   String deviceName = 'PearDrop Device', version = VERSION_STRING, filePath;
   PeardropFile file;
   Future<void> receiverFuture;
-  bool isReceiving = true;
+  bool _isReceiving = true, _isSharing = false;
   final pc = PanelController();
+  Timer _locateNearbyDevices;
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       final ip = await getMainIP();
       setState(() => deviceName = WordList.ipToWords(ip));
     }();
-    receiverFuture = _beginReceive();
+    _refreshReceiving();
     () async {
       if (Platform.isIOS || Platform.isAndroid) {
         final info = await PackageInfo.fromPlatform();
@@ -51,11 +52,18 @@ class _HomePageState extends State<HomePage> {
     }();
   }
 
+  void setSharing(bool value) {
+    setState(() => _isSharing = value);
+  }
+
+  void _refreshReceiving() {
+    setState(() => _isReceiving = false);
+    receiverFuture = _beginReceive();
+  }
+
   Future<void> _beginReceive() async {
-    setState(() {
-      isReceiving = true;
-    });
-    while (isReceiving) {
+    setState(() => _isReceiving = true);
+    while (_isReceiving) {
       try {
         print('attempting to receieve');
         var temp = await Peardrop.receive();
@@ -93,39 +101,54 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleFileSelect() async {
+    if (_locateNearbyDevices != null) {
+      _locateNearbyDevices.cancel();
+    }
     print('attempting to select');
     var temp = await selectFile();
-    setState(() {
-      filePath = temp;
-    });
-    await _handleFileShare();
+    setState(() => {filePath = temp, devices = []});
+    if (filePath != null) {
+      await _handleFileShare();
+      _locateNearbyDevices = Timer.periodic(
+          Duration(seconds: 15),
+          (Timer t) => {
+                if (!_isSharing)
+                  {
+                    print('refreshing devices'),
+                    _handleFileShare(),
+                  }
+              });
+    } else {
+      _refreshReceiving();
+    }
   }
 
   Future<void> _handleFileShare() async {
-    setState(() {
-      devices = [];
-    });
-    if (filePath != null) {
-      final fileName = p.basename(filePath);
-      print('attempting to send');
-      final data = await File(filePath).readAsBytes();
-      final receivers =
-          await Peardrop.send(data, fileName, mime(fileName) ?? 'Unknown File');
-      setState(() {
-        isReceiving = false;
-      });
-      receiverFuture = _beginReceive();
-      receivers.listen((PeardropReceiver receiver) async {
-        final duplicate = devices.any((device) => device.ip == receiver.ip);
+    setState(() => devices = []);
+    final fileName = p.basename(filePath);
+    _refreshReceiving();
+    final data = await File(filePath).readAsBytes();
+    final receivers =
+        await Peardrop.send(data, fileName, mime(fileName) ?? 'Unknown File');
+    _refreshReceiving();
+    print('attempting to send');
+    receivers.listen((PeardropReceiver receiver) async {
+      final duplicate = devices.any((device) =>
+          (device.ip == receiver.ip) ||
+          (device.name == Device(Icons.description, receiver).name));
 
-        if (!(await isSelfIP(receiver.ip)) && !duplicate) {
-          setState(() {
-            devices.add(Device(Icons.description, receiver));
-          });
-        }
-        print('devices: ' + devices?.toString());
-      });
-    }
+      if (!(await isSelfIP(receiver.ip)) && !duplicate) {
+        setState(() {
+          devices.add(Device(Icons.description, receiver));
+        });
+      }
+      // else {
+      //   for (var device in devices) {
+      //     setState(() => device.state = SharingState.neutral);
+      //   }
+      // }
+      print('devices: ' + devices?.toString());
+    });
   }
 
   @override
@@ -151,6 +174,7 @@ class _HomePageState extends State<HomePage> {
                 devices: devices,
                 fileSelect: _handleFileSelect,
                 version: version,
+                setSharing: setSharing,
                 fileName: filePath,
                 deviceName: deviceName,
                 fileSelected: filePath != null,

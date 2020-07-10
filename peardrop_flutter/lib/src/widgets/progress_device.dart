@@ -6,16 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:peardrop/src/utilities/nearby_device.dart';
 
 class DeviceWidget extends StatefulWidget {
-  DeviceWidget({@required this.device});
+  DeviceWidget({@required this.device, this.setSharing});
   final Device device;
-
+  final Function(bool value) setSharing;
   @override
-  _DeviceWidgetState createState() => _DeviceWidgetState(device: device);
+  _DeviceWidgetState createState() =>
+      _DeviceWidgetState(device: device, setSharing: setSharing);
 }
 
 class _DeviceWidgetState extends State<DeviceWidget> {
-  _DeviceWidgetState({@required this.device});
+  _DeviceWidgetState({@required this.device, this.setSharing});
   Device device;
+  final Function(bool value) setSharing;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
           child: getStateWidget(),
           onPressed: () async {
             if (device.state == SharingState.neutral) {
+              setSharing(true);
               setState(() => device.state = SharingState.sharing);
               print('attempting to send');
               await fileShare();
@@ -88,11 +91,15 @@ class _DeviceWidgetState extends State<DeviceWidget> {
     } catch (e) {
       print('error caught: $e');
       setState(() => device.state = SharingState.failed);
-      await Future.delayed(
-        Duration(seconds: 2),
-        () => setState(() => device.state = SharingState.neutral),
-      );
+
+      // await Future.delayed(Duration(seconds: 2), () => setSharing(false));
+      // await Future.delayed(
+      //   Duration(seconds: 2),
+      //   () => setState(() => device.state = SharingState.neutral),
+      // );
+      // setSharing(false);
       // await handleFileShare;
     }
+    setSharing(false);
   }
 }

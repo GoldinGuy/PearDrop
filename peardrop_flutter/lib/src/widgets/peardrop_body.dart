@@ -15,12 +15,14 @@ class PearDropBody extends StatelessWidget {
     this.fileSelected,
     this.fileName,
     this.version,
+    this.setSharing,
     this.deviceName,
   });
 
   final List<Device> devices;
   final String deviceName, fileName, version;
   final Function() fileSelect;
+  final Function(bool value) setSharing;
   final bool fileSelected;
 
   final List<Image> headers = [
@@ -137,7 +139,7 @@ class PearDropBody extends StatelessWidget {
           children: List.generate(devices.length, (i) {
             return Container(
               decoration: BoxDecoration(),
-              child: DeviceWidget(device: devices[i]),
+              child: DeviceWidget(device: devices[i], setSharing: setSharing),
             );
           }),
         ),
