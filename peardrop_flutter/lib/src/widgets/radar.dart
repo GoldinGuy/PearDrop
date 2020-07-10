@@ -42,8 +42,8 @@ class RenderRadar extends RenderBox
   RenderRadar({@required TickerProvider vsync, List<RenderBox> children})
       : assert(vsync != null) {
     addAll(children);
-    _controller =
-        AnimationController(vsync: vsync, duration: Duration(seconds: 4));
+    _controller = AnimationController(
+        vsync: vsync, duration: Duration(milliseconds: 4300));
     _controller.addListener(() {
       if (_controller.value != _lastValue) {
         markNeedsPaint();
@@ -56,7 +56,8 @@ class RenderRadar extends RenderBox
         _controller.forward();
       }
     });
-    _tween = Tween(begin: pi, end: 2 * pi).animate(_controller);
+    _tween = Tween(begin: 0.9 * pi, end: 2.1 * pi).animate(_controller);
+    // _tween = Tween(begin: pi, end: 2 * pi).animate(_controller);
   }
 
   AnimationController _controller;

@@ -66,6 +66,12 @@ class _DeviceWidgetState extends State<DeviceWidget> {
         color: Colors.white,
         size: 35.0,
       );
+    } else if (device.state == SharingState.failed) {
+      return Icon(
+        Icons.close,
+        color: Colors.white,
+        size: 35.0,
+      );
     } else {
       return Icon(
         device.icon,
@@ -76,11 +82,17 @@ class _DeviceWidgetState extends State<DeviceWidget> {
   }
 
   Future<void> fileShare() async {
-    await device.receiver.send();
-    setState(() => device.state = SharingState.done);
-    // await Future.delayed(
-    //   Duration(seconds: 2),
-    //   () => setState(() => device.state = SharingState.neutral),
-    // );
+    try {
+      await device.receiver.send();
+      setState(() => device.state = SharingState.done);
+    } catch (e) {
+      print('error caught: $e');
+      setState(() => device.state = SharingState.failed);
+      await Future.delayed(
+        Duration(seconds: 2),
+        () => setState(() => device.state = SharingState.neutral),
+      );
+      // await handleFileShare;
+    }
   }
 }

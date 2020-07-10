@@ -96,8 +96,14 @@ class _HomePageState extends State<HomePage> {
     print('attempting to select');
     var temp = await selectFile();
     setState(() {
-      devices = [];
       filePath = temp;
+    });
+    await _handleFileShare();
+  }
+
+  Future<void> _handleFileShare() async {
+    setState(() {
+      devices = [];
     });
     if (filePath != null) {
       final fileName = p.basename(filePath);

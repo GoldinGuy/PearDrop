@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
 
-enum SharingState { neutral, sharing, done }
+enum SharingState { neutral, sharing, done, failed }
 
 class Device {
   IconData _iconName;
