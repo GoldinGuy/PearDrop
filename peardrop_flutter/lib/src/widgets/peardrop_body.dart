@@ -150,6 +150,50 @@ class PearDropBody extends StatelessWidget {
     if (Platform.isWindows || Platform.isMacOS) {
       containerHeight = 40.0;
     }
+    final innerContainer = SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: containerHeight),
+            child: Text(
+              deviceName,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 19,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 3),
+            child: InkWell(
+              onTap: fileSelect,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.grey[200],
+                ),
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.fromLTRB(15, 5, 15, 11),
+                child: _getFileContainer(),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 4),
+            child: Text(
+              version,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+                color: Colors.grey,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
     if (!fileSelected) {
       return Stack(
         alignment: Alignment.topCenter,
@@ -174,50 +218,7 @@ class PearDropBody extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: containerHeight),
-                          child: Text(
-                            deviceName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 19,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 3),
-                          child: InkWell(
-                            onTap: fileSelect,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey[200],
-                              ),
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.fromLTRB(15, 5, 15, 11),
-                              child: _getFileContainer(),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 4),
-                          child: Text(
-                            version,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  child: innerContainer,
                 ),
               ],
             ),
@@ -248,50 +249,7 @@ class PearDropBody extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: containerHeight),
-                          child: Text(
-                            deviceName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 19,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 3),
-                          child: InkWell(
-                            onTap: fileSelect,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey[200],
-                              ),
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.fromLTRB(15, 5, 15, 11),
-                              child: _getFileContainer(),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 4),
-                          child: Text(
-                            version,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  child: innerContainer,
                 ),
               ],
             ),

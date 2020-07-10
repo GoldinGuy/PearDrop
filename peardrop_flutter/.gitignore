@@ -18,4 +18,4 @@ Podfile.lock
 .file_upload.dart
 .devices_page.dart
 .olddeviceselect.dart
-
+/lib/src/utilities/isolate.dart

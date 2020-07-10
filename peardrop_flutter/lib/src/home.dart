@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   String deviceName = 'PearDrop Device', version = VERSION_STRING, filePath;
   PeardropFile file;
   Future<void> receiverFuture;
+  bool isReceiving = true;
   final pc = PanelController();
 
   @override
@@ -51,7 +52,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _beginReceive() async {
-    while (true) {
+    setState(() {
+      isReceiving = true;
+    });
+    while (isReceiving) {
       try {
         print('attempting to receieve');
         var temp = await Peardrop.receive();
@@ -68,7 +72,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleFileReceive() async {
-    setState(() => filePath = null);
+    // setState(() => filePath = null);
     var data = await file.accept();
     await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
@@ -89,6 +93,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleFileSelect() async {
+    print('attempting to select');
     var temp = await selectFile();
     setState(() {
       devices = [];
@@ -96,10 +101,14 @@ class _HomePageState extends State<HomePage> {
     });
     if (filePath != null) {
       final fileName = p.basename(filePath);
-      final data = await File(filePath).readAsBytes();
       print('attempting to send');
+      final data = await File(filePath).readAsBytes();
       final receivers =
           await Peardrop.send(data, fileName, mime(fileName) ?? 'Unknown File');
+      setState(() {
+        isReceiving = false;
+      });
+      receiverFuture = _beginReceive();
       receivers.listen((PeardropReceiver receiver) async {
         final duplicate = devices.any((device) => device.ip == receiver.ip);
 
