@@ -1,142 +1,191 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
-import 'package:peardrop/src/utilities/sharing_service.dart';
+import 'package:libpeardrop/libpeardrop.dart';
+import 'package:mime_type/mime_type.dart';
+import 'package:package_info/package_info.dart';
+import 'package:path/path.dart' as p;
+import 'package:peardrop/src/utilities/file_select.dart';
+import 'package:peardrop/src/utilities/ip.dart';
+import 'package:peardrop/src/utilities/version_const.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
-import 'package:peardrop/src/widgets/bottom_version.dart';
-import 'package:peardrop/src/widgets/file_select_body.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
+
 import 'utilities/nearby_device.dart';
-import 'widgets/device_select_body.dart';
+import 'widgets/peardrop_body.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-enum PearPanel { sharing, receiving, accepting, done }
-
 class _HomePageState extends State<HomePage> {
   List<Device> devices = [];
-  InternetAddress deviceId = new InternetAddress('190.160.225.16');
-  bool pearPanelOpen = false, fileSelected = false;
-  SharingService share;
-  String fileName = '';
-  PanelController _pc = new PanelController();
-  PearPanel pearPanel = PearPanel.accepting;
+  String deviceName = 'PearDrop Device', version = VERSION_STRING, filePath;
+  PeardropFile file;
+  Future<void> receiverFuture;
+  bool _isReceiving = true, _isSharing = false;
+  final pc = PanelController();
+  Timer _locateNearbyDevices;
 
   @override
   void initState() {
     super.initState();
-    share = new SharingService();
-    fileSelected = false;
-    // TODO: determine how best to use deviceInfo | deviceId = DeviceDetails().getDeviceDetails() as String;
     // dummy data
-    devices.add(Device(Icons.phone_iphone, InternetAddress('140.70.235.92')));
-    // devices.add(Device(Icons.laptop_windows, InternetAddress('3.219.241.180')));
-    devices.add(Device(Icons.laptop_windows,
-        InternetAddress('2001:0db8:85a3:0000:0000:8a2e:0370:7334')));
+    //devices.add(
+    //    Device.dummy(Icons.phone_iphone, InternetAddress('26.189.192.87')));
+    //devices.add(Device.dummy(Icons.computer, InternetAddress('3.45.253.192')));
+    () async {
+      final ip = await getMainIP();
+      setState(() => deviceName = WordList.ipToWords(ip));
+    }();
+    _refreshReceiving();
+    () async {
+      if (Platform.isIOS || Platform.isAndroid) {
+        final info = await PackageInfo.fromPlatform();
+        setState(() => version = '${info.version}+${info.buildNumber}');
+      }
+    }();
   }
 
-// resets the app back to the main screen
-  void reset() {
-    setFile(false, '');
-    setPearPanel(false, PearPanel.accepting);
+  void setSharing(bool value) {
+    setState(() => _isSharing = value);
   }
 
-// sets whether there is currently a file selected or not
-  void setFile(bool selected, String file) {
-    setState(() {
-      fileSelected = selected;
-      fileName = file;
-    });
+  void _refreshReceiving() {
+    setState(() => _isReceiving = false);
+    receiverFuture = _beginReceive();
   }
 
-// sets panel appearence and opens and closes it based on boolean
-  void setPearPanel(bool isOpen, PearPanel panel) {
-    setState(() {
-      pearPanelOpen = isOpen;
-      pearPanel = panel;
-    });
-    if (pearPanelOpen) {
-      _pc.open();
-    } else if (!pearPanelOpen) {
-      _pc.close();
+  Future<void> _beginReceive() async {
+    setState(() => _isReceiving = true);
+    while (_isReceiving) {
+      try {
+        print('attempting to receieve');
+        var temp = await Peardrop.receive();
+        if (temp != null) {
+          setState(() {
+            file = temp;
+            pc.open();
+          });
+        }
+      } catch (e) {
+        print('error caught: $e');
+      }
     }
   }
 
-  // main build function
+  void _handleFileReceive() async {
+    var data = await file.accept();
+    await pc.close();
+    if (Platform.isAndroid || Platform.isIOS) {
+      // open share modal
+      await WcFlutterShare.share(
+        sharePopupTitle: 'PearDrop',
+        mimeType: file.mimetype,
+        fileName: file.filename,
+        bytesOfFile: data,
+      );
+    } else {
+      // select file and save
+      var result = await showSavePanel(suggestedFileName: file.filename);
+      if (result.canceled || result.paths.isEmpty) return;
+      var path = result.paths.first;
+      await File(path).writeAsBytes(data, flush: true);
+    }
+  }
+
+  Future<void> _handleFileSelect() async {
+    if (_locateNearbyDevices != null) {
+      _locateNearbyDevices.cancel();
+    }
+    print('attempting to select');
+    var temp = await selectFile();
+    setState(() => {filePath = temp, devices = []});
+    if (filePath != null) {
+      await _handleFileShare();
+      _locateNearbyDevices = Timer.periodic(
+          Duration(seconds: 15),
+          (Timer t) => {
+                if (!_isSharing)
+                  {
+                    print('refreshing devices'),
+                    _handleFileShare(),
+                  }
+              });
+    } else {
+      _refreshReceiving();
+    }
+  }
+
+  Future<void> _handleFileShare() async {
+    setState(() => devices = []);
+    final fileName = p.basename(filePath);
+    _refreshReceiving();
+    final data = await File(filePath).readAsBytes();
+    final receivers =
+        await Peardrop.send(data, fileName, mime(fileName) ?? 'Unknown File');
+    _refreshReceiving();
+    print('attempting to send');
+    receivers.listen((PeardropReceiver receiver) async {
+      final duplicate = devices.any((device) =>
+          (device.ip == receiver.ip) ||
+          (device.name == Device(Icons.description, receiver).name));
+
+      if (!(await isSelfIP(receiver.ip)) && !duplicate) {
+        setState(() {
+          devices.add(Device(Icons.description, receiver));
+        });
+      }
+
+      print('devices: ' + devices?.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    double _panelHeightOpen = determinePanelHeight();
-    setState(() {
-      _panelHeightOpen = _panelHeightOpen;
-      fileName = fileName;
-    });
     return Material(
       child: Scaffold(
         backgroundColor: Color(0xff293851),
-        // appBar: PearDropAppBar().getAppBar('PearDrop'),
         body: Stack(
           alignment: Alignment.topCenter,
           children: <Widget>[
             SlidingUpPanel(
-              controller: _pc,
-              maxHeight: _panelHeightOpen,
+              controller: pc,
+              maxHeight: MediaQuery.of(context).size.height * 0.35,
               minHeight: 0.0,
               defaultPanelState: PanelState.CLOSED,
               backdropEnabled: true,
               backdropOpacity: 0.2,
               isDraggable: false,
-              body: _getBody(),
+              onPanelClosed: () async {
+                if (file != null) await file.reject();
+              },
+              body: PearDropBody(
+                devices: devices,
+                fileSelect: _handleFileSelect,
+                version: version,
+                setSharing: setSharing,
+                fileName: filePath,
+                deviceName: deviceName,
+                fileSelected: filePath != null,
+              ),
               panelBuilder: (sc) => SlidingPanel(
-                peerDevice: devices[share.peerIndex],
-                sc: sc,
-                fileName: fileName,
-                pearPanel: pearPanel,
-                reset: reset,
-                accept: share.handleFileReceive,
+                file: file,
+                accept: _handleFileReceive,
               ),
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(18.0),
-                  topRight: Radius.circular(18.0)),
+                topLeft: Radius.circular(18.0),
+                topRight: Radius.circular(18.0),
+              ),
             ),
           ],
         ),
-        bottomNavigationBar: BottomVersionBar(
-          version: '1.0.0+0',
-          fileName: fileName,
-        ),
       ),
     );
-  }
-
-  // returns main app body
-  Widget _getBody() {
-    if (fileSelected) {
-      return DeviceSelectBody(
-          devices: devices,
-          reset: reset,
-          fileName: fileName,
-          fileShare: share.handleFileShare,
-          deviceName: WordList().ipToWords(deviceId),
-          setPanel: setPearPanel);
-    } else {
-      return FileSelectBody(
-        fileSelect: share.handleFileSelect,
-        setFile: setFile,
-        deviceName: WordList().ipToWords(deviceId),
-      );
-    }
-  }
-
-  double determinePanelHeight() {
-    if (pearPanel != PearPanel.receiving && pearPanel != PearPanel.sharing) {
-      return MediaQuery.of(context).size.height * 0.35;
-      // TODO: fix panel height being too small on some devices due to small app size return 200;
-    } else {
-      return MediaQuery.of(context).size.height * 0.25;
-    }
   }
 }

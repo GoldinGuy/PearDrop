@@ -8,7 +8,6 @@ build/
 ios/.generated/
 ios/Flutter/Generated.xcconfig
 ios/Flutter/flutter_export_environment.sh
-packages
 pubspec.lock
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -18,3 +17,5 @@ Podfile.lock
 .circle.dart
 .file_upload.dart
 .devices_page.dart
+.olddeviceselect.dart
+/lib/src/utilities/isolate.dart

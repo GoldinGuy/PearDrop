@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'dart:io';
 
 class WordList {
-  var rawWords = {
+  static final rawWords = {
     '00': ['aardvark', 'adroitness'],
     '01': ['absurd', 'adviser'],
     '02': ['accrue', 'aftermath'],
@@ -262,62 +260,31 @@ class WordList {
     'FF': ['Zulu', 'Yucatan'],
   };
 
-  String ipToWords(InternetAddress ip) {
-    var ipHex = ip.address.toString();
-    ipHex = ipHex.replaceAll('.', '');
-    if (ipHex.contains(':')) {
-      ipHex = ipHex.replaceAll(':', '');
-      var reg = new RegExp(r'[a-zA-Z]', multiLine: true);
-      ipHex = ipHex.replaceAll(reg, '');
-      ipHex = ipHex.substring(0, (ipHex.length / 2).round());
-    }
-    ipHex = (int.parse(ipHex)).toRadixString(16).toUpperCase();
-    List<String> hexs = [];
-    for (var i = 0; i < ipHex.length - 1; i += 2) {
-      hexs.add(ipHex.substring(i, i + 2));
+  static String ipToWords(InternetAddress ip) {
+    if (ip == null) return null;
+    var hexs = <String>[];
+    print('ip = $ip');
+    // print("raw = ${ip.rawAddress}");
+    final rhex = ip.rawAddress;
+    for (var i = 0; i < rhex.length; i += 1) {
+      hexs.add(rhex[i].toRadixString(16).padLeft(2, '0'));
     }
     return hexToWords(hexs).toString();
   }
 
-  String hexToWord(String hex, int position) {
+  static String hexToWord(String hex, int position) {
     return rawWords[hex][position % 2];
   }
 
-  String hexToWords(List<String> hexs) {
-    // print(hexs);
+  static String hexToWords(List<String> hexs) {
+    print(hexs);
     var words = [];
     var i = 0;
     hexs.forEach((String hex) {
       words.add(hexToWord(hex.toUpperCase(), i));
       i++;
     });
-    // return words;
-    return (words[0] + '-' + words[3]).toString();
+
+    return (words[0] + '-' + words[3]).toString().toLowerCase();
   }
-
-  // wordToHex(word) {
-  //   contains(a, w) {
-  //     var i = a.length;
-  //     while (i--) {
-  //       if (a[i].toUpperCase() == w.toUpperCase()) {
-  //         return true;
-  //       }
-  //     }
-  //     return false;
-  //   }
-
-  //   for (int i = 0; i < rawWords.length; i++) {
-  //     if (contains(rawWords[i], word)) {
-  //       return i;
-  //     }
-  //   }
-  // }
-
-  // wordsToHex(words) {
-  //   var hexs = [];
-  //   words.forEach((word) {
-  //     hexs.add(wordToHex(word));
-  //   });
-  //   return hexs;
-  // }
 }

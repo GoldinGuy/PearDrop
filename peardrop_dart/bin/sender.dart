@@ -9,8 +9,10 @@ void main(List<String> arguments) async {
     exit(1);
   }
   List<int> file = await File(filename).readAsBytes();
-  await for (var receiver in await Peardrop.send(file, filename, "text/plain")) {
-    stdout.write('Should we send to this receiver (addr=${receiver.ip.address})? [y/n]');
+  await for (var receiver
+      in await Peardrop.send(file, filename, "text/plain")) {
+    stdout.write(
+        'Should we send to this receiver (addr=${receiver.ip.address})? [y/n]');
     await stdout.flush();
     var inp = stdin.readLineSync();
     if (inp == 'y') {

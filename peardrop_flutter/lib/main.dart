@@ -1,8 +1,11 @@
 import 'dart:io' show Platform;
-import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:peardrop/src/home.dart';
+import 'package:peardrop/src/settings.dart';
+import 'package:peardrop/src/tos.dart';
 import 'package:window_size/window_size.dart' as window_size;
 
 void main() {
@@ -12,11 +15,9 @@ void main() {
     window_size.getWindowInfo().then((window) {
       if (window.screen != null) {
         final screenFrame = window.screen.visibleFrame;
-        // TODO: determine best way to set window size in desktop mode
-        final width = (screenFrame.width / 3.8).roundToDouble(),
-            height = (screenFrame.height / 1.6).roundToDouble();
-        // final width = 470.0, height = 670.0;
-        // final width = 430.0, height = 600.0;
+        // double width = (screenFrame.width / 4.4).roundToDouble(),
+        //     height = (screenFrame.height / 1.5).roundToDouble();
+        final width = 420.0, height = 780.0;
         final left = ((screenFrame.width - width) / 2).roundToDouble();
         final top = ((screenFrame.height - height) / 3).roundToDouble();
         final frame = Rect.fromLTWH(left, top, width, height);
@@ -24,13 +25,19 @@ void main() {
         window_size.setWindowTitle('PearDrop');
 
         if (Platform.isMacOS) {
-          window_size.setWindowMinSize(Size(440, 600));
-          window_size.setWindowMaxSize(Size(800, 1200));
+          window_size.setWindowMinSize(Size(420, 780));
+          window_size.setWindowMaxSize(Size(420, 780));
         }
+      } else {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+            statusBarColor: Colors.white, // Color for Android
+            statusBarBrightness:
+                Brightness.dark // Dark == white status bar for IOS.
+            ));
       }
     });
   }
-  runApp(new PearDrop());
+  runApp(PearDrop());
 }
 
 class PearDrop extends StatelessWidget {
@@ -46,6 +53,8 @@ class PearDrop extends StatelessWidget {
       ),
       routes: {
         '/home': (_) => HomePage(),
+        '/tos': (_) => TermsDisplayScreen(),
+        '/settings': (_) => SettingsScreen(),
       },
       home: HomePage(),
     );

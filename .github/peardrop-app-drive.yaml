@@ -1,0 +1,40 @@
+name: peardrop app drive
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  drive:
+    strategy:
+      matrix:
+        device:
+          - "iPhone 8 (13.1)"
+          - "iPhone 11 Pro Max (13.1)"
+
+      fail-fast: false
+    runs-on: macOS-latest
+    steps:
+      - name: "List simulators"
+        run: "xcrun instruments -s"
+      - name: "Start Simulator"
+        run: |
+          UDID=$(
+            xcrun instruments -s |
+            awk \
+              -F ' *[][]' \
+              -v 'device=${{ matrix.device }}' \
+              '$1 == device { print $2 }'
+          )
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v1
+      # https://github.com/marketplace/actions/flutter-action
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable" # or: 'dev' or 'beta'
+      - name: "Run PearDrop App Drive tests"
+        run: "flutter drive --target=test_driver/app.dart"
+
+ # Some of this code was based on https://medium.com/flutter-community/run-flutter-driver-tests-on-github-actions-13c639c7e4ab

@@ -1,0 +1,318 @@
+(function() {
+	var approval_records = {};
+	var show_all_pending = false;
+	var callback_queue   = {};
+
+	// Debounce a function
+	function debounce(func, ms) {
+		var timeout = null;
+		var args    = [];
+
+		return function() {
+			args = arguments;
+
+			if(timeout) {
+				return;
+			}
+
+			timeout = setTimeout(function() {
+				timeout = null;
+
+				func.apply(null, args);
+			}, ms);
+		};
+	}
+
+	function flush() {
+		// Get the callback queue
+		var sources   = {};
+		var callbacks = callback_queue;
+
+		// Clear the callback queue
+		callback_queue = {};
+
+		for(var key in callbacks) {
+			var parts     = JSON.parse(key);
+			var source    = parts[0];
+			var source_id = parts[1];
+
+			// If we are already getting records for all source IDs for this source, skip this key
+			if(sources[source] === true) {
+				continue;
+			}
+
+			// If there is no source ID, get records for all source IDs for this source
+			if(!source_id) {
+				sources[source] = true;
+
+				// ...and then continue
+				continue;
+			}
+
+			// Get the records for this source ID
+			if(!sources[source]) {
+				sources[source] = {};
+			}
+
+			sources[source][source_id] = true;
+		}
+
+		// Create the request
+		var request = {
+			autoload_finance : true,
+			type             : 'ApprovalFlowTooltipHandler',
+			action           : 'getRecords',
+
+			data : {
+				getRecords : {
+					sources : sources
+				}
+			}
+		};
+
+		// Resolve/reject the callbacks
+		Focus.ajax.post(request, function(data) {
+			var response = JSON.parse(data);
+
+			// DO NOT MODIFY IF UNFAMILIAR WITH GZIP.
+			// This decodes base64 response.*, returns it back to a JSON string with INFLATE algorithm, then parses it into a JSON object.
+			// Code for the gzip functions can be found in /assets/gzip/gzip.js.
+			var get_records = JSON.parse(Focus.gzip.inflate(atob(response.getRecords)));
+
+			// Update the "show all pending" flag
+			show_all_pending = get_records.show_all_pending;
+
+			for(var source_id_key in callbacks) {
+				var parts         = JSON.parse(source_id_key);
+				var source        = parts[0];
+				var source_id     = parts[1];
+				var source_result = get_records.result[source] || {};
+
+				if(!source_id) {
+					callbacks[source_id_key].resolve({
+						pending : source_result.pending || false,
+						denied  : source_result.denied || false,
+						records : source_result.records || [],
+					});
+				}
+				else {
+					var source_pending = source_result.pending || {};
+					var source_denied  = source_result.denied || {};
+					var source_records = source_result.records || {};
+
+					callbacks[source_id_key].resolve({
+						pending : source_pending[source_id] || false,
+						denied  : source_denied[source_id] || false,
+						records : source_records[source_id] || [],
+					});
+				}
+			}
+		}, function(error) {
+			for(var key in callbacks) {
+				callbacks[key].reject(error);
+			}
+		});
+	}
+
+	// Debounce the flush function
+	var debounced_flush = debounce(flush, 50);
+
+	// Update all approval records for a given source ID
+	function updateBySourceId(source, source_id, stop, table) {
+		// If there are > 5000 sources pending, wait for the queue to clear out
+		var keys = Object.keys(callback_queue);
+
+		if(keys.length > 5000) {
+			return new Promise(function(resolve, reject) {
+				setTimeout(function() {
+					updateBySourceId(source, source_id, stop, table).then(resolve, reject);
+				}, 100);
+			});
+		}
+
+		var key = JSON.stringify([ source, +source_id || null ]);
+
+		// If there is already a pending update for this key in progress, return the promise
+		if(approval_records[key]) {
+			return approval_records[key];
+		}
+
+		// Add a Promise for the approval records for the source ID
+		approval_records[key] = new Promise(function(resolve, reject) {
+			callback_queue[key] = {
+				resolve : resolve,
+				reject  : reject,
+			};
+		});
+
+		// Flush the queue
+		debounced_flush();
+
+		// Update the UI
+		return approval_records[key].then(function(result) {
+			// Clear the promise to force a refresh if the key is updated again
+			approval_records[key] = null;
+
+			// Update the UI
+			if(!stop) {
+				updateUI(table);
+			}
+
+			return result;
+		});
+	}
+
+	// Update the approval flow tooltip UI
+	function updateUI(table) {
+		if (!table) {
+			$('.approval-flow').trigger('initialize');
+		}
+		else {
+			var rows = table.getRows();
+
+			for (var i in rows) {
+				var $flow = $(rows[i]).find(".approval-flow");
+
+				initialize($flow);
+			}
+		}
+	}
+
+	// Initialize an approval flow element
+	function initialize($self) {
+		var source = $self.data('source');
+		var id     = $self.data('id');
+
+		// Approval flow elements should have 'data-source' and 'data-id' attributes
+		if(!source || !id) {
+			return;
+		}
+
+		$self
+			.addClass('loading initialized')
+			.removeClass('pending denied approved')
+			.text('');
+
+		// Ensure the approval flow data for this record exists
+		return updateBySourceId(source, id, true).then(function(source_records) {
+			var pending = source_records['pending'];
+			var denied  = source_records['denied'];
+			var records = source_records['records'];
+
+			// Generate the css class and text
+			var css_class = pending ? 'pending' : denied ? 'denied' : 'approved';
+			var text      = pending ? 'Pending' : denied ? 'Denied' : 'Approved';
+
+			$self
+				.removeClass('loading pending denied approved')
+				.addClass(css_class)
+				.text(text);
+
+			// If there are no records, do not show a tooltip
+			if(!records.length) {
+				$self.attr('data-focus-tooltip', null);
+				return true;
+			}
+
+			var tooltip_elements = [
+				'<div class="approval-flow-header">Approval Chain</div>'
+			];
+
+			var previous_group      = null;
+			var last_group          = false;
+			var remaining_approvers = [];
+
+			// Generate the tooltip
+			for(var i in records) {
+				var record = records[i];
+
+				if(record.group !== previous_group) {
+					if(last_group && !show_all_pending) {
+						break;
+					}
+
+					if(record.approved === null) {
+						last_group = true;
+					}
+
+					var group_header = [
+						'<div class="approval-flow-group-header">',
+							'<span>',
+								record.group,
+							'</span>',
+						'</div>'
+					].join('');
+
+					tooltip_elements.push(group_header);
+
+					previous_group = record.group;
+				}
+
+				if(record.approved === null) {
+					remaining_approvers.push(record.name);
+				}
+
+				var approver = [
+					'<div class="approval-flow-record" data-approved="' + record.approved + '">',
+						record.name + record.decision_date,
+					'</div>'
+				].join('');
+
+				tooltip_elements.push(approver);
+			}
+
+			var tooltip = [
+				'<div class="approval-flow-tooltip">',
+					tooltip_elements.join(''),
+				'</div>'
+			].join('');
+
+			$self.attr('data-focus-tooltip', tooltip);
+			$self.attr("data-accessible-tooltip", "");
+
+			// This is used for automation tests
+			$self.attr('data-remaining-approvers', remaining_approvers.join('||'));
+		});
+	}
+
+	// Initialize approval flows
+	$(document).on('initialize', '.approval-flow', function() {
+		initialize($(this));
+	});
+
+	// Initialize approval flows inside DataTable automatically
+	$(document).on('tablePaginate', '.dataTable', function() {
+		var $this = $(this);
+
+		if ($this.find('.approval-flow').length) {
+			var $flows = $($this[0].getRows())
+				.find('.approval-flow')
+				.not('.initialized');
+
+			for(var i = 0; i < $flows.length; i++) {
+				initialize($($flows[i]));
+			}
+		}
+	});
+
+	// Update all approval elements for a given source
+	function update(source, table) {
+		var $rows    = table ? $($(table)[0].getRows()) : $(document.body);
+		var $flows   = $rows.find(".approval-flow[data-source='" + source + "']");
+		var promises = [];
+		var deferred = $.Deferred();
+
+		for(var i = 0; i < $flows.length; i++) {
+			promises.push(initialize($($flows[i])));
+		}
+
+		// Proxy the promises to a jQuery Deferred object since calling code expects it
+		Promise.all(promises).then(deferred.resolve, deferred.reject);
+
+		return deferred;
+	}
+
+	Focus.ApprovalFlow = {
+		update : update
+	};
+}());

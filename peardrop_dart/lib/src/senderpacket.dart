@@ -19,6 +19,7 @@ class SenderPacket {
     free(cfilename);
     free(cmimetype);
   }
+
   /// Reads a [SenderPacket] from the given buffer.
   SenderPacket.read(List<int> buffer) {
     var cbuffer = cbcopy(buffer);

@@ -1,18 +1,41 @@
 name: peardrop
-description: A cross-platform airdrop alternative
-version: 1.0.0+1
+description: A cross-platform AirDrop alternative
+version: 0.0.1+11
+author: anirudhb, GoldinGuy
 
 dependencies:
   flutter:
     sdk: flutter
 
+  # connectivity: ^0.4.8+6
+
   cupertino_icons: ^0.1.2
 
   sliding_up_panel: ^1.0.2
 
+  mime_type: ^0.3.2
+
+  mockito: ^4.1.1
+
+  permission_handler: ^5.0.1+1
+
   file_picker: ^1.9.0+1
 
+  wc_flutter_share: ^0.2.2
+
   device_info: ^0.4.2+4
+
+  package_info: ^0.4.1
+
+  path: ^1.7.0
+
+  get_ip:
+    path: ../packages/get_ip/
+
+  http: ^0.12.1
+
+  libpeardrop:
+    path: ../peardrop_dart/
 
   flutter_staggered_animations: "^0.1.2"
 
@@ -53,7 +76,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.7.4
 
 flutter_icons:
-  image_path: "assets/images/icon.png"
+  image_path: "assets/images/icon2.png"
   android: true
   ios: true
 
@@ -61,7 +84,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/share.gif
+    - assets/images/icon.png
+    - assets/images/header1.png
+    - assets/images/header2.png
+    - assets/images/header3.png
 
   fonts:
     - family: Montserrat

@@ -24,8 +24,10 @@ void main() {
   test('tcp_read', () {
     int port = 14678;
     List<int> data = [
-      1, /*ext_len*/
-      0, /*TCP_EXTENSION_TYPE*/
+      1,
+      /*ext_len*/
+      0,
+      /*TCP_EXTENSION_TYPE*/
       (port >> 8) & 0xff,
       port & 0xff,
     ];
@@ -37,8 +39,10 @@ void main() {
     AdPacket packet = AdPacket();
     packet.tcpPort = port;
     List<int> expected = [
-      1, /*ext_len*/
-      0, /*TCP_EXTENSION_TYPE*/
+      1,
+      /*ext_len*/
+      0,
+      /*TCP_EXTENSION_TYPE*/
       (port >> 8) & 0xff,
       port & 0xff,
     ];

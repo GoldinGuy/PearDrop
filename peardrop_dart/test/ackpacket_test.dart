@@ -20,8 +20,10 @@ void main() {
     AckType type = AckType.accept(AckTypeType.AD_PACKET);
     int port = 14678;
     List<int> data = [
-      type.raw << 4 | 1, /*ext_len*/
-      0, /* ACK_TCP_EXTENSION_TYPE */
+      type.raw << 4 | 1,
+      /*ext_len*/
+      0,
+      /* ACK_TCP_EXTENSION_TYPE */
       (port >> 8) & 0xff,
       port & 0xff,
     ];
@@ -32,8 +34,10 @@ void main() {
     AckType type = AckType.accept(AckTypeType.AD_PACKET);
     int port = 14678;
     List<int> expected = [
-      type.raw << 4 | 1, /*ext_len*/
-      0, /*ACK_TCP_EXTENSION_TYPE*/
+      type.raw << 4 | 1,
+      /*ext_len*/
+      0,
+      /*ACK_TCP_EXTENSION_TYPE*/
       (port >> 8) & 0xff,
       port & 0xff,
     ];
