@@ -91,14 +91,6 @@ class _DeviceWidgetState extends State<DeviceWidget> {
     } catch (e) {
       print('error caught: $e');
       setState(() => device.state = SharingState.failed);
-
-      // await Future.delayed(Duration(seconds: 2), () => setSharing(false));
-      // await Future.delayed(
-      //   Duration(seconds: 2),
-      //   () => setState(() => device.state = SharingState.neutral),
-      // );
-      // setSharing(false);
-      // await handleFileShare;
     }
     setSharing(false);
   }

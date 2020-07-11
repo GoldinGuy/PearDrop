@@ -57,7 +57,6 @@ class RenderRadar extends RenderBox
       }
     });
     _tween = Tween(begin: 0.9 * pi, end: 2.1 * pi).animate(_controller);
-    // _tween = Tween(begin: pi, end: 2 * pi).animate(_controller);
   }
 
   AnimationController _controller;

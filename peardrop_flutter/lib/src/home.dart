@@ -80,7 +80,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handleFileReceive() async {
-    // setState(() => filePath = null);
     var data = await file.accept();
     await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
@@ -142,11 +141,7 @@ class _HomePageState extends State<HomePage> {
           devices.add(Device(Icons.description, receiver));
         });
       }
-      // else {
-      //   for (var device in devices) {
-      //     setState(() => device.state = SharingState.neutral);
-      //   }
-      // }
+
       print('devices: ' + devices?.toString());
     });
   }

@@ -28,7 +28,6 @@ jobs:
               '$1 == device { print $2 }'
           )
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
-      # https://medium.com/flutter-community/run-flutter-driver-tests-on-github-actions-13c639c7e4ab
       # https://github.com/actions/checkout
       - uses: actions/checkout@v1
       # https://github.com/marketplace/actions/flutter-action
@@ -37,3 +36,5 @@ jobs:
           channel: "stable" # or: 'dev' or 'beta'
       - name: "Run PearDrop App Drive tests"
         run: "flutter drive --target=test_driver/app.dart"
+
+ # Some of this code was based on https://medium.com/flutter-community/run-flutter-driver-tests-on-github-actions-13c639c7e4ab
