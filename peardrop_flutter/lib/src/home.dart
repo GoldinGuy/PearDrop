@@ -46,7 +46,9 @@ class _HomePageState extends State<HomePage> {
     () async {
       final ip = await getMainIP();
       setState(() => deviceName = WordList.ipToWords(ip));
-      initDirectory();
+      if (Platform.isIOS || Platform.isAndroid) {
+        initDirectory();
+      }
     }();
     _refreshReceiving();
     () async {
@@ -71,8 +73,6 @@ class _HomePageState extends State<HomePage> {
     if (Platform.isIOS) {
       temp = await getApplicationDocumentsDirectory();
     } else {
-      // temp = await getExternalStorageDirectory();
-
       temp = await DownloadsPathProvider.downloadsDirectory;
     }
     setState(() => _directory = temp);
@@ -100,14 +100,8 @@ class _HomePageState extends State<HomePage> {
     var data = await file.accept();
     await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
-      // open share modal
+      // open modal
       ReceiveSheet().getReceiveSheet(context, file, data, _directory);
-      // await WcFlutterShare.share(
-      //   sharePopupTitle: 'PearDrop',
-      //   mimeType: file.mimetype,
-      //   fileName: file.filename,
-      //   bytesOfFile: data,
-      // );
     } else {
       // select file and save
       var result = await showSavePanel(suggestedFileName: file.filename);

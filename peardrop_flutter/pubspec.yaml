@@ -1,7 +1,7 @@
 name: peardrop
-description: A cross-platform AirDrop alternative
+description: A cross-platform file sharing application
 version: 0.0.1+11
-author: anirudhb, GoldinGuy
+author: GoldinGuy & anirudhb
 
 dependencies:
   flutter:
@@ -16,6 +16,8 @@ dependencies:
   mime_type: ^0.3.2
 
   mockito: ^4.1.1
+
+  open_file: ^3.0.1
 
   permission_handler: ^5.0.1+1
 
@@ -64,12 +66,12 @@ dependencies:
       path: plugins/flutter_plugins/path_provider_fde
       ref: b0794faf2c000576515aee56ca6bb5bee64cece4
   shared_preferences: ^0.5.6
-  url_launcher: ^5.4.0
-  url_launcher_fde:
-    git:
-      url: git://github.com/google/flutter-desktop-embedding.git
-      path: plugins/flutter_plugins/url_launcher_fde
-      ref: b0794faf2c000576515aee56ca6bb5bee64cece4
+  # url_launcher: ^5.4.0
+  # url_launcher_fde:
+  #   git:
+  #     url: git://github.com/google/flutter-desktop-embedding.git
+  #     path: plugins/flutter_plugins/url_launcher_fde
+  #     ref: b0794faf2c000576515aee56ca6bb5bee64cece4
 
 dev_dependencies:
   flutter_test:
