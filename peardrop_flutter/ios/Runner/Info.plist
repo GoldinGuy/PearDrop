@@ -38,6 +38,10 @@
 	<string>Send and receive files</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Send and receive files</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
