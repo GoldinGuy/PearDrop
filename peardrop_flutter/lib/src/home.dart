@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:peardrop/src/utilities/file_select.dart';
 import 'package:peardrop/src/utilities/ip.dart';
 import 'package:peardrop/src/utilities/version_const.dart';
 import 'package:peardrop/src/utilities/word_list.dart';
+import 'package:peardrop/src/widgets/receive_completed.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
@@ -30,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> receiverFuture;
   bool _isReceiving = true, _isSharing = false;
   final pc = PanelController();
+  Directory _directory;
   Timer _locateNearbyDevices;
 
   @override
@@ -42,6 +46,7 @@ class _HomePageState extends State<HomePage> {
     () async {
       final ip = await getMainIP();
       setState(() => deviceName = WordList.ipToWords(ip));
+      initDirectory();
     }();
     _refreshReceiving();
     () async {
@@ -59,6 +64,18 @@ class _HomePageState extends State<HomePage> {
   void _refreshReceiving() {
     setState(() => _isReceiving = false);
     receiverFuture = _beginReceive();
+  }
+
+  void initDirectory() async {
+    Directory temp;
+    if (Platform.isIOS) {
+      temp = await getApplicationDocumentsDirectory();
+    } else {
+      // temp = await getExternalStorageDirectory();
+
+      temp = await DownloadsPathProvider.downloadsDirectory;
+    }
+    setState(() => _directory = temp);
   }
 
   Future<void> _beginReceive() async {
@@ -84,12 +101,13 @@ class _HomePageState extends State<HomePage> {
     await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
       // open share modal
-      await WcFlutterShare.share(
-        sharePopupTitle: 'PearDrop',
-        mimeType: file.mimetype,
-        fileName: file.filename,
-        bytesOfFile: data,
-      );
+      ReceiveSheet().getReceiveSheet(context, file, data, _directory);
+      // await WcFlutterShare.share(
+      //   sharePopupTitle: 'PearDrop',
+      //   mimeType: file.mimetype,
+      //   fileName: file.filename,
+      //   bytesOfFile: data,
+      // );
     } else {
       // select file and save
       var result = await showSavePanel(suggestedFileName: file.filename);
