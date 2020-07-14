@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
       // open modal
-      ReceiveSheet().getReceiveSheet(context, file, data, _directory);
+      ReceiveSheet.showReceiveSheet(context, file, data, _directory);
     } else {
       // select file and save
       var result = await showSavePanel(suggestedFileName: file.filename);

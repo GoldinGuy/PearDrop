@@ -10,7 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class ReceiveSheet {
-  void getReceiveSheet(BuildContext context, PeardropFile file, List<int> data,
+  static void showReceiveSheet(BuildContext context, PeardropFile file, List<int> data,
       Directory directory) {
     if (Platform.isIOS) {
       showCupertinoModalPopup(
@@ -101,10 +101,10 @@ class ReceiveSheet {
 
   void saveFile(PeardropFile file, List<int> data, Directory directory) async {
     var temp;
-    if (await Permission.storage.isGranted != true) {
+    if (!(await Permission.storage.isGranted)) {
       await Permission.storage.request();
     }
-    temp = await File('${directory.path}/${file.filename}');
+    temp = File('${directory.path}/${file.filename}');
     temp.writeAsBytesSync(data);
     print('${temp.absolute.path}');
     print('saved file to device');
