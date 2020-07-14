@@ -16,8 +16,6 @@ import 'package:peardrop/src/utilities/word_list.dart';
 import 'package:peardrop/src/widgets/receive_completed.dart';
 import 'package:peardrop/src/widgets/sliding_panel.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:wc_flutter_share/wc_flutter_share.dart';
-
 import 'utilities/nearby_device.dart';
 import 'widgets/peardrop_body.dart';
 
@@ -125,6 +123,7 @@ class _HomePageState extends State<HomePage> {
           (Timer t) => {
                 if (!_isSharing)
                   {
+                    setState(() => devices = []),
                     print('refreshing devices'),
                     _handleFileShare(),
                   }
@@ -168,7 +167,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             SlidingUpPanel(
               controller: pc,
-              maxHeight: MediaQuery.of(context).size.height * 0.35,
+              maxHeight: MediaQuery.of(context).size.height * 0.36,
               minHeight: 0.0,
               defaultPanelState: PanelState.CLOSED,
               backdropEnabled: true,

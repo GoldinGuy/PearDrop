@@ -80,7 +80,7 @@ class PearDropBody extends StatelessWidget {
 
   Widget _getBody() {
     if (!fileSelected) {
-      var deviceHeight = 26.0;
+      var deviceHeight = 28.0;
       if (Platform.isWindows || Platform.isMacOS) {
         deviceHeight = 17;
       }
@@ -113,7 +113,7 @@ class PearDropBody extends StatelessWidget {
                     bottom: deviceHeight,
                   ),
                   child: Text(
-                    'Click below to start sharing, or begin from another nearby device',
+                    'Press below to start sharing, or begin from another nearby device',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,
