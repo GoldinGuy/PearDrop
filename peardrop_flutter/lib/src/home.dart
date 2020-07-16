@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:libpeardrop/libpeardrop.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:package_info/package_info.dart';
@@ -162,39 +163,42 @@ class _HomePageState extends State<HomePage> {
     return Material(
       child: Scaffold(
         backgroundColor: Color(0xff293851),
-        body: Stack(
-          alignment: Alignment.topCenter,
-          children: <Widget>[
-            SlidingUpPanel(
-              controller: pc,
-              maxHeight: MediaQuery.of(context).size.height * 0.36,
-              minHeight: 0.0,
-              defaultPanelState: PanelState.CLOSED,
-              backdropEnabled: true,
-              backdropOpacity: 0.2,
-              isDraggable: false,
-              onPanelClosed: () async {
-                if (file != null) await file.reject();
-              },
-              body: PearDropBody(
-                devices: devices,
-                fileSelect: _handleFileSelect,
-                version: version,
-                setSharing: setSharing,
-                fileName: filePath,
-                deviceName: deviceName,
-                fileSelected: filePath != null,
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              SlidingUpPanel(
+                controller: pc,
+                maxHeight: MediaQuery.of(context).size.height * 0.36,
+                minHeight: 0.0,
+                defaultPanelState: PanelState.CLOSED,
+                backdropEnabled: true,
+                backdropOpacity: 0.2,
+                isDraggable: false,
+                onPanelClosed: () async {
+                  if (file != null) await file.reject();
+                },
+                body: PearDropBody(
+                  devices: devices,
+                  fileSelect: _handleFileSelect,
+                  version: version,
+                  setSharing: setSharing,
+                  fileName: filePath,
+                  deviceName: deviceName,
+                  fileSelected: filePath != null,
+                ),
+                panelBuilder: (sc) => SlidingPanel(
+                  file: file,
+                  accept: _handleFileReceive,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(18.0),
+                  topRight: Radius.circular(18.0),
+                ),
               ),
-              panelBuilder: (sc) => SlidingPanel(
-                file: file,
-                accept: _handleFileReceive,
-              ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18.0),
-                topRight: Radius.circular(18.0),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

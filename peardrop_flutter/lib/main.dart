@@ -28,13 +28,14 @@ void main() {
           window_size.setWindowMinSize(Size(420, 780));
           window_size.setWindowMaxSize(Size(420, 780));
         }
-      } else {
-        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Colors.white, // Color for Android
-            statusBarBrightness:
-                Brightness.dark // Dark == white status bar for IOS.
-            ));
       }
+      //  else {
+      //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      //       statusBarColor: Colors.white, // Color for Android
+      //       statusBarBrightness:
+      //           Brightness.dark // Dark == white status bar for IOS.
+      //       ));
+      // }
     });
   }
   runApp(PearDrop());
