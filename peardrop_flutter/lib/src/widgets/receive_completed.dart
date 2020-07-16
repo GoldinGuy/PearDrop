@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:libpeardrop/libpeardrop.dart';
-import 'package:path/path.dart' as p;
-import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class ReceiveSheet {
@@ -14,88 +13,90 @@ class ReceiveSheet {
       List<int> data, Directory directory) {
     if (Platform.isIOS) {
       showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext context) {
-            return CupertinoActionSheet(
-                title: const Text('Receive Complete'),
-                // message: const Text(''),
-                actions: <Widget>[
-                  CupertinoActionSheetAction(
-                    child: const Text('Save'),
-                    onPressed: () {
-                      saveFile(file, data, directory);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  CupertinoActionSheetAction(
-                    child: const Text('Share'),
-                    onPressed: () async {
-                      shareFile(file, data, directory);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  CupertinoActionSheetAction(
-                    child: const Text('Save & Open'),
-                    onPressed: () {
-                      saveFile(file, data, directory);
-                      openFile(file, directory);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-                cancelButton: CupertinoActionSheetAction(
-                  child: const Text('Cancel'),
-                  isDefaultAction: true,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ));
-          });
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            title: const Text('Receive Complete'),
+            // message: const Text(''),
+            actions: <Widget>[
+              CupertinoActionSheetAction(
+                child: const Text('Save'),
+                onPressed: () async {
+                  await saveFile(file, data, directory);
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Share'),
+                onPressed: () async {
+                  await shareFile(file, data, directory);
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: const Text('Save & Open'),
+                onPressed: () async {
+                  await saveFile(file, data, directory);
+                  await openFile(file, directory);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              child: const Text('Cancel'),
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          );
+        },
+      );
     } else {
       showModalBottomSheet(
-          context: context,
-          builder: (BuildContext bc) {
-            return Container(
-              child: Wrap(
-                children: <Widget>[
-                  ListTile(
-                      leading: Icon(Icons.save),
-                      title: Text('Save'),
-                      onTap: () => {
-                            saveFile(file, data, directory),
-                            Navigator.pop(context),
-                          }),
-                  ListTile(
-                    leading: Icon(Icons.share),
-                    title: Text('Share'),
-                    onTap: () => {
-                      shareFile(file, data, directory),
-                      Navigator.pop(context),
-                    },
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.save),
+                  title: Text('Save'),
+                  onTap: () async {
+                    await saveFile(file, data, directory);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.share),
+                  title: Text('Share'),
+                  onTap: () async {
+                    await shareFile(file, data, directory);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.open_in_browser),
+                  title: Text('Save & Open'),
+                  onTap: () async {
+                    await saveFile(file, data, directory);
+                    await openFile(file, directory);
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.cancel),
+                  title: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.red),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.open_in_browser),
-                    title: Text('Save & Open'),
-                    onTap: () => {
-                      saveFile(file, data, directory),
-                      openFile(file, directory),
-                      Navigator.pop(context),
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.cancel),
-                    title: Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    onTap: () => {
-                      Navigator.pop(context),
-                    },
-                  ),
-                ],
-              ),
-            );
-          });
+                  onTap: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
   }
 
@@ -122,8 +123,13 @@ class ReceiveSheet {
     print('shared file');
   }
 
-  static void openFile(PeardropFile file, Directory directory) {
+  static void openFile(PeardropFile file, Directory directory) async {
     final filePath = '${directory.path}/${file.filename}';
-    OpenFile.open(filePath);
+    final url = Uri.file(filePath).toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Cannot launch $url');
+    }
   }
 }
