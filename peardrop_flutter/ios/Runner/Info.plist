@@ -22,6 +22,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Send and receive files</string>
 	<key>NSCalendarsUsageDescription</key>
@@ -30,16 +32,12 @@
 	<string>Send and receive files</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Allows the user to accurately send and recieve files with nearby devices</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allows the user to accurately send and recieve files with nearby devices</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Send and receive files</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send and receive files</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Send and receive files</string>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

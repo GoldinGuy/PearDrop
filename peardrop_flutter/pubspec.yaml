@@ -15,7 +15,7 @@ dependencies:
 
   mockito: ^4.1.1
 
-  open_file: ^3.0.1
+  url_launcher: ^5.5.0
 
   permission_handler: ^5.0.1+1
 

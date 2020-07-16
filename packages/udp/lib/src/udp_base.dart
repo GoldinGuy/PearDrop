@@ -75,14 +75,14 @@ class UDP {
   static Future<UDP> bind(Endpoint localEndpoint) async {
     var ep = localEndpoint;
 
-    // Doesn't work on iOS
-    if (!Platform.isIOS) {
+    // Doesn't work on iOS or macOS
+    if (!Platform.isIOS && !Platform.isMacOS) {
       if (localEndpoint.isMulticast) {
         ep = Endpoint.any(port: localEndpoint.port);
       }
     }
 
-    return await RawDatagramSocket.bind(ep.address, ep.port.value)
+    return await RawDatagramSocket.bind(ep.address, ep.port.value, reuseAddress: true, reusePort: true)
         .then((socket) {
       var udp = UDP._(localEndpoint);
 
