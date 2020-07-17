@@ -101,6 +101,7 @@ class PearDropBody extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 23,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 Padding(
