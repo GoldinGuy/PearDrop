@@ -8,6 +8,7 @@ class TermsDisplayScreen extends StatelessWidget {
         child: Scaffold(
       backgroundColor: Color(0xff91c27d),
       appBar: AppBar(
+        brightness: Brightness.dark,
         title: const Padding(
           padding: EdgeInsets.only(left: 10),
           child: Text('Terms of Service'),

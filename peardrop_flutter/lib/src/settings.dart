@@ -49,27 +49,11 @@ class SettingsScreen extends StatelessWidget {
           ),
           _buildCard(
             child: Text(
-              'Clear Cache',
-              style: HEADER_TEXT_STYLE,
-            ),
-            onPressed: () {},
-          ),
-          _buildCard(
-            child: Text(
-              'Airdrop Animation',
-              style: HEADER_TEXT_STYLE,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/circle');
-            },
-          ),
-          _buildCard(
-            child: Text(
               'Terms of Service',
               style: HEADER_TEXT_STYLE,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/terms');
+              Navigator.pushNamed(context, '/tos');
             },
           ),
         ],

@@ -76,11 +76,9 @@ class PearDropBody extends StatelessWidget {
     );
   }
 
-  // all methods below are related to UI based on if a file has been selected or not
-
   Widget _getBody() {
     if (!fileSelected) {
-      var deviceHeight = 26.0;
+      var deviceHeight = 28.0;
       if (Platform.isWindows || Platform.isMacOS) {
         deviceHeight = 17;
       }
@@ -113,7 +111,7 @@ class PearDropBody extends StatelessWidget {
                     bottom: deviceHeight,
                   ),
                   child: Text(
-                    'Click below to start sharing, or begin from another nearby device',
+                    'Press below to start sharing, or begin from another nearby device',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,
