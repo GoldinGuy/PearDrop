@@ -17,7 +17,6 @@ class ReceiveSheet {
         builder: (BuildContext context) {
           return CupertinoActionSheet(
             title: const Text('Receive Complete'),
-            // message: const Text(''),
             actions: <Widget>[
               CupertinoActionSheetAction(
                 child: const Text('Save'),

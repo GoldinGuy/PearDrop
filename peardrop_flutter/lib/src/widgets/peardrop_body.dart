@@ -76,8 +76,6 @@ class PearDropBody extends StatelessWidget {
     );
   }
 
-  // all methods below are related to UI based on if a file has been selected or not
-
   Widget _getBody() {
     if (!fileSelected) {
       var deviceHeight = 28.0;

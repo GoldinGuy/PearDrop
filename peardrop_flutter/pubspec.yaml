@@ -1,7 +1,7 @@
 name: peardrop
 description: A cross-platform file sharing application
 version: 0.0.1+11
-author: anirudhb & GoldinGuy
+author: GoldinGuy, anirudhb
 
 dependencies:
   flutter:
@@ -56,7 +56,6 @@ dependencies:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: b0794faf2c000576515aee56ca6bb5bee64cece4
-  # Plugins from flutter/plugins, with local desktop implementations.
   path_provider: ^1.6.5
   path_provider_fde:
     git:

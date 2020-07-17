@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     var data = await file.accept();
     await pc.close();
     if (Platform.isAndroid || Platform.isIOS) {
-      // open modal
+      // open receive sheet
       ReceiveSheet.showReceiveSheet(context, file, data, _directory);
     } else {
       // select file and save
@@ -153,7 +153,6 @@ class _HomePageState extends State<HomePage> {
           devices.add(Device(Icons.description, receiver));
         });
       }
-
       print('devices: ' + devices?.toString());
     });
   }
