@@ -120,7 +120,7 @@ class PearDropBody extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 8, 0, 3),
+                  padding: EdgeInsets.fromLTRB(0, 7, 0, 3),
                   child: Container(
                     child: headers[Random().nextInt(headers.length)],
                     height: 288,
@@ -316,17 +316,19 @@ class PearDropBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: Text(
-                'Select a file to start sharing',
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  color: Color(0xff559364),
+          Expanded(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                child: Text(
+                  'Select a file to start sharing',
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Color(0xff559364),
+                  ),
                 ),
               ),
             ),
