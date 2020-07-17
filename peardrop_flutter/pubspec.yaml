@@ -13,6 +13,8 @@ dependencies:
 
   mime_type: ^0.3.2
 
+  open_file: ^3.0.1
+
   mockito: ^4.1.1
 
   url_launcher: ^5.5.0

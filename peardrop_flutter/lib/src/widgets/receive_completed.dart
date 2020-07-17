@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:libpeardrop/libpeardrop.dart';
+import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
@@ -101,13 +102,17 @@ class ReceiveSheet {
 
   static void saveFile(
       PeardropFile file, List<int> data, Directory directory) async {
-    var temp;
+    // var temp;
+    // if (!(await Permission.storage.isGranted)) {
+    //   await Permission.storage.request();
+    // }
+    // temp = File('${directory.path}/${file.filename}');
+    // temp.writeAsBytesSync(data);
     if (!(await Permission.storage.isGranted)) {
       await Permission.storage.request();
     }
-    temp = File('${directory.path}/${file.filename}');
-    temp.writeAsBytesSync(data);
-    print('${temp.absolute.path}');
+    await File('${directory.path}/${file.filename}').writeAsBytes(data);
+    print('${directory.path}/${file.filename}');
     print('saved file to device');
   }
 
@@ -123,12 +128,17 @@ class ReceiveSheet {
   }
 
   static void openFile(PeardropFile file, Directory directory) async {
-    final filePath = '${directory.path}/${file.filename}';
-    final url = Uri.file(filePath).toString();
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (Platform.isAndroid) {
+      final filePath = '${directory.path}/${file.filename}';
+      await OpenFile.open(filePath);
     } else {
-      print('Cannot launch $url');
+      final filePath = '${directory.path}/${file.filename}';
+      final url = Uri.file(filePath).toString();
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        print('Cannot launch $url');
+      }
     }
   }
 }
