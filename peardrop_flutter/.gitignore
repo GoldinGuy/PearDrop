@@ -19,3 +19,5 @@ Podfile.lock
 .devices_page.dart
 .olddeviceselect.dart
 /lib/src/utilities/isolate.dart
+/android/app/key/*
+android/key.properties
