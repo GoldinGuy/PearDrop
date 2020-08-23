@@ -1,3 +1,5 @@
+# PearDrop
+
 🍐 A cross-platform file transfer application
 
 [![Discuss On Discord][discord]][discord-url]
@@ -6,50 +8,75 @@
 
 These days, closed ecosystems surround us. iPhones only share with Apple devices, Android phones only with Windows. Sending a file from one place to another is difficult and frustrating, usually requiring you to send an email to yourself. This is not acceptable, and PearDrop aims to solve this issue. PearDrop is an application built on a custom protocol that is available on every platform (Apple, Google, Windows, etc). This allows for simple and efficient file transfer when you really need it.
 
-<!--
-README Template to fill out at a later date:
-![](header.png)
+## Gallery
+
+<img src="https://user-images.githubusercontent.com/47064842/90986562-ef697900-e551-11ea-8146-78d8e82dad67.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/47064842/90986585-08722a00-e552-11ea-80e3-cf213545837e.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/47064842/90986522-913c9600-e551-11ea-9462-200fb640da95.jpg" width="30%"></img>
+
 ## Installation
-OS X & Linux:
-```sh
-npm install my-crazy-module --save
+
+`iOS:` Via the App Store or [Testflight](https://testflight.apple.com/join/jnlYfhfP) for the latest version
+
+`Android:` Via the [Google Play Store](https://play.google.com/store/apps/details?id=com.mr.flutter.plugin.peardrop_flutter&hl=en_US)
+
+`Windows:` Clone this repo, ensure you are on the latest flutter `dev` release with `flutter channel dev`, then run
+
 ```
-Windows:
-```sh
-edit autoexec.bat
+flutter pub get
+
+cd peardrop_flutter
+
+flutter run -d windows
 ```
-## Usage example
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
-_For more examples and usage, please refer to the [Wiki][wiki]._
+
+There will be a new `PearDrop.exe` file under `peardrop_flutter/build/windows` for you to run
+
+`MacOS:` Same as Windows, except run `flutter run` targeting macos
+
+`Linux:` Coming soon...
+
+If you run into issues when building for desktop, try running `flutter doctor`
+
+## How it works
+
+PearDrop is an app built on Flutter, a framework that enables cross-platform compatibility for a single codebase. It uses a one-page layout with the following UI/UX flow:
+
+`Open App or Click On Share Sheet/Taskbar => Select File to Share => Select Device to Share To`
+
+Once a device has been clicked on, it will initiate a function that displays a modal panel to the receiving device asking them to accept or decline. If the transmission was accepted, it will share the file to the other device. The sharing user can then select another device to send to, or click on the file button to select a different file to send.
+
+For more information on how PearDrop works visit the [wiki](https://github.com/GoldinGuy/PearDrop/wiki), which describes [Architecture](https://github.com/GoldinGuy/PearDrop/wiki/Architecture), [Core Format](https://github.com/GoldinGuy/PearDrop/wiki/Core-format), and [Network Extensions](https://github.com/GoldinGuy/PearDrop/wiki/Network-extensions) in detail
+
 ## Development setup
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-```sh
-make install
-npm test
+
+Simply clone the repository, then run
+
 ```
-## Release History
-- 0.2.1
-  - CHANGE: Update docs (module code remains unchanged)
-- 0.2.0
-  - CHANGE: Remove `setDefaultXYZ()`
-  - ADD: Add `init()`
-- 0.1.1
-  - FIX: Crash when calling `baz()` (Thanks @GenerousContributorName!)
-- 0.1.0
-  - The first proper release
-  - CHANGE: Rename `foo()` to `bar()`
-- 0.0.1
-  - Work in progress
-## Meta
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
-Distributed under the XYZ license. See `LICENSE` for more information.
-[https://github.com/yourname/github-link](https://github.com/dbader/)
+flutter pub get
+```
+
+Then to test the app, enter the `peardrop_flutter` directory and run
+
+```
+cd peardrop_flutter
+
+flutter devices
+
+flutter run -d "target device"
+```
+
 ## Contributing
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
+
+1. Fork PearDrop [here](https://github.com/GoldinGuy/PearDrop/fork)
+2. Create a feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request -->
+5. Create a new Pull Request
+
+## Meta
+
+Created by Students [@GoldinGuy](https://github.com/GoldinGuy) and [@anirudhb](https://github.com/anirudhb)
+
+Distributed under the GNU AGPLv3 license. See [LICENSE](https://github.com/GoldinGuy/PearDrop/blob/master/LICENSE) for more information.
 
 <!-- Markdown link & img dfn's -->
 

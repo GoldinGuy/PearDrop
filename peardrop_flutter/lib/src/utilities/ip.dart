@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:get_ip/get_ip.dart';
 
 Future<bool> isSelfIP(InternetAddress ip) async {
-  // Get IPs
+  // Get device IP addresses
   final ips = await getAllIPs();
   return ips.contains(ip);
 }

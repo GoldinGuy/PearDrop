@@ -1,4 +1,4 @@
-// this file will contain all relevant info for nearby devices
+// this file contains all relevant info for nearby devices
 
 import 'dart:io';
 

@@ -12,7 +12,7 @@ Future<String> selectFile(
       allowedExtensions: allowedExtensions,
     );
   } else {
-    final result = await showOpenPanel(); //initialDirectory: initialDirectory);
+    final result = await showOpenPanel(); //initialDirectory: initialDirectory
     path = result.paths.isEmpty ? null : result.paths.first;
     print(path);
   }
